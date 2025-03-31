@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>From Machine Learning to Neural Networks &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro/from-ml-to-nn';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Processing images with Neural Networks" href="processing-images-with-nn.html" />
+    <link rel="prev" title="Computational Imaging (CI)" href="../intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Computational Imaging (CI)
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing-images-with-nn.html">Processing images with Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/intro.html">An introduction to End-to-End Image Reconstruction methods</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hybrid/intro.html">An introduction to Hybrid Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hybrid/unrolling.html">Algorithm Unrolling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hybrid/plug-and-play.html">Plug-and-Play (PnP) algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hybrid/diffusion.html">A brief overview of PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro/from-ml-to-nn.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/intro/from-ml-to-nn.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>From Machine Learning to Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity">Linearity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks">Neural networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-multiple-linear-functions">Stacking multiple linear functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-linear-activation-functions">Non-linear activation functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notations">Notations</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="from-machine-learning-to-neural-networks">
+<h1>From Machine Learning to Neural Networks<a class="headerlink" href="#from-machine-learning-to-neural-networks" title="Link to this heading">#</a></h1>
+<p>In the first module of this course, you already discussed the problem of image reconstruction from measurements acquired via linear operators. In this module, we will approach the same problem from a different perspective, i.e. solving inverse problem of recovering an unknown image from (noisy) measurement by employing <strong>neural networks</strong>.</p>
+<p>In this first section, we will begin by introducing basic concepts of classical Machine Learning-such as the concepts of <em>linearity</em>, <em>parameters</em> and <em>regression</em>. Then, we will introduce <em>neural networks</em> as a sub-class of Machine Learning, and we will underline its main properties. Implementation will be provided in the next section.</p>
+<p><img alt="" src="../_images/hybrid.png" /></p>
+<section id="basics-of-machine-learning">
+<h2>Basics of Machine Learning<a class="headerlink" href="#basics-of-machine-learning" title="Link to this heading">#</a></h2>
+<p>A <em>learning problem</em> is a setup where we want to extract knowledge from a set of <span class="math notranslate nohighlight">\(N\)</span> datapoints <span class="math notranslate nohighlight">\(\{ (x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \dots,  (x^{(N)}, y^{(N)}) \}\)</span>, previously collected, where for any <span class="math notranslate nohighlight">\(i = 1, \dots, N\)</span>, an input-output pairs is provided. Think of the <strong>input data</strong> <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^d\)</span> as the information available, associated with the <strong>output data</strong> <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}^s\)</span>, which represent the variable we want to predict. The input dimension, <span class="math notranslate nohighlight">\(d\)</span>, is the number of information available as input, while the output dimension <span class="math notranslate nohighlight">\(s\)</span> is the amount of variable we want to predict. For simplicity, these information are usually collected into vectors of shape <span class="math notranslate nohighlight">\(d\)</span> and <span class="math notranslate nohighlight">\(s\)</span>, respectively.</p>
+<p>For example, …</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that this construction assumes that all the information is provided in the form of real numbers (as both <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and <span class="math notranslate nohighlight">\(y^{(i)}\)</span> are real vectors). Handling problems with non-numeric data is out of the scope of this course, but we refer the curious reader to the topic of <em>embedding</em> of categorical variables [CITARE].</p>
+</div>
+<p>The task of a Machine Learning (ML) model is to extract the knowledge from the given data, understanding its pattern, and use this information to model the mapping from input to output, with the intention of predicting future outcomes of the same phenomenon. Mathematically, a ML model is a <em>function</em> <span class="math notranslate nohighlight">\(f_\Theta: \mathbb{R}^d \to \mathbb{R}^s\)</span>, mapping an <strong>input vector</strong> of length <span class="math notranslate nohighlight">\(d\)</span> to an <strong>output vector</strong> of length <span class="math notranslate nohighlight">\(s\)</span>. The output dimension, <span class="math notranslate nohighlight">\(s\)</span>, depends on the application:</p>
+<ul class="simple">
+<li><p>if the model is used to <strong>classify</strong> the input image in one of possible <span class="math notranslate nohighlight">\(k\)</span> classes, then usually <span class="math notranslate nohighlight">\(s = k\)</span>;</p></li>
+<li><p>if the model is used for a <strong>regression</strong> task, then <span class="math notranslate nohighlight">\(s\)</span> is the number of output features;</p></li>
+<li><p>if the model is used for <strong>image reconstruction</strong>, then usually <span class="math notranslate nohighlight">\(s = n\)</span>, i.e. the shape of the reconstructed image.</p></li>
+</ul>
+<p>The model <strong>knowledge</strong> is contained in the vector <span class="math notranslate nohighlight">\(\Theta\)</span> representing its <em>parameters</em>. To better understand the role of parameters in a ML model, let’s begin with a simple experiment with Linear Regression.</p>
+<p>Consider a simple model <span class="math notranslate nohighlight">\(f_\Theta\)</span> with only two parameters, namely <span class="math notranslate nohighlight">\(\Theta_1\)</span> and <span class="math notranslate nohighlight">\(\Theta_2\)</span>, as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+f_\Theta(x) = \Theta_1 + \Theta_2 x,
+\]</div>
+<p>which represents a <strong>straight line</strong> with quote <span class="math notranslate nohighlight">\(\Theta_1\)</span> and slope <span class="math notranslate nohighlight">\(\Theta_2\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Define parameterized function f</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="c1"># Choose two different values for the parameters</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="n">theta2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Visualize the model prediction in the range [-5, 5]</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">yy</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span>
+<span class="n">yy2</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta2</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy2</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A plot of f_theta(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/863cc0fb076a60bf68c2cd5a34075a2106a489ff1d6012843bda03d6f539ffdb.png" src="../_images/863cc0fb076a60bf68c2cd5a34075a2106a489ff1d6012843bda03d6f539ffdb.png" />
+</div>
+</div>
+<p>Think of <span class="math notranslate nohighlight">\(x\)</span> as an input data, which we want to use to predict an output <span class="math notranslate nohighlight">\(y\)</span>, and note how different combination of <span class="math notranslate nohighlight">\(\Theta\)</span> lead to very different predictions.</p>
+<p>Now, superimpose the available data to the same plot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define synthetic datapoints</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">x_data</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">x_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy2</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A plot of f_theta(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/170a6702ecdecae5aeea68a53afbfc8471e30fd951728489e5622e76a7c8fed7.png" src="../_images/170a6702ecdecae5aeea68a53afbfc8471e30fd951728489e5622e76a7c8fed7.png" />
+</div>
+</div>
+<p><em>Which of the two straight lines better fit the data provided?</em>
+Clearly, the blue line, the one parameterized by <span class="math notranslate nohighlight">\(\Theta = (1, 0.2)\)</span>. Indeed looking in detail on the code I used to generate the data, it can be noticed that <span class="math notranslate nohighlight">\((1, 0.2)\)</span> is actually the parameters that defines <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
+<p>This observation is to describe the two main features, common for basically every ML model:</p>
+<ul class="simple">
+<li><p>Different choice of parameters <span class="math notranslate nohighlight">\(\Theta\)</span> lead to <strong>very different</strong> predictions,</p></li>
+<li><p>Given <em>training set</em>, some parameter choices are better than other, and usually there is one choice which is <strong>optimal</strong>. A good model should be able to at least approximate the optimal parameter choice.</p></li>
+</ul>
+<p>The process of selecting the optimal parameters for a ML model given a training set is called <strong>training</strong>. We will come back later to the task of training a model and how it is usually performed.</p>
+<section id="linearity">
+<h3>Linearity<a class="headerlink" href="#linearity" title="Link to this heading">#</a></h3>
+<p>Note that the example above assumes that both the input and output dimensions <span class="math notranslate nohighlight">\(d\)</span> and <span class="math notranslate nohighlight">\(s\)</span> are equal to 1. A linear regression model can be easily generalized to dimensions <span class="math notranslate nohighlight">\(d &gt; 1\)</span>, <span class="math notranslate nohighlight">\(s&gt;1\)</span> by simply consider the general linear model:</p>
+<div class="math notranslate nohighlight">
+\[
+f_\Theta(x) = W x + b,
+\]</div>
+<p>where there parameters <span class="math notranslate nohighlight">\(\Theta = \{ W, b \}\)</span> have dimensions <span class="math notranslate nohighlight">\(W \in \mathbb{R}^{s \times d}\)</span>, <span class="math notranslate nohighlight">\(b \in \mathbb{R}^s\)</span>. Note that this implies that the total number of parameters to be setted equals to <span class="math notranslate nohighlight">\(s(d+1)\)</span>, i.e. it grows linearly with the input and output dimension.</p>
+<p>Clearly, the output of this model with <span class="math notranslate nohighlight">\(d&gt;1\)</span> and <span class="math notranslate nohighlight">\(s&gt;1\)</span> cannot be visualized in a plot, as it would require at least 4 dimensions.</p>
+<p>While linear models have multiple interesting properties (which, again, are beyond the scope of this course), their <strong>expressivity</strong>-i.e. the ability of approximating complicated output- is limited, as linear model can only represents <em>linear functions</em>-straight lines, planes, …. As a consequence a linear model cannot even approximate well functions such as <span class="math notranslate nohighlight">\(\sin(x)\)</span>, and their use for real, complex data such as images, or even language, is limited.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define synthetic datapoints</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
+
+<span class="c1"># Create a linear model approximation</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">yy</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A plot of f_theta(x) approximating sin(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2fafe42756edfb4ce1c52358cb13932419860b498beada5b575bf3f4041b0ed8.png" src="../_images/2fafe42756edfb4ce1c52358cb13932419860b498beada5b575bf3f4041b0ed8.png" />
+</div>
+</div>
+<p>To this aim, multiple ML algorithm have been proposed in literature, where the most succesful are: Polynomial Regression, Support Vector Machines (SVM), Random Forest (RF), and XGBoost.</p>
+<p>However, while they have shown superior predictive performance compared to linear models, none of them is expressive enough to well approximate highly complicated data, as we need for image reconstruction tasks.</p>
+</section>
+</section>
+<section id="neural-networks">
+<h2>Neural networks<a class="headerlink" href="#neural-networks" title="Link to this heading">#</a></h2>
+<p>A neural network is a particular type of Machine Learning (ML) model, which became particularly relevant in the last few years due to multiple reasons, which includes:</p>
+<ul class="simple">
+<li><p>the exponential increase in computational power, and in particular of GPUs, which allowed extreme <em>parallelization</em>, a key advantage of neural networks compared to other Artificial Intelligence (AI) methods;</p></li>
+<li><p>the huge amount of data available thanks to internet.</p></li>
+</ul>
+<p>In this section, we will briefly discuss in great generality what a neural network is. We will then dive into more details on neural networks specifically designed for image processing. For a deeper understanding on neural networks please refer either to the course of professor Andrea Asperti or to [CITARE].</p>
+<section id="stacking-multiple-linear-functions">
+<h3>Stacking multiple linear functions<a class="headerlink" href="#stacking-multiple-linear-functions" title="Link to this heading">#</a></h3>
+<p>The basic idea of neural networks if fairly simple: linear models are great and efficient, but not expressive enough, why don’t just stacking multiple linear models one in top of the other to improve the expressivity?</p>
+<p>For example, consider two linear models:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+f^1_{\Theta^1}(x) = W^1 x + b^1, \\
+f^2_{\Theta^2}(x) = W^2 x + b^2, \\
+\end{split}\]</div>
+<p>and consider the model <span class="math notranslate nohighlight">\(f_\Theta(x)\)</span> obtained by concatenating the two models so that the output of the first is given as input to the second, that is:</p>
+<div class="math notranslate nohighlight">
+\[
+f_\Theta(x) := (f_{\Theta^2} \circ f_{\Theta^1})(x) = f_{\Theta^2} ( f_{\Theta^1} (x)).
+\]</div>
+<p>Maybe this way we obtain a more flexible model? <strong>Unfortunately, not.</strong></p>
+<p>Indeed, it is not hard to show that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+f_\Theta(x) &amp;= f_{\Theta^2} ( f_{\Theta^1} (x)) = f_{\Theta^2} (W^1 x + b^1) \\ &amp;= W^2(W^1 x + b^1) + b^2 = W^2 W^1 x + W^2b^1 + b^2.
+\end{aligned}
+\end{split}\]</div>
+<p>If we re-name <span class="math notranslate nohighlight">\(W := W^2 W^1\)</span> and <span class="math notranslate nohighlight">\(b := W^2b^1 + b^2\)</span>, we get:</p>
+<div class="math notranslate nohighlight">
+\[
+f_\Theta(x) = W x + b,
+\]</div>
+<p>which proves that <em>stacking multiple linear models one after the other, the resulting model is still a linear model</em>. This is not surprising, as being <em>close by composition</em> is a key property of linear functions.</p>
+</section>
+<section id="non-linear-activation-functions">
+<h3>Non-linear activation functions<a class="headerlink" href="#non-linear-activation-functions" title="Link to this heading">#</a></h3>
+<p>Consequently, to build a model which is more expressive than a linear model, we cannot simply stack multiple copies of them, but we also need something to break the linearity. In neural networks, the solution adopted is fairly easy: why don’t we just insert simple non-linear functions in between two linear models to break the linearity?</p>
+<p>In particular, consider a simple function like:</p>
+<div class="math notranslate nohighlight">
+\[
+\rho(x) = \max(0, x),
+\]</div>
+<p>whose plot is as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define ReLU</span>
+<span class="k">def</span> <span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Define x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Plot of ReLU(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b56496a26b51568230b568923340578afa52a1e018740fbe9a41d6cdcff60d60.png" src="../_images/b56496a26b51568230b568923340578afa52a1e018740fbe9a41d6cdcff60d60.png" />
+</div>
+</div>
+<p>Re-define the model <span class="math notranslate nohighlight">\(f_\Theta\)</span> as above, but inserting <span class="math notranslate nohighlight">\(\rho(x)\)</span> in between the two linear models <span class="math notranslate nohighlight">\(f_{\Theta^1}\)</span> and <span class="math notranslate nohighlight">\(f_{\Theta^2}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\Theta}(x) := f_{\Theta^2} ( \rho (f_{\Theta^1} (x))) = W^2(\rho(W^1x + b^1) + b^2).
+\]</div>
+<p>Surprisingly, while this simple modification does not seem to really alter the structure of the stacked linear model discussed above, it shows an incredible property: <span class="math notranslate nohighlight">\(f_\Theta(x)\)</span> can approximate <em>arbitrarly well</em> any continuous function, thus exhibiting <strong>Universal Approximation</strong> property. This model, originally called Multi-layer Perceptron (MLP) due to its layered structure, is the simplest version of a <em>neural network</em>.</p>
+<p>As we will see in the following, more advanced versions of neural networks can be simply obtained by:</p>
+<ul class="simple">
+<li><p>stacking more linear models (always placing a non-linear function in between them),</p></li>
+<li><p>changing the non-linear function employed,</p></li>
+<li><p>limiting the structure of the parameter matrices <span class="math notranslate nohighlight">\(W^l\)</span> to allow for more efficient computation (this is particularly important for image reconstruction).</p></li>
+</ul>
+</section>
+<section id="notations">
+<h3>Notations<a class="headerlink" href="#notations" title="Link to this heading">#</a></h3>
+<p>To conclude this introductory section, we</p>
+<p><img alt="" src="../_images/MLP.png" /></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./intro"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Computational Imaging (CI)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="processing-images-with-nn.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Processing images with Neural Networks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity">Linearity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks">Neural networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-multiple-linear-functions">Stacking multiple linear functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-linear-activation-functions">Non-linear activation functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notations">Notations</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
