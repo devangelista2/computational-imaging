@@ -3,7 +3,19 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+parts: 
+  - caption: Introduction
+    chapters:
+      - file: intro/from-ml-to-nn
+      - file: intro/a-brief-overview-pytorch
+  - caption: End-to-End Neural Networks
+    chapters:
+      - file: end-to-end/processing-images-with-nn
+      - file: end-to-end/deep-dive-into-IPPy
+      - file: end-to-end/intro
+  - caption: Hybrid methods for Image Reconstruction
+    chapters:
+      - file: hybrid/intro
+      - file: hybrid/unrolling
+      - file: hybrid/plug-and-play
+      - file: hybrid/diffusion

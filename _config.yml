@@ -1,14 +1,16 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: My sample book
-author: The Jupyter Book Community
+title: Computational Imaging
+author: Davide Evangelista
 logo: logo.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: force
+  execute_notebooks: "force"  # Set to "auto", "force", or "cache"
+  allow_errors: true  # Allow the notebook to continue executing even if an error occurs
+
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -17,7 +19,7 @@ latex:
 
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
-  - references.bib
+  - biblio.bib
 
 # Information about where the book exists on the web
 repository:
