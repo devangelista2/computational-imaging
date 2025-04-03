@@ -394,6 +394,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-formulation-of-machine-learning-models">Mathematical Formulation of Machine Learning Models</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity">Linearity</a></li>
 </ul>
 </li>
@@ -430,20 +431,37 @@ document.write(`
 \[
 \{ (x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \dots, (x^{(N)}, y^{(N)}) \}
 \]</div>
-<p>where each pair <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> consists of an input and its corresponding output. Think of the input data <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^d\)</span>   as the available information and the output data <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}^s\)</span> as the quantity we want to predict. The input dimension, <span class="math notranslate nohighlight">\(d\)</span>, represents the number of input features, while the output dimension, <span class="math notranslate nohighlight">\(s\)</span>, corresponds to the number of variables we aim to predict. To simplify things, we usually represent these as vectors of size <span class="math notranslate nohighlight">\(d\)</span> and <span class="math notranslate nohighlight">\(s\)</span>, respectively.</p>
-<p>For example, …</p>
+<p>where each pair <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> consists of an input and its corresponding output. Think of the input data <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^d\)</span> as the available information and the output data <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}^s\)</span> as the quantity we want to predict. The input dimension, <span class="math notranslate nohighlight">\(d\)</span>, represents the number of input features, while the output dimension, <span class="math notranslate nohighlight">\(s\)</span>, corresponds to the number of variables we aim to predict. To simplify things, we usually represent these as vectors of size <span class="math notranslate nohighlight">\(d\)</span> and <span class="math notranslate nohighlight">\(s\)</span>, respectively.</p>
+<p>For example, Machine Learning is widely used to predict house prices based on property characteristics. Suppose we have a dataset where each house is described by features such as:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_1\)</span>: Square footage</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_2\)</span>: Number of bedrooms</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_3\)</span>: Number of bathrooms</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_4\)</span>: Distance to the city center</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_5\)</span>: Age of the house</p></li>
+</ul>
+<p>The goal is to predict the selling price <span class="math notranslate nohighlight">\(y\)</span> of a house given its features. Here, the input <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^5\)</span> represents a vector of property attributes, and the output <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}\)</span> is the house price.</p>
+<p>A Machine Learning model, such as <strong>linear regression</strong>, learns a function <span class="math notranslate nohighlight">\(f_\Theta\)</span> that maps inputs to outputs:</p>
+<div class="math notranslate nohighlight">
+\[
+y = f_\Theta(x_1, x_2, x_3, x_4, x_5).
+\]</div>
+<p>Initially, the model <strong>does not know</strong> how these features influence the price. By <strong>training</strong> on past sales data, it finds patterns and estimates parameters (or weights) that best fit the data. Once trained, the model can predict the price of new houses that were not in the dataset.</p>
+<p>This simple example illustrates the core idea of supervised learning: using past data to make future predictions. More generally, a Machine Learning model can be seen as a mathematical function that maps input features to an output of interest.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This setup assumes that all data is represented as real numbers (since both <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and <span class="math notranslate nohighlight">\(y^{(i)}\)</span> are real-valued vectors). Handling non-numeric data is beyond the scope of this course, but for those interested, we recommend looking into <em>embedding</em> techniques for categorical variables [CITARE].</p>
+<p>This setup assumes that all data is represented as real numbers (since both <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and <span class="math notranslate nohighlight">\(y^{(i)}\)</span> are real-valued vectors). Handling non-numeric data is beyond the scope of this course, but for those interested, we recommend looking into <em>embedding</em> techniques for categorical variables.</p>
 </div>
-<p>The goal of a Machine Learning (ML) model is to extract patterns from the data and use them to predict future outcomes. Mathematically, an ML model is a function</p>
+<section id="mathematical-formulation-of-machine-learning-models">
+<h3>Mathematical Formulation of Machine Learning Models<a class="headerlink" href="#mathematical-formulation-of-machine-learning-models" title="Link to this heading">#</a></h3>
+<p>At its core, a Machine Learning (ML) model is a function</p>
 <div class="math notranslate nohighlight">
 \[
 f_\Theta: \mathbb{R}^d \to \mathbb{R}^s
 \]</div>
 <p>that maps an input vector of length <span class="math notranslate nohighlight">\(d\)</span> to an output vector of length <span class="math notranslate nohighlight">\(s\)</span>. The choice of <span class="math notranslate nohighlight">\(s\)</span> depends on the application:</p>
 <ul class="simple">
-<li><p>If the model is used for classification, where an input belongs to one of <span class="math notranslate nohighlight">\(k\)</span> categories, then <span class="math notranslate nohighlight">\(s=k\)</span>.</p></li>
+<li><p>If the model is used for classification, where an input belongs to one of <span class="math notranslate nohighlight">\(k\)</span> categories, then <span class="math notranslate nohighlight">\(s = k\)</span>.</p></li>
 <li><p>If the model is used for regression, <span class="math notranslate nohighlight">\(s\)</span> corresponds to the number of predicted values.</p></li>
 <li><p>If the model is used for image reconstruction, <span class="math notranslate nohighlight">\(s\)</span> typically represents the number of pixels in the reconstructed image.</p></li>
 </ul>
@@ -507,7 +525,7 @@ f_\Theta(x) = \Theta_1 + \Theta_2 x.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c92fbd73f293e61000c7355a05d1df735ba1df445b9f4fa90dc2a586bf98f620.png" src="../_images/c92fbd73f293e61000c7355a05d1df735ba1df445b9f4fa90dc2a586bf98f620.png" />
+<img alt="../_images/0ccfcebfce8d47a5d36dd245d64399ba89a6e22ea5d6b5f0e0e154093e6970ca.png" src="../_images/0ccfcebfce8d47a5d36dd245d64399ba89a6e22ea5d6b5f0e0e154093e6970ca.png" />
 </div>
 </div>
 <p><em>Which of the two straight lines better fits the given data?</em>
@@ -518,6 +536,7 @@ Clearly, the blue line—parameterized by <span class="math notranslate nohighli
 <li><p>Given a training set, some parameter choices are better than others, and usually, there is one that is <em>optimal</em>. A good model should at least approximate this optimal choice.</p></li>
 </ul>
 <p>The process of finding the optimal parameters for an ML model based on a training set is called <em>training</em>. We’ll revisit this topic later when discussing how models are typically trained.</p>
+</section>
 <section id="linearity">
 <h3>Linearity<a class="headerlink" href="#linearity" title="Link to this heading">#</a></h3>
 <p>In the example above, we assumed both the input and output dimensions were <span class="math notranslate nohighlight">\(d = 1\)</span> and <span class="math notranslate nohighlight">\(s = 1\)</span>. However, we can easily generalize a linear regression model to higher dimensions (<span class="math notranslate nohighlight">\(d &gt; 1\)</span>, <span class="math notranslate nohighlight">\(s &gt; 1\)</span>) using the general linear model:</p>
@@ -566,7 +585,7 @@ f_\Theta(x) = W x + b
 <li><p>The vast amount of data available, largely thanks to the internet.</p></li>
 </ul>
 <p>In this section, we will provide a high-level overview of neural networks. We will then dive deeper into neural networks specifically designed for image processing.</p>
-<p>For a more in-depth understanding of neural networks, we recommend referring to the course by Professor Andrea Asperti or to [CITARE].</p>
+<p>For a more in-depth understanding of neural networks, we recommend referring to the course by Professor Andrea Asperti which will be held at the beginning of the second year of this Master Degree.</p>
 <section id="stacking-multiple-linear-functions">
 <h3>Stacking Multiple Linear Functions<a class="headerlink" href="#stacking-multiple-linear-functions" title="Link to this heading">#</a></h3>
 <p>The basic idea behind neural networks is fairly simple: linear models are efficient but not expressive enough, so why not stack multiple linear models on top of each other to improve expressivity?</p>
@@ -812,6 +831,7 @@ z_i = w_i \cdot x + b_i,
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-formulation-of-machine-learning-models">Mathematical Formulation of Machine Learning Models</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity">Linearity</a></li>
 </ul>
 </li>
