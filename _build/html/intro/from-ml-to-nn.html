@@ -525,7 +525,7 @@ f_\Theta(x) = \Theta_1 + \Theta_2 x.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0ccfcebfce8d47a5d36dd245d64399ba89a6e22ea5d6b5f0e0e154093e6970ca.png" src="../_images/0ccfcebfce8d47a5d36dd245d64399ba89a6e22ea5d6b5f0e0e154093e6970ca.png" />
+<img alt="../_images/c401f97b6df78105101e67d7373d434b42a2c6d0a0cf0901871e4a10d5cf1837.png" src="../_images/c401f97b6df78105101e67d7373d434b42a2c6d0a0cf0901871e4a10d5cf1837.png" />
 </div>
 </div>
 <p><em>Which of the two straight lines better fits the given data?</em>
@@ -674,7 +674,7 @@ z_i = w_i \cdot x + b_i,
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(w_i\)</span> and <span class="math notranslate nohighlight">\(b_i\)</span> are the neuron-specific parameters, usually called <em>weights</em> and <em>biases</em>, respectively. These are represented as the edges connecting the neurons from the input layer to <span class="math notranslate nohighlight">\(z_i\)</span>. The hidden layer is then processed by the non-linear activation function <span class="math notranslate nohighlight">\(\rho\)</span>, mapping each neuron to the corresponding <span class="math notranslate nohighlight">\(h_i = \rho(z_i)\)</span>.</p>
 <p>Finally, another linear transformation maps <span class="math notranslate nohighlight">\(h_i\)</span> to the output neuron <span class="math notranslate nohighlight">\(y\)</span>, which defines the <em>output layer</em> of our network.</p>
-<a class="reference internal image-reference" href="../_images/MLP.png"><img alt="../_images/MLP.png" class="align-center" src="../_images/MLP.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../_images/NN.png"><img alt="../_images/NN.png" class="align-center" src="../_images/NN.png" style="width: 400px;" /></a>
 </section>
 </section>
 <section id="deep-neural-networks">
@@ -682,6 +682,7 @@ z_i = w_i \cdot x + b_i,
 <p>The simple neural network architecture described above, since its debut in 1958, has evolved in multiple, different directions. One of the first and crucial evolutions was the adoption of multiple hidden layers. Indeed, note that we can simply iterate the process used to build the single hidden layer architecture above to define multiple hidden layers, each taking as input the output of the previous hidden layer and employing the classical linear transformation + non-linear activation, possibly improving the expressivity of the model.</p>
 <p>Thanks to the large increase in computational power, modern neural networks employ hundreds of hidden layers. Let <span class="math notranslate nohighlight">\(L\)</span> be the number of hidden layers in a deep neural network, so that the <span class="math notranslate nohighlight">\(l\)</span>-th layer has <span class="math notranslate nohighlight">\(H_l\)</span> neurons. Usually, <span class="math notranslate nohighlight">\(L\)</span> is referred to as the <em>depth</em> of the model, while the largest number of neurons among hidden layers, i.e. <span class="math notranslate nohighlight">\(\max_{l} H_l\)</span>, is usually called the <em>width</em> of the model.</p>
 <p>A neural network with a lot of hidden layers is therefore a <em>deep</em> neural network, which explains the reason behind its name. The set of algorithms based on deep neural networks is usually referred to as <strong>Deep Learning</strong>.</p>
+<a class="reference internal image-reference" href="../_images/MLP.png"><img alt="../_images/MLP.png" class="align-center" src="../_images/MLP.png" style="width: 600px;" /></a>
 <section id="activation-functions-beyond-relu">
 <h3>Activation Functions: Beyond ReLU<a class="headerlink" href="#activation-functions-beyond-relu" title="Link to this heading">#</a></h3>
 <p>As already discussed, another line of research in modern neural networks is the exploration of different activation functions. Here, we report a few of them, mainly as a reminder. We will investigate their properties in the next few sections.</p>

@@ -12,7 +12,7 @@ parts:
     chapters:
       - file: end-to-end/processing-images-with-nn
       - file: end-to-end/deep-dive-into-IPPy
-      - file: end-to-end/intro
+      - file: end-to-end/end-to-end
   - caption: Hybrid methods for Image Reconstruction
     chapters:
       - file: hybrid/intro
