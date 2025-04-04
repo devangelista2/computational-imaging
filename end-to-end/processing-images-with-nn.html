@@ -190,7 +190,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">An introduction to End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">An introduction to End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
 <ul class="nav bd-sidenav">
@@ -370,7 +370,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -386,6 +388,18 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-recall-on-image-reconstruction">A Brief Recall on Image Reconstruction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural networks for Image Processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid">End-to-end vs Hybrid</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -397,26 +411,52 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="processing-images-with-neural-networks">
 <h1>Processing images with Neural Networks<a class="headerlink" href="#processing-images-with-neural-networks" title="Link to this heading">#</a></h1>
-<p>In the first module of this course, you already discussed the problem of image reconstruction from measurements acquired via linear operators. In particular, we recall that this has been done by considering the following acquisition system:</p>
+<p>After introducing the concept of Neural Networks (in its simplest form, that is the MLP), we are now ready to move back to the main topic of this course: <strong>image reconstruction</strong>. In the following, we will quickly recall the problem setup, mainly to fix some notation, and we will discuss how the basic architecture of MLP can be modified to address the task of image reconstruction.
+This discussion will include the concept of <strong>Convolutional Neural Networks (CNN)</strong>, a particular modifications to the already-described MLP that allows for a more flexible processing of the input image, which generalizes better on new data by imitating the behavior of the human eye. To this aim, we will introduce the concept of <strong>Receptive Field (RF)</strong>, as the sub-portion of input image that provides the context in image reconstruction. To improve the RF, we will then discuss <strong>U-Net</strong>, arguably the most-used neural network architecture for every possible task related to images, highlighiting its main advantages and limitations.</p>
+<p>Finally, we will introduce <strong>Vision Transformers (ViT)</strong>: a recently-introduced architecture which seems to perform particularly well on computer vision tasks trying to imitate the success that Transformers already had in Language Processing.</p>
+<section id="a-brief-recall-on-image-reconstruction">
+<h2>A Brief Recall on Image Reconstruction<a class="headerlink" href="#a-brief-recall-on-image-reconstruction" title="Link to this heading">#</a></h2>
+<p>In the first module of this course, you already discussed the problem of image reconstruction from measurements acquired via <strong>linear operators</strong>. In particular, this was done by considering the following acquisition system:</p>
 <div class="math notranslate nohighlight">
 \[
 y^\delta = Kx_{true} + e,
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> represents the acquisition operator, <span class="math notranslate nohighlight">\(x_{true} \in \mathbb{R}^n\)</span> is the true datum we want to reconstruct (here indicated in vectorized form), <span class="math notranslate nohighlight">\(e \in \mathbb{R}^m\)</span> is the measurement noise, which satisfies <span class="math notranslate nohighlight">\(|| e ||_2 \leq \delta\)</span>, and <span class="math notranslate nohighlight">\(y^\delta \in \mathbb{R}^m\)</span> is the acquired datum.</p>
-<p>The task of image reconstruction is to reconstruct an approximated version of <span class="math notranslate nohighlight">\(x_{true}\)</span> (named <span class="math notranslate nohighlight">\(x^*\)</span> in the following), starting from <span class="math notranslate nohighlight">\(y^\delta\)</span> and, possibly, some information on the noise-e.g. <span class="math notranslate nohighlight">\(e\)</span> could be a Gaussian noise with zero mean and a given standard deviation <span class="math notranslate nohighlight">\(\sigma&gt;0\)</span>.</p>
-<p>For simplicity, in the first part of this course, you usually represented <span class="math notranslate nohighlight">\(x_{true}\)</span> as a matrix with shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span>, representing the number of pixels per row (<span class="math notranslate nohighlight">\(n_x\)</span>) and per column (<span class="math notranslate nohighlight">\(n_y\)</span>) in <span class="math notranslate nohighlight">\(x\)</span>. Clearly, this implies that <span class="math notranslate nohighlight">\((n_x, n_y)\)</span> satisfies <span class="math notranslate nohighlight">\(n_x \cdot n_y = n\)</span>. Similarly, the acquired measurement data <span class="math notranslate nohighlight">\(y^\delta\)</span> is again an image, with shape <span class="math notranslate nohighlight">\(m_x \times m_y\)</span> so that <span class="math notranslate nohighlight">\(m_x \cdot m_y = m\)</span>.</p>
+<p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> represents the <strong>acquisition operator</strong>, <span class="math notranslate nohighlight">\(x_{true} \in \mathbb{R}^n\)</span> is the <strong>true datum</strong> we want to reconstruct (here represented in <em>vectorized</em> form), <span class="math notranslate nohighlight">\(e \in \mathbb{R}^m\)</span> is the <strong>measurement noise</strong>, which satisfies <span class="math notranslate nohighlight">\(|| e ||_2 \leq \delta\)</span>, and <span class="math notranslate nohighlight">\(y^\delta \in \mathbb{R}^m\)</span> is the <strong>acquired datum</strong>.</p>
+<p>The task of image reconstruction is to approximate <span class="math notranslate nohighlight">\(x_{true}\)</span> (denoted as <span class="math notranslate nohighlight">\(x^*\)</span> in the following), starting from <span class="math notranslate nohighlight">\(y^\delta\)</span> and, possibly, some information about the noise—e.g., <span class="math notranslate nohighlight">\(e\)</span> could be Gaussian noise with zero mean and a given standard deviation <span class="math notranslate nohighlight">\(\sigma&gt;0\)</span>.</p>
+<p>For simplicity, in the first part of this course, <span class="math notranslate nohighlight">\(x_{true}\)</span> was usually represented as a matrix of shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span>, where <span class="math notranslate nohighlight">\(n_x\)</span> and <span class="math notranslate nohighlight">\(n_y\)</span> denote the number of pixels per row and column, respectively. Clearly, this implies that <span class="math notranslate nohighlight">\((n_x, n_y)\)</span> satisfies <span class="math notranslate nohighlight">\(n_x \cdot n_y = n\)</span>. Similarly, the acquired measurement data <span class="math notranslate nohighlight">\(y^\delta\)</span> is also treated as an image, with shape <span class="math notranslate nohighlight">\(m_x \times m_y\)</span> such that <span class="math notranslate nohighlight">\(m_x \cdot m_y = m\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Due to the dimension of the reconstructed image <span class="math notranslate nohighlight">\(x_{true}\)</span>, the operator <span class="math notranslate nohighlight">\(K\)</span> <strong>cannot</strong> be stored in memory. For this reason, we usually consider an <strong>operator</strong> which <em>simulates</em> the application of <span class="math notranslate nohighlight">\(K\)</span> to the input <span class="math notranslate nohighlight">\(x_{true}\)</span>.</p>
+<p>Due to the dimensions of the reconstructed image <span class="math notranslate nohighlight">\(x_{true}\)</span>, the operator <span class="math notranslate nohighlight">\(K\)</span> <strong>cannot</strong> be stored in memory. For this reason, we typically consider an <strong>operator</strong> that <em>simulates</em> the application of <span class="math notranslate nohighlight">\(K\)</span> to the input <span class="math notranslate nohighlight">\(x_{true}\)</span>.</p>
 </div>
-<p>We also recall that the majority of <em>classical</em> methods to solve the image reconstruction problem as defined above are based on the <strong>regularized least square</strong> optimization problem:</p>
+<p>We also recall that most classical methods for solving the image reconstruction problem defined above rely on the <strong>regularized least squares optimization problem</strong>:</p>
 <div class="math notranslate nohighlight">
 \[
-\min_{x \in \mathcal{X}} \frac{1}{2} || Kx - y^\delta ||_2^2 + \lambda R(x),
+\min_{x \in \mathcal{X}} \frac{1}{2} || K x - y^\delta ||_2^2 + \lambda R(x),
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathcal{X}\)</span> is the space denoting the image domain (usually, <span class="math notranslate nohighlight">\(\mathcal{X} = \{ x \geq 0 \}\)</span>), <span class="math notranslate nohighlight">\(R(x)\)</span> is the <strong>regularizer</strong>, which describes prior information on the solution, and <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span> is the <strong>regularization parameter</strong>.</p>
-<p>This optimization method is then solved through an <em>optimizer</em>, based on the mathematical properties of <span class="math notranslate nohighlight">\(R(x)\)</span>.</p>
-<p>In this module, we will follow a slightly different approach, as we will solve the inverse problem of recovering <span class="math notranslate nohighlight">\(x_{true}\)</span> from <span class="math notranslate nohighlight">\(y^\delta\)</span> by employing <strong>neural networks</strong>.</p>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{X}\)</span> denotes the image domain (typically, <span class="math notranslate nohighlight">\(\mathcal{X} = \{ x \geq 0 \}\)</span>), <span class="math notranslate nohighlight">\(R(x)\)</span> is the regularizer, which incorporates prior information about the solution, and <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span> is the <em>regularization parameter</em>.</p>
+<p>This optimization problem is then solved using an <em>optimizer</em>, which depends on the mathematical properties of <span class="math notranslate nohighlight">\(R(x)\)</span>.</p>
+</section>
+<section id="neural-networks-for-image-processing">
+<h2>Neural networks for Image Processing<a class="headerlink" href="#neural-networks-for-image-processing" title="Link to this heading">#</a></h2>
+<p>While working with neural network, we need to take a slightly different approach. Indeed, as we already remarked in the previous sections, a neural network pipeline is composed of two main components:</p>
+<ul class="simple">
+<li><p>A <strong>model architecture</strong>, described by the type of layers, the number of layers (<span class="math notranslate nohighlight">\(L\)</span>) and the activation functions (<span class="math notranslate nohighlight">\(\rho\)</span>), and represented as <span class="math notranslate nohighlight">\(f_\Theta\)</span> for simplicity.</p></li>
+<li><p>A <strong>training set</strong> <span class="math notranslate nohighlight">\(D\)</span> containing <span class="math notranslate nohighlight">\(N\)</span> pairs of input-output data, which is used to train the model, optimizing its parameters to achieve the task described by <span class="math notranslate nohighlight">\(D\)</span>.</p></li>
+</ul>
+<p>While we leave the description of the neural network model to the next few sections, we will focus here on the on how the dataset is usually built to achieve image processing tasks.</p>
+<section id="end-to-end-vs-hybrid">
+<h3>End-to-end vs Hybrid<a class="headerlink" href="#end-to-end-vs-hybrid" title="Link to this heading">#</a></h3>
+<p>The first distinction that is important to clarify when working with neural networks for image reconstruction is the <strong>end-to-end</strong> approach versus the <strong>hybrid</strong> approach.</p>
+<ul class="simple">
+<li><p>An end-to-end neural network is a model <span class="math notranslate nohighlight">\(f_\Theta\)</span> that is trained to take as input the corrupted datum <span class="math notranslate nohighlight">\(y^\delta\)</span> and <strong>directly</strong> compute the reconstruction <span class="math notranslate nohighlight">\(x^* = f_\Theta(y^\delta)\)</span>, in a single forward application of the model. This causes …</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/end-to-end.pdf"><img alt="../_images/end-to-end.pdf" class="align-center" src="../_images/end-to-end.pdf" style="width: 600px;" /></a>
+<ul class="simple">
+<li><p>An hybrid algorithm for image reconstruction, instead, …</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/hybrid-approach.pdf"><img alt="../_images/hybrid-approach.pdf" class="align-center" src="../_images/hybrid-approach.pdf" style="width: 600px;" /></a>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -473,6 +513,25 @@ y^\delta = Kx_{true} + e,
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-recall-on-image-reconstruction">A Brief Recall on Image Reconstruction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural networks for Image Processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid">End-to-end vs Hybrid</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
