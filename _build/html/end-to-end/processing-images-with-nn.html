@@ -563,8 +563,138 @@ Classically, images are converted into <code class="docutils literal notranslate
 <section id="the-mayo-s-dataset">
 <h3>The Mayo’s dataset<a class="headerlink" href="#the-mayo-s-dataset" title="Link to this heading">#</a></h3>
 <p>The Mayo’s dataset is a commonly-used dataset for benchmarking algorithms for Computed Tomography (CT) image reconstruction from sparse measurement. It can be downloaded from the following link: <a class="reference external" href="https://drive.google.com/drive/folders/13BEiz6t57qSbwBpCtfqllmYTLmkhQeFE?usp=share_link">Mayo’s Dataset Download</a>.</p>
-<p>This dataset comprises a total of <span class="math notranslate nohighlight">\(N = 3305\)</span> training images and <span class="math notranslate nohighlight">\(N = 327\)</span> test images, representing the CT scan of a 10 chests.</p>
+<p>This dataset comprises a total of <span class="math notranslate nohighlight">\(N = 3305\)</span> training images and <span class="math notranslate nohighlight">\(N = 327\)</span> test images, representing the CT scan of 10 human chests.</p>
 <a class="reference internal image-reference" href="../_images/0.png"><img alt="../_images/0.png" class="align-center" src="../_images/0.png" style="width: 400px;" /></a>
+<p>Each image is a <span class="math notranslate nohighlight">\(512 \times 512\)</span> grey-scale image representing, for each patient, a different <strong>slice</strong> of the scan, from the top of the chest to the bottom. The data is saved as <code class="docutils literal notranslate"><span class="pre">uint8</span></code> for space-efficiency. The file structure of the data folder is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span>
+<span class="o">|---</span> <span class="n">Mayo</span>
+<span class="o">|------|</span> <span class="n">train</span>
+<span class="o">|----------|</span> <span class="n">C002</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C004</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C012</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C016</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C027</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C030</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C050</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C052</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C067</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C077</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|------|</span> <span class="n">test</span>
+<span class="o">|----------|</span> <span class="n">C081</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>Where each folder inside e.g. the <code class="docutils literal notranslate"><span class="pre">train</span></code> folder represents a patient, whose slice are indicated with an increasing integer number, in <code class="docutils literal notranslate"><span class="pre">.png</span></code> format. We need to take care of this folder structure when we load data into memory via the custom <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class.</p>
+<p>When working with self-supervised learning as we will do next, it is common practice to define a dataset that only returns the input <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, and the corresponding corrupted data <span class="math notranslate nohighlight">\(y^{(i)} = Kx^{(i)} + e^{(i)}\)</span> is usually generated online inside the training loop itself. Thus, we expect our <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class to only return <span class="math notranslate nohighlight">\(x^{(i)}\)</span> when the <code class="docutils literal notranslate"><span class="pre">__getitem__(self,</span> <span class="pre">idx)</span></code> method is called.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+
+        <span class="c1"># We expect data_path to be like &quot;./data/Mayo/train&quot; or &quot;./data/Mayo/test&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">/*/*.png&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># Load the idx&#39;s image from fname_list</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+         <span class="c1"># To load the image as grey-scale</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert to numpy array -&gt; (512, 512)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> 
+
+        <span class="c1"># Convert to pytorch tensor -&gt; (1, 512, 512) &lt;-&gt; (c, n_x, n_y)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Resize to the required shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (1, n_x, n_y)</span>
+
+        <span class="c1"># Normalize in [0, 1] range</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">get_patient_and_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A utility function. Given an idx, it returns the patient ID and the number of slice of</span>
+<span class="sd">        that patient corresponding to the idx&#39;s datapoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">patient_id</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">slice_n</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">slice_n</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that our dataset now returns a normalized grey-scale image of the required shape as an <span class="math notranslate nohighlight">\((1, n_x, n_y)\)</span> pytorch tensor. The batch dimension <span class="math notranslate nohighlight">\(N\)</span> will be automatically provided by the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> class, as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Define dataset and dataloader (only train for now)</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Get a sample batch</span>
+<span class="n">x</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Visualize the sample with matplotlib (different everytime!)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([4, 1, 256, 256])
+</pre></div>
+</div>
+<img alt="../_images/80775487f38afd327d80726e3fbeac8f05eab5564d250c44428985caae87e928.png" src="../_images/80775487f38afd327d80726e3fbeac8f05eab5564d250c44428985caae87e928.png" />
+</div>
+</div>
+<p>Now that the data is ready, we need one more step before going back to neural networks: defining imaging operators.</p>
+<p>While this step could be theoretically done by simply combining functions from existing libraries, for simplicity we will use functions from the package <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, which is meant to simplify the process.</p>
 </section>
 </section>
 </section>

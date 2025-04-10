@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/deep-dive-into-IPPy';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="An introduction to End-to-End Image Reconstruction methods" href="intro.html" />
+    <link rel="next" title="An introduction to End-to-End Image Reconstruction methods" href="end-to-end.html" />
     <link rel="prev" title="Processing images with Neural Networks" href="processing-images-with-nn.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -188,7 +188,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">An introduction to End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">An introduction to End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
 <ul class="nav bd-sidenav">
@@ -368,7 +368,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -384,6 +386,17 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-and-requirements">Introduction and requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-operators-module">The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-solvers-module">The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-nn-module">The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -395,6 +408,51 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="deep-dive-into-ippy">
 <h1>Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code><a class="headerlink" href="#deep-dive-into-ippy" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is a simple library, developed by me specifically for this course (and to support me during my experiments for papers). It includes multiple modules:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn</span></code>: contains functions to easy define complex neural network models, such as UNet, ViT, and others, with a flexible design.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solvers</span></code>: implements a few optimization algorithms already discussed in the first module of this course, such as the <code class="docutils literal notranslate"><span class="pre">ChambollePock</span></code> algorithm for TV minimization, the <code class="docutils literal notranslate"><span class="pre">SGP</span></code> algorithm for smoothed-TV regularization, and others.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operators</span></code>: implements multiple operators (we will check some of them below) specifically designed to work well with pytorch tensors. Not only they are developed so that they can efficiently work with batched, multidimensional data, but they also implement gradient tracking, useful to backpropagate the gradient back from the output to the input of the inverse process. This is useful in applications such as Algorithm Unrolling or Deep Generative Prior (DGP).</p></li>
+</ul>
+<section id="introduction-and-requirements">
+<h2>Introduction and requirements<a class="headerlink" href="#introduction-and-requirements" title="Link to this heading">#</a></h2>
+<p>TODO:</p>
+<ul class="simple">
+<li><p>Come “installare” IPPy</p></li>
+<li><p>Librerie che servono per farla funzionare</p></li>
+<li><p>Come installare librerie di supporto</p></li>
+<li><p>Il funzionamento degli array “standard”</p></li>
+</ul>
+</section>
+<section id="the-operators-module">
+<h2>The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module<a class="headerlink" href="#the-operators-module" title="Link to this heading">#</a></h2>
+<p>TODO:</p>
+<ul class="simple">
+<li><p>Cos’è un’operatore. Esempio con CT.</p></li>
+<li><p>Operatore in generale.</p></li>
+<li><p>Esempi di operatori presenti in libreria.</p></li>
+<li><p>Backpropagation attraverso gli operatori</p></li>
+</ul>
+</section>
+<section id="the-solvers-module">
+<h2>The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module<a class="headerlink" href="#the-solvers-module" title="Link to this heading">#</a></h2>
+<p>TODO:</p>
+<ul class="simple">
+<li><p>Definire un solver</p></li>
+<li><p>Testare un solver sui dati</p></li>
+</ul>
+</section>
+<section id="the-nn-module">
+<h2>The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module<a class="headerlink" href="#the-nn-module" title="Link to this heading">#</a></h2>
+<p>TODO:</p>
+<ul class="simple">
+<li><p>Come definire una rete neurale in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></p></li>
+<li><p>Alcuni esempi di rete neurale</p></li>
+<li><p>Addestrare la rete neurale sui nostri dati (NOTA: no spiegazione di come funziona, per ora)</p></li>
+<li><p>Salvare i pesi di un modello: pesi e cfg-dict</p></li>
+<li><p>Caricare i pesi di un modello e testare il modello</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -437,7 +495,7 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="intro.html"
+       href="end-to-end.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
@@ -451,6 +509,24 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-and-requirements">Introduction and requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-operators-module">The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-solvers-module">The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-nn-module">The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
