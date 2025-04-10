@@ -394,8 +394,19 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-recall-on-image-reconstruction">A Brief Recall on Image Reconstruction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural networks for Image Processing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid">End-to-end vs Hybrid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural Networks for Image Processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid-approaches">End-to-End vs. Hybrid Approaches</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-supervised-learning">Self-Supervised Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-data-for-neural-network-processing">Preparing the data for Neural Network processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshaping">Reshaping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization">Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-type">Data type</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-and-dataloading">Dataset and Dataloading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mayo-s-dataset">The Mayo’s dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -437,24 +448,123 @@ y^\delta = Kx_{true} + e,
 <p>This optimization problem is then solved using an <em>optimizer</em>, which depends on the mathematical properties of <span class="math notranslate nohighlight">\(R(x)\)</span>.</p>
 </section>
 <section id="neural-networks-for-image-processing">
-<h2>Neural networks for Image Processing<a class="headerlink" href="#neural-networks-for-image-processing" title="Link to this heading">#</a></h2>
-<p>While working with neural network, we need to take a slightly different approach. Indeed, as we already remarked in the previous sections, a neural network pipeline is composed of two main components:</p>
+<h2>Neural Networks for Image Processing<a class="headerlink" href="#neural-networks-for-image-processing" title="Link to this heading">#</a></h2>
+<p>When working with neural networks, we need to take a slightly different approach. As we already noted in the previous sections, a neural network pipeline consists of two main components:</p>
 <ul class="simple">
-<li><p>A <strong>model architecture</strong>, described by the type of layers, the number of layers (<span class="math notranslate nohighlight">\(L\)</span>) and the activation functions (<span class="math notranslate nohighlight">\(\rho\)</span>), and represented as <span class="math notranslate nohighlight">\(f_\Theta\)</span> for simplicity.</p></li>
-<li><p>A <strong>training set</strong> <span class="math notranslate nohighlight">\(D\)</span> containing <span class="math notranslate nohighlight">\(N\)</span> pairs of input-output data, which is used to train the model, optimizing its parameters to achieve the task described by <span class="math notranslate nohighlight">\(D\)</span>.</p></li>
+<li><p>A <strong>model architecture</strong>, defined by the type of layers, the number of layers (<span class="math notranslate nohighlight">\(L\)</span>), and the activation functions (<span class="math notranslate nohighlight">\(\rho\)</span>), and represented as <span class="math notranslate nohighlight">\(f_\Theta\)</span> for simplicity.</p></li>
+<li><p>A <strong>training set</strong> <span class="math notranslate nohighlight">\(D\)</span> containing <span class="math notranslate nohighlight">\(N\)</span> pairs of input-output data, which is used to train the model by optimizing its parameters to perform the task described by <span class="math notranslate nohighlight">\(D\)</span>.</p></li>
 </ul>
-<p>While we leave the description of the neural network model to the next few sections, we will focus here on the on how the dataset is usually built to achieve image processing tasks.</p>
-<section id="end-to-end-vs-hybrid">
-<h3>End-to-end vs Hybrid<a class="headerlink" href="#end-to-end-vs-hybrid" title="Link to this heading">#</a></h3>
-<p>The first distinction that is important to clarify when working with neural networks for image reconstruction is the <strong>end-to-end</strong> approach versus the <strong>hybrid</strong> approach.</p>
+<p>While we will describe the neural network model in detail in the next sections, we focus here on how the dataset is typically constructed for image processing tasks.</p>
+<section id="end-to-end-vs-hybrid-approaches">
+<h3>End-to-End vs. Hybrid Approaches<a class="headerlink" href="#end-to-end-vs-hybrid-approaches" title="Link to this heading">#</a></h3>
+<p>A key distinction when using neural networks for image reconstruction is between the <strong>end-to-end</strong> approach and the <strong>hybrid</strong> approach.</p>
 <ul class="simple">
-<li><p>An end-to-end neural network is a model <span class="math notranslate nohighlight">\(f_\Theta\)</span> that is trained to take as input the corrupted datum <span class="math notranslate nohighlight">\(y^\delta\)</span> and <strong>directly</strong> compute the reconstruction <span class="math notranslate nohighlight">\(x^* = f_\Theta(y^\delta)\)</span>, in a single forward application of the model. This causes …</p></li>
+<li><p>An <strong>end-to-end</strong> neural network is a model <span class="math notranslate nohighlight">\(f_\Theta\)</span> trained to take the corrupted datum <span class="math notranslate nohighlight">\(y^\delta\)</span> as input and <strong>directly</strong> compute the reconstruction, i.e., <span class="math notranslate nohighlight">\(x^* = f_\Theta(y^\delta)\)</span>, in a single forward pass. This approach is significantly faster than, for example, a regularized variational method. Moreover, due to the power and flexibility of neural networks, the visual quality of the reconstructed image is often superior. However, such methods are known to suffer from severe instabilities—for instance, the quality of the solution may degrade unexpectedly when <span class="math notranslate nohighlight">\(y^\delta\)</span> is corrupted with additional noise. This makes them unreliable for applications such as medical imaging, where consistency between the solution and the measured data is crucial.</p></li>
 </ul>
 <a class="reference internal image-reference" href="../_images/end-to-end.pdf"><img alt="../_images/end-to-end.pdf" class="align-center" src="../_images/end-to-end.pdf" style="width: 600px;" /></a>
 <ul class="simple">
-<li><p>An hybrid algorithm for image reconstruction, instead, …</p></li>
+<li><p>A <strong>hybrid</strong> algorithm for image reconstruction, on the other hand, alternates the application of a neural network with a step of a classical algorithm that ensures the solution remains consistent with the measurements. Due to the inherently iterative nature of this approach, these methods tend to be slower, often requiring multiple (sometimes hundreds of) applications of the neural network. Additionally, the consistency step may not always be parallelizable on a GPU, which further slows down the process due to the frequent transfer of data between the GPU and CPU. However, these models typically achieve comparable quality to end-to-end models while being significantly more stable, making them more suitable for applications such as medical imaging.</p></li>
 </ul>
-<a class="reference internal image-reference" href="../_images/hybrid-approach.pdf"><img alt="../_images/hybrid-approach.pdf" class="align-center" src="../_images/hybrid-approach.pdf" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="../_images/hybrid-approach.pdf"><img alt="../_images/hybrid-approach.pdf" class="align-center" src="../_images/hybrid-approach.pdf" style="width: 800px;" /></a>
+<p>The class of hybrid algorithms is broad and includes methods such as Plug-and-Play (PnP), Algorithm Unrolling, and Deep Generative Priors. Later in this course, we will explore some of these methods, which are widely used in the literature.</p>
+</section>
+<section id="self-supervised-learning">
+<h3>Self-Supervised Learning<a class="headerlink" href="#self-supervised-learning" title="Link to this heading">#</a></h3>
+<p>How to build a training dataset for end-to-end neural network models is quite interesting. In fact, we already remarked that neural networks are usually trained in a <strong>supervised</strong> way, meaning that the training data is supposed to be composed on <span class="math notranslate nohighlight">\(N\)</span> input-output pairs.
+However, this would require to collect a set of <span class="math notranslate nohighlight">\(N\)</span> pairs of corrupted image - associated ground truth solution, which is undoable in practice as it would require to acquire the exact same datum twice: once for the corrupted image, and once for the ground truth. Clearly, this is impossible to do most of the time, and in particular for applications such as medical imaging, where measuring a patient twice in a row would cause him to handle twice the radiation, with consequences on his health. Therefore, how to collect data such a dataset for image reconstruction?</p>
+<p>The short answer is: <strong>you dont</strong>.
+Indeed, neural networks for image reconstruction are usually trained with a variant of the supervised learning approach, named <strong>self-supervised learning</strong>. The idea is as follows:</p>
+<ul class="simple">
+<li><p>Collect a set <span class="math notranslate nohighlight">\(\{ x^{(1)}, x^{(2)}, \dots, x^{(N)} \}\)</span> of ground-truth images.</p></li>
+<li><p><strong>Synthetically</strong> construct the associated corrupted measurement by considering the corruption operator <span class="math notranslate nohighlight">\(K\)</span>, a given noise variance <span class="math notranslate nohighlight">\(\sigma^2 &gt; 0\)</span>, and computing <span class="math notranslate nohighlight">\(y^{(i)} = K x^{(i)} + e^{(i)}\)</span> for any <span class="math notranslate nohighlight">\(i = 1, \dots, N\)</span>.</p></li>
+<li><p>Generate the final dataset as <span class="math notranslate nohighlight">\(D = \{ (y^{(1)}, x^{(1)}), (y^{(2)}, x^{(2)}), \dots, (y^{(N)}, x^{(N)}) \}\)</span>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that, compared to the classical notation we used previously, here we consider the training pair as <span class="math notranslate nohighlight">\((y^{(i)}, x^{(i)})\)</span> instead of <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span>. This is because the network should take as input the corrupted image <span class="math notranslate nohighlight">\(y^{(i)}\)</span> and return a reconstructed solution <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="preparing-the-data-for-neural-network-processing">
+<h2>Preparing the data for Neural Network processing<a class="headerlink" href="#preparing-the-data-for-neural-network-processing" title="Link to this heading">#</a></h2>
+<section id="reshaping">
+<h3>Reshaping<a class="headerlink" href="#reshaping" title="Link to this heading">#</a></h3>
+<p>Data preparation for image processing tasks follows a set of simple, classical step, which is slightly different from the approach used in the previous module of this course. Indeed, classical imaging processing algorithm (variational methods) usually considers images to be either matrices of shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span> (for grey-scale images) or <span class="math notranslate nohighlight">\(n_x \times n_y \times 3\)</span> (for RGB images, where the last dimension refers to the channel dimension), which are then flattened to <span class="math notranslate nohighlight">\(n\)</span>-dimensional vectors of length <span class="math notranslate nohighlight">\(n\)</span> where <span class="math notranslate nohighlight">\(n = n_x \cdot n_y\)</span> or <span class="math notranslate nohighlight">\(n = n_x \cdot n_y \cdot 3\)</span> to be left-multiplied by the corruption matrix <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span>. In neural network applications, since we would like to work with a <strong>batch</strong> of images in parallel, we usually consider an image as a <strong>tensor</strong> with shape <span class="math notranslate nohighlight">\(N \times c \times n_x \times n_y\)</span>, where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> is the <strong>number of images in each batch</strong> (usually, <span class="math notranslate nohighlight">\(N = 1\)</span> when working with a single image).</p></li>
+<li><p><span class="math notranslate nohighlight">\(c\)</span> is the <strong>number of channels</strong>, whose value is:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(c = 1\)</span> for grey-scale images,</p></li>
+<li><p><span class="math notranslate nohighlight">\(c = 3\)</span> for RGB images,</p></li>
+<li><p><span class="math notranslate nohighlight">\(c &gt; 3\)</span> for hyperspectral images, where <span class="math notranslate nohighlight">\(c\)</span> contains all the hyperspectral information together.</p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\(n_x\)</span> and <span class="math notranslate nohighlight">\(n_y\)</span> are the number of rows and the number of columns of the image matrix, respectively.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Differently from classical methods, images are usually not flattened in neural network-based algorithms. Therefore, one should be careful when defining the corrupting operator <span class="math notranslate nohighlight">\(K\)</span>, which won’t be a real matrix, rather it will be represented as a general operator <span class="math notranslate nohighlight">\(K: \mathbb{R}^{N \times c \times n_x \times n_y} \to \mathbb{R}^{N \times c' \times m_x \times m_y}\)</span> such that <span class="math notranslate nohighlight">\(y = K(x)\)</span>.
+Note then, when required, these operators should implement a <em>Transpose</em> counterpart, <span class="math notranslate nohighlight">\(x = K^T(y)\)</span>, that simulates the application of the transposed of the operator <span class="math notranslate nohighlight">\(K\)</span> when seen as a matrix.<br />
+All this structure has been already implemented on a few operators on the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> package, as we will see later in this course.</p>
+</div>
+</section>
+<section id="normalization">
+<h3>Normalization<a class="headerlink" href="#normalization" title="Link to this heading">#</a></h3>
+<p>Normalization is the operation of re-scaling the features of a dataset so that they fit in the same, pre-determined range of values. For example, in the California Housing example from the previous section, we had multiple input features, some of which has values that are naturally larger (or smaller) than the others. For example, the size of the house in square foot or the distance from the city center will be tipically larger than its number of bedrooms. This imbalance in the feature range causes the model to focus more on those variables and partially ignoring the others.
+As a consequence, every ML-based algorithm requires its training data to be pre-processed so that all the features have approximately the same magnitude. This process (called normalization), is mostly done in two possible ways:</p>
+<ul class="simple">
+<li><p><strong>min-max normalization:</strong> Each input data is re-scaled into the range <span class="math notranslate nohighlight">\([0, 1]\)</span> by a min-max rescaling, i.e.
+$<span class="math notranslate nohighlight">\(
+      x^{(i)} \leftarrow \frac{x^{(i)} - m}{M - x},
+  \)</span><span class="math notranslate nohighlight">\(
+  where \)</span>M<span class="math notranslate nohighlight">\( and \)</span>m$ are the maximum of the training data and its minimum, respectively.</p></li>
+<li><p><strong>gaussian normalization:</strong> Each input data is re-scaled so that its mean becomes 0 and its standard deviation becomes 1, i.e.
+$<span class="math notranslate nohighlight">\(
+      x^{(i)} \leftarrow \frac{x^{(i)} - \mu}{\sigma},
+  \)</span><span class="math notranslate nohighlight">\(
+  where \)</span>\mu<span class="math notranslate nohighlight">\( is the mean of the training set \)</span>D<span class="math notranslate nohighlight">\(, while \)</span>\sigma$ is its standard deviation.</p></li>
+</ul>
+<p>While Gaussian normalization is the most commonly used nowadays for any general-use machine learning task, it is meaningful for image processing task, as by definition, after normalization,half of the pixels are negative, and negative pixels has no physical intepretation.</p>
+<p>For this reason, in the field of image processing, it is most common to employ min-max normalization (and this is the approach we will follow from now on). Let’s define the Python function to perform dataset normalization, which will be useful in the following.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assuming the input x is a Pytorch tensor with shape (N, c, n_x, n_y), it normalizes it</span>
+<span class="sd">    with min-max normalization and returns a tensor with the same shape, in the range [0, 1].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-type">
+<h3>Data type<a class="headerlink" href="#data-type" title="Link to this heading">#</a></h3>
+<p>A last common pre-processing step for image processing tasks is that of converting all the data into the same data type. We already discuss that the main datatypes for Pytorch tensors are <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">float16</span></code>, <code class="docutils literal notranslate"><span class="pre">float32</span></code> and <code class="docutils literal notranslate"><span class="pre">float64</span></code>.
+Classically, images are converted into <code class="docutils literal notranslate"><span class="pre">float32</span></code> as it is a good trade-off between efficiency and precision:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert a tensor x to float32</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="dataset-and-dataloading">
+<h2>Dataset and Dataloading<a class="headerlink" href="#dataset-and-dataloading" title="Link to this heading">#</a></h2>
+<p>Now that we discussed how data should be prepared, we are ready to define a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class in <code class="docutils literal notranslate"><span class="pre">torch</span></code> to work with our data. For this example we will consider an example which we will use multiple time throughout this module: the <strong>Mayo’s dataset</strong>.</p>
+<section id="the-mayo-s-dataset">
+<h3>The Mayo’s dataset<a class="headerlink" href="#the-mayo-s-dataset" title="Link to this heading">#</a></h3>
+<p>The Mayo’s dataset is a commonly-used dataset for benchmarking algorithms for Computed Tomography (CT) image reconstruction from sparse measurement. It can be downloaded from the following link: <a class="reference external" href="https://drive.google.com/drive/folders/13BEiz6t57qSbwBpCtfqllmYTLmkhQeFE?usp=share_link">Mayo’s Dataset Download</a>.</p>
+<p>This dataset comprises a total of <span class="math notranslate nohighlight">\(N = 3305\)</span> training images and <span class="math notranslate nohighlight">\(N = 327\)</span> test images, representing the CT scan of a 10 chests.</p>
+<a class="reference internal image-reference" href="../_images/0.png"><img alt="../_images/0.png" class="align-center" src="../_images/0.png" style="width: 400px;" /></a>
 </section>
 </section>
 </section>
@@ -524,8 +634,19 @@ y^\delta = Kx_{true} + e,
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-recall-on-image-reconstruction">A Brief Recall on Image Reconstruction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural networks for Image Processing</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid">End-to-end vs Hybrid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural Networks for Image Processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid-approaches">End-to-End vs. Hybrid Approaches</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-supervised-learning">Self-Supervised Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-data-for-neural-network-processing">Preparing the data for Neural Network processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshaping">Reshaping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization">Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-type">Data type</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-and-dataloading">Dataset and Dataloading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mayo-s-dataset">The Mayo’s dataset</a></li>
 </ul>
 </li>
 </ul>
