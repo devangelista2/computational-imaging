@@ -190,7 +190,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/intro.html">An introduction to End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
 <ul class="nav bd-sidenav">
@@ -579,8 +579,8 @@ tensor([[0., 0., 0.],
         [0., 0., 0.]])
 tensor([[1., 1., 1., 1.],
         [1., 1., 1., 1.]])
-tensor([[0.5695, 0.9719],
-        [0.1955, 0.0354]])
+tensor([[0.2017, 0.7009],
+        [0.7058, 0.5422]])
 </pre></div>
 </div>
 </div>
@@ -738,7 +738,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([1.4975, 1.5377]), y: tensor([5.9950, 6.0754])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([1.0955, 1.6583]), y: tensor([5.1910, 6.3166])
 </pre></div>
 </div>
 </div>
@@ -896,7 +896,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_batch: torch.Size([16, 8]). Shape of y_batch: torch.Size([16, 1])
-Real value: 2.0239999294281006. Model prediction: 0.16520507633686066.
+Real value: 0.824999988079071. Model prediction: -0.08058249950408936.
 </pre></div>
 </div>
 </div>
@@ -981,6 +981,10 @@ This is done as follows:</p>
         <span class="c1"># Get x, y from data</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span>
 
+        <span class="c1"># Send to device</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
         <span class="c1"># Compute neural network prediction</span>
         <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
@@ -1017,6 +1021,10 @@ This is done as follows:</p>
     <span class="c1"># Sample data from the dataset</span>
     <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
 
+    <span class="c1"># Send to device</span>
+    <span class="n">x_batch</span> <span class="o">=</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
     <span class="c1"># Forward pass through the model</span>
     <span class="n">y_prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
 
@@ -1025,7 +1033,7 @@ This is done as follows:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 1.2939. True: 1.6290.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 2.9300. True: 2.4040.
 </pre></div>
 </div>
 </div>
