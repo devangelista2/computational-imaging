@@ -660,7 +660,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/396a6437f58ef511090b15289adf009e226d9b54ef1aa9509e934f3eb8934555.png" src="../_images/396a6437f58ef511090b15289adf009e226d9b54ef1aa9509e934f3eb8934555.png" />
+<img alt="../_images/88a3a5e8d6bb49be84df82bcdbd405039fc2e25e3856d2a1db62bb085c9c367d.png" src="../_images/88a3a5e8d6bb49be84df82bcdbd405039fc2e25e3856d2a1db62bb085c9c367d.png" />
 </div>
 </div>
 <p>Feel free to test different operators to see how they work.</p>
@@ -700,7 +700,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grad_x = 0.2141
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grad_x = 0.2121
 </pre></div>
 </div>
 </div>
@@ -748,10 +748,10 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reconstruction SSIM: 0.9323.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reconstruction SSIM: 0.9320.
 </pre></div>
 </div>
-<img alt="../_images/20694d8ac737884ed3ce5bc07def2f69627b51c257b0e693c99d8909e06ab75a.png" src="../_images/20694d8ac737884ed3ce5bc07def2f69627b51c257b0e693c99d8909e06ab75a.png" />
+<img alt="../_images/3119d15a24e9fecdcc8ca9afa75911de4801165015cc32651b41d3c1baf4c462.png" src="../_images/3119d15a24e9fecdcc8ca9afa75911de4801165015cc32651b41d3c1baf4c462.png" />
 </div>
 </div>
 </section>
@@ -764,6 +764,101 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 <p>Defining a training a neural network model with <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is straightforward: just choose one of the available architecture from the <code class="docutils literal notranslate"><span class="pre">nn</span></code> module, set the parameters (or implement one yourself), and you are ready to go!</p>
 <p>Let’s see how to implement a <code class="docutils literal notranslate"><span class="pre">UNet</span></code> model for image reconstruction using <code class="docutils literal notranslate"><span class="pre">IPPy.nn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="k">class</span> <span class="nc">ResCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Define (convolution) layers -&gt; NOTE: padding=&quot;same&quot; means &quot;padded convolution&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="o">+</span> <span class="n">x</span>
+    
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ResCNN</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AssertionError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">23</span>
+<span class="g g-Whitespace">     </span><span class="mi">20</span>         <span class="k">return</span> <span class="n">out</span> <span class="o">+</span> <span class="n">x</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span>
+<span class="ne">---&gt; </span><span class="mi">23</span> <span class="n">model</span> <span class="o">=</span> <span class="n">ResCNN</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/envs/teaching/lib/python3.12/site-packages/torch/nn/modules/module.py:1343,</span> in <span class="ni">Module.to</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1340</span>         <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1341</span>             <span class="k">raise</span>
+<span class="ne">-&gt; </span><span class="mi">1343</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="n">convert</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/envs/teaching/lib/python3.12/site-packages/torch/nn/modules/module.py:903,</span> in <span class="ni">Module._apply</span><span class="nt">(self, fn, recurse)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">902</span>     <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">903</span>         <span class="n">module</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">905</span> <span class="k">def</span> <span class="nf">compute_should_use_set_data</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">tensor_applied</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">906</span>     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">_has_compatible_shallow_copy_type</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">tensor_applied</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">907</span>         <span class="c1"># If the new tensor has compatible tensor type as the existing tensor,</span>
+<span class="g g-Whitespace">    </span><span class="mi">908</span>         <span class="c1"># the current behavior is to change the tensor in-place using `.data =`,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">913</span>         <span class="c1"># global flag to let the user control whether they want the future</span>
+<span class="g g-Whitespace">    </span><span class="mi">914</span>         <span class="c1"># behavior of overwriting the existing tensor or not.</span>
+
+<span class="nn">File /opt/anaconda3/envs/teaching/lib/python3.12/site-packages/torch/nn/modules/module.py:930,</span> in <span class="ni">Module._apply</span><span class="nt">(self, fn, recurse)</span>
+<span class="g g-Whitespace">    </span><span class="mi">926</span> <span class="c1"># Tensors stored in modules are graph leaves, and we don&#39;t want to</span>
+<span class="g g-Whitespace">    </span><span class="mi">927</span> <span class="c1"># track autograd history of `param_applied`, so we have to use</span>
+<span class="g g-Whitespace">    </span><span class="mi">928</span> <span class="c1"># `with torch.no_grad():`</span>
+<span class="g g-Whitespace">    </span><span class="mi">929</span> <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">930</span>     <span class="n">param_applied</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">931</span> <span class="n">p_should_use_set_data</span> <span class="o">=</span> <span class="n">compute_should_use_set_data</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">param_applied</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">933</span> <span class="c1"># subclasses may have multiple child tensors so we need to use swap_tensors</span>
+
+<span class="nn">File /opt/anaconda3/envs/teaching/lib/python3.12/site-packages/torch/nn/modules/module.py:1329,</span> in <span class="ni">Module.to.&lt;locals&gt;.convert</span><span class="nt">(t)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1322</span>     <span class="k">if</span> <span class="n">convert_to_format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">t</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1323</span>         <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1324</span>             <span class="n">device</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1325</span>             <span class="n">dtype</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">is_floating_point</span><span class="p">()</span> <span class="ow">or</span> <span class="n">t</span><span class="o">.</span><span class="n">is_complex</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1326</span>             <span class="n">non_blocking</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1327</span>             <span class="n">memory_format</span><span class="o">=</span><span class="n">convert_to_format</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1328</span>         <span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1329</span>     <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1330</span>         <span class="n">device</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1331</span>         <span class="n">dtype</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">is_floating_point</span><span class="p">()</span> <span class="ow">or</span> <span class="n">t</span><span class="o">.</span><span class="n">is_complex</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1332</span>         <span class="n">non_blocking</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1333</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1334</span> <span class="k">except</span> <span class="ne">NotImplementedError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1335</span>     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Cannot copy out of meta tensor; no data!&quot;</span><span class="p">:</span>
+
+<span class="nn">File /opt/anaconda3/envs/teaching/lib/python3.12/site-packages/torch/cuda/__init__.py:310,</span> in <span class="ni">_lazy_init</span><span class="nt">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span>         <span class="s2">&quot;Cannot re-initialize CUDA in forked subprocess. To use CUDA with &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="s2">&quot;multiprocessing, you must use the &#39;spawn&#39; start method&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">309</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">_C</span><span class="p">,</span> <span class="s2">&quot;_cuda_getDeviceCount&quot;</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">310</span>     <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Torch not compiled with CUDA enabled&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">311</span> <span class="k">if</span> <span class="n">_cudart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">312</span>     <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">313</span>         <span class="s2">&quot;libcudart functions unavailable. It looks like you have a broken build?&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span>     <span class="p">)</span>
+
+<span class="ne">AssertionError</span>: Torch not compiled with CUDA enabled
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPPy.nn</span> <span class="kn">import</span> <span class="n">models</span>
@@ -859,7 +954,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPPy.nn</span> <span class="kn">import</span> <span class="n">trainer</span>
 
 <span class="c1"># Save model state</span>
-<span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/&quot;</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -868,7 +963,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load model</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -911,7 +1006,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/725c05c4ba6919fec7147879ea05fc877954c86eb1e39e4caa7218b6b583ae35.png" src="../_images/725c05c4ba6919fec7147879ea05fc877954c86eb1e39e4caa7218b6b583ae35.png" />
+<img alt="../_images/20ad887be3146aee2e4202d6101ac4683c0c0c8e544736f096aedeefdd4d85a6.png" src="../_images/20ad887be3146aee2e4202d6101ac4683c0c0c8e544736f096aedeefdd4d85a6.png" />
 </div>
 </div>
 <p>Now that we learned how to implement, train and test a neural network model, we are ready to get into the details.</p>
