@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>An introduction to End-to-End Image Reconstruction methods &#8212; Computational Imaging</title>
+    <title>End-to-End Image Reconstruction methods &#8212; Computational Imaging</title>
   
   
   
@@ -57,6 +57,8 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/end-to-end';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -188,7 +190,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">An introduction to End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
 <ul class="nav bd-sidenav">
@@ -368,7 +370,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -379,11 +383,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>An introduction to End-to-End Image Reconstruction methods</h1>
+    <h1>End-to-End Image Reconstruction methods</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convolutional-neural-networks">Convolutional Neural Networks</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -393,8 +405,17 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="an-introduction-to-end-to-end-image-reconstruction-methods">
-<h1>An introduction to End-to-End Image Reconstruction methods<a class="headerlink" href="#an-introduction-to-end-to-end-image-reconstruction-methods" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="end-to-end-image-reconstruction-methods">
+<h1>End-to-End Image Reconstruction methods<a class="headerlink" href="#end-to-end-image-reconstruction-methods" title="Link to this heading">#</a></h1>
+<p>We are finally ready to describe more in details the main architecture used for end-to-end image reconstruction with neural networks. In particular, this chapter will focus not only on describing the main architectures commonly used in the literature, namely the Convolutional Neural Network (<strong>CNN</strong>), the <strong>UNet</strong> and the <strong>Vision Transformer (ViT)</strong>, but it will also delve into the detail on <strong>why</strong> some architectural choice is made and in which occasion one may want to slightly modify the default architecture.</p>
+<p>For the whole chapter we will consider as an example the inverse problem associated with the MotionBlur operator, considering the Mayo’s Dataset already introduced in the previous chapter. At the end of this chapter, we will also investigate the Computed Tomography inverse problem, which requires more attention as, differently from the MotionBlur, in Computed Tomography (as well as in SuperResolution, and others), the dimensionality of the measurement <span class="math notranslate nohighlight">\(y^\delta\)</span> is different from the dimensionality of the datum <span class="math notranslate nohighlight">\(x_{true}\)</span>.</p>
+<section id="convolutional-neural-networks">
+<h2>Convolutional Neural Networks<a class="headerlink" href="#convolutional-neural-networks" title="Link to this heading">#</a></h2>
+<p>Working with images is a completely different task than working with tabular data, not only because the number of features in images is usually way higher than the number of features of tabular data, but also in the way these features should be considered.</p>
+<p>Indeed, when we analyze an image, the value of one given pixel <strong>alone</strong> is of low importance: we mostly care on the behavior of a set of neighbour pixels which, when taken together, produces a <strong>visible object</strong> in our image. But that’s more, sometimes, we also care about more <strong>global</strong> information, i.e. how the object described by the neighbour of pixels interact with the other objects, with the environment, and its relative position inside the image.</p>
+<p>More formally, if we define a <strong>punctual information</strong> as any information that can be extracted by considering a single pixel, isolated by its context, a <strong>local information</strong> as any information that can be extracted by a small set of neighbour pixels, and a <strong>global information</strong> as any information that requires a global knowledge on the value of each pixels in the image to be extracted, with a context that fullfils the whole image, then we can say than image processing task is mostly based on local and global information, with a very minority of punctual information.</p>
+<p>From this observation, one can note that the classical MLP architecture, defined by a chain of linear transformation alternated with non-linear activation functions, which processes each pixel as a single, isolated neuron, is meaningless. Indeed, it would be better to consider a network where each <strong>linear</strong> layer is substitued with a layer that takes into consideration <strong>local</strong> information.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -451,6 +472,21 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convolutional-neural-networks">Convolutional Neural Networks</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
