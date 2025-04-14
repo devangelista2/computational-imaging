@@ -190,7 +190,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">An introduction to End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
 <ul class="nav bd-sidenav">
@@ -564,7 +564,7 @@ Classically, images are converted into <code class="docutils literal notranslate
 <h3>The Mayo’s dataset<a class="headerlink" href="#the-mayo-s-dataset" title="Link to this heading">#</a></h3>
 <p>The Mayo’s dataset is a commonly-used dataset for benchmarking algorithms for Computed Tomography (CT) image reconstruction from sparse measurement. It can be downloaded from the following link: <a class="reference external" href="https://drive.google.com/drive/folders/13BEiz6t57qSbwBpCtfqllmYTLmkhQeFE?usp=share_link">Mayo’s Dataset Download</a>.</p>
 <p>This dataset comprises a total of <span class="math notranslate nohighlight">\(N = 3305\)</span> training images and <span class="math notranslate nohighlight">\(N = 327\)</span> test images, representing the CT scan of 10 human chests.</p>
-<a class="reference internal image-reference" href="../_images/0.png"><img alt="../_images/0.png" class="align-center" src="../_images/0.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="data/Mayo/test/C081/0.png"><img alt="data/Mayo/test/C081/0.png" class="align-center" src="data/Mayo/test/C081/0.png" style="width: 400px;" /></a>
 <p>Each image is a <span class="math notranslate nohighlight">\(512 \times 512\)</span> grey-scale image representing, for each patient, a different <strong>slice</strong> of the scan, from the top of the chest to the bottom. The data is saved as <code class="docutils literal notranslate"><span class="pre">uint8</span></code> for space-efficiency. The file structure of the data folder is as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span>
 <span class="o">|---</span> <span class="n">Mayo</span>
@@ -664,6 +664,20 @@ Classically, images are converted into <code class="docutils literal notranslate
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torchvision&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <p>Note that our dataset now returns a normalized grey-scale image of the required shape as an <span class="math notranslate nohighlight">\((1, n_x, n_y)\)</span> pytorch tensor. The batch dimension <span class="math notranslate nohighlight">\(N\)</span> will be automatically provided by the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> class, as shown below.</p>
 <div class="cell docutils container">
@@ -687,10 +701,18 @@ Classically, images are converted into <code class="docutils literal notranslate
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([4, 1, 256, 256])
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Define dataset and dataloader (only train for now)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Get a sample batch</span>
+
+<span class="ne">NameError</span>: name &#39;MayoDataset&#39; is not defined
 </pre></div>
 </div>
-<img alt="../_images/e694b69d7d8e80b3e29531e22cb1898de03a273cd1c366e26ead15602770357f.png" src="../_images/e694b69d7d8e80b3e29531e22cb1898de03a273cd1c366e26ead15602770357f.png" />
 </div>
 </div>
 <p>Now that the data is ready, we need one more step before going back to neural networks: defining imaging operators.</p>
