@@ -428,7 +428,7 @@ document.write(`
 <p>Indeed, when we analyze an image, the value of one given pixel <strong>alone</strong> is of low importance: we mostly care on the behavior of a set of neighbour pixels which, when taken together, produces a <strong>visible object</strong> in our image. But that’s more, sometimes, we also care about more <strong>global</strong> information, i.e. how the object described by the neighbour of pixels interact with the other objects, with the environment, and its relative position inside the image.</p>
 <p>More formally, if we define a <strong>punctual information</strong> as any information that can be extracted by considering a single pixel, isolated by its context, a <strong>local information</strong> as any information that can be extracted by a small set of neighbour pixels, and a <strong>global information</strong> as any information that requires a global knowledge on the value of each pixels in the image to be extracted, with a context that fullfils the whole image, then we can say than image processing task is mostly based on local and global information, with a very minority of punctual information.</p>
 <p>From this observation, one can note that the classical MLP architecture, defined by a chain of linear transformation alternated with non-linear activation functions, which processes each pixel as a single, isolated neuron, is meaningless. Indeed, it would be better to consider a network where each <strong>linear</strong> layer is substitued with a layer that takes into consideration <strong>local</strong> information. The simplest mathematical tool achieving this is the <strong>Convolution</strong> operation.</p>
-<a class="reference internal image-reference" href="../_images/convolution.pdf"><img alt="../_images/convolution.pdf" class="align-center" src="../_images/convolution.pdf" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_images/convolution.png"><img alt="../_images/convolution.png" class="align-center" src="../_images/convolution.png" style="width: 800px;" /></a>
 <p>As shown in the image above, a convolution is a linear operation involving an input image <span class="math notranslate nohighlight">\(x\)</span> with shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span> and a convolution kernel <span class="math notranslate nohighlight">\(\mathcal{K}\)</span>, with shape <span class="math notranslate nohighlight">\(k \times k\)</span>, usually much smaller than the dimension of the image. Each pixel in position <span class="math notranslate nohighlight">\((i, j)\)</span> of the output image <span class="math notranslate nohighlight">\(y = \mathcal{K} \ast x\)</span> is obtained by applying the center of the kernel to the pixel <span class="math notranslate nohighlight">\((i, j)\)</span> of the input image, then element-wise multiplying the convolution kernel with the corresponding pixels of the input image, and summing the result. In formula:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -442,7 +442,7 @@ y_{i, j} = \sum_{t= -\frac{k}{2}}^{\frac{k}{2}} \sum_{l = -\frac{k}{2}}^{\frac{k
 <p>One key limitation of Convolutions (clearly visible in the image above), is that the dimension of the output image is way lower than the dimension of the corresponding input. This makes convolutions impractical for end-to-end image reconstruction tasks, as we usually expect the output shape to be the same as the input shape.</p>
 <p>To overcome this limitation, a technique which is usually considered is the <strong>padding</strong>, or <strong>padded convolution</strong>. The idea is to pad the input image with a given numbers of zeros to increase the dimensionality of the input image just before applying the convolution, so that the dimension of the output image is preserved after the application of the kernel. In practice, is the kernel shape is <span class="math notranslate nohighlight">\(k \times k\)</span>, one should pad the input with <span class="math notranslate nohighlight">\(\frac{k-1}{2}\)</span> zeros at each side to preserve the image shape.
 The result of a padded convolution is shown in the image below.</p>
-<a class="reference internal image-reference" href="../_images/padded-convolution.pdf"><img alt="../_images/padded-convolution.pdf" class="align-center" src="../_images/padded-convolution.pdf" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_images/padded-convolution.png"><img alt="../_images/padded-convolution.png" class="align-center" src="../_images/padded-convolution.png" style="width: 800px;" /></a>
 <p>In the following, we will always consider padded convolution operation when working with images.</p>
 </section>
 <section id="convolutional-neural-networks-cnn">
@@ -598,12 +598,10 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(1.))
+SSIM: 0.9405
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SSIM: 0.9406
-</pre></div>
-</div>
-<img alt="../_images/b8721671a4b773222fb217952cf8258cdef5e2bdc313df40de8c02e808e29561.png" src="../_images/b8721671a4b773222fb217952cf8258cdef5e2bdc313df40de8c02e808e29561.png" />
+<img alt="../_images/03a5f09de191d1e2ea9ef2a64df397ed7ad49a17bfaf18eeffa1ccc9484f092d.png" src="../_images/03a5f09de191d1e2ea9ef2a64df397ed7ad49a17bfaf18eeffa1ccc9484f092d.png" />
 </div>
 </div>
 <p>Given a trained CNN, we can also investigate what are e.g. the operation learnt on the first convolutional layer:</p>
@@ -637,7 +635,7 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/31ffc5c46bc6f0243ad7f610f8bd2b0f34125125e579cd7c1a30972a406490db.png" src="../_images/31ffc5c46bc6f0243ad7f610f8bd2b0f34125125e579cd7c1a30972a406490db.png" />
+<img alt="../_images/57b1bdad4b9dc81f7206baaa526be8bad5c452a320721bbb85b6dda99274c3a1.png" src="../_images/57b1bdad4b9dc81f7206baaa526be8bad5c452a320721bbb85b6dda99274c3a1.png" />
 </div>
 </div>
 <p>As you can see, each convolutional layer visualizes a particular pattern of the input image, each of which is then processed again by the second convolutional layer to attempt to solve the image reconstruction task.</p>
@@ -745,8 +743,8 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/27456bc8de5571c7cb607fd74c1c7c1e426e3af4783c03c303695af81ca57630.png" src="../_images/27456bc8de5571c7cb607fd74c1c7c1e426e3af4783c03c303695af81ca57630.png" />
-<img alt="../_images/74757dfa8b76f17930faec8d4826b78cbd83f21e747033a36ca77658d5e7aab0.png" src="../_images/74757dfa8b76f17930faec8d4826b78cbd83f21e747033a36ca77658d5e7aab0.png" />
-<img alt="../_images/a4253ff4e24df6e0c9feede3a14ae22794df9c179ba3f49670998f97d5b507de.png" src="../_images/a4253ff4e24df6e0c9feede3a14ae22794df9c179ba3f49670998f97d5b507de.png" />
+<img alt="../_images/6f214a8ea117dd79c93216fff8ff79bc283bb5c3db60b0da507fe9a8383d1d94.png" src="../_images/6f214a8ea117dd79c93216fff8ff79bc283bb5c3db60b0da507fe9a8383d1d94.png" />
+<img alt="../_images/f8b1a71badd89c42ccf2ee3289952630add299cafd9e843137a467745b6c6334.png" src="../_images/f8b1a71badd89c42ccf2ee3289952630add299cafd9e843137a467745b6c6334.png" />
 </div>
 </div>
 <p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed before, where the network is trained to learn <strong>not</strong> the reconstructed image, but rather the <strong>residual</strong>, which is then converted to the actual image by just adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back to the output with the aim of learning the residual is usually called <strong>residual connection</strong> or <strong>skip connection</strong>. This architectures are named <strong>Residual Convolutional Neural Netowork (ResCNN)</strong>.</p>
@@ -888,12 +886,10 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(1.))
+SSIM: 0.9404
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SSIM: 0.9405
-</pre></div>
-</div>
-<img alt="../_images/17405e476f8cded6a6a5f0472829f268a54a0fdcc9c9d8ad1aed50b02fa0cb78.png" src="../_images/17405e476f8cded6a6a5f0472829f268a54a0fdcc9c9d8ad1aed50b02fa0cb78.png" />
+<img alt="../_images/5b975305ffcb006efa333d45b76b3710d2d2866ab420eec6cc337198f0fce8ed.png" src="../_images/5b975305ffcb006efa333d45b76b3710d2d2866ab420eec6cc337198f0fce8ed.png" />
 </div>
 </div>
 </section>
