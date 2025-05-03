@@ -62,7 +62,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/end-to-end';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="An introduction to Hybrid Reconstruction methods" href="../hybrid/intro.html" />
+    <link rel="next" title="Preprocessing and Postprocessing" href="preprocessing-and-postprocessing.html" />
     <link rel="prev" title="Deep dive into IPPy" href="deep-dive-into-IPPy.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -191,13 +191,11 @@
 <li class="toctree-l1"><a class="reference internal" href="processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing-and-postprocessing.html">Preprocessing and Postprocessing</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/intro.html">An introduction to Hybrid Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/unrolling.html">Algorithm Unrolling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/plug-and-play.html">Plug-and-Play (PnP) algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/diffusion.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Introduction to Diffusion Models</a></li>
 </ul>
 
     </div>
@@ -406,7 +404,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attentionconvblock">AttentionConvBlock</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directing-the-model-via-loss-function-selection">Directing the model via loss function selection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guiding-the-model-via-loss-function-selection">Guiding the Model via Loss Function Selection</a></li>
 </ul>
             </nav>
         </div>
@@ -598,10 +596,10 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(1.))
-SSIM: 0.9405
+SSIM: 0.9406
 </pre></div>
 </div>
-<img alt="../_images/03a5f09de191d1e2ea9ef2a64df397ed7ad49a17bfaf18eeffa1ccc9484f092d.png" src="../_images/03a5f09de191d1e2ea9ef2a64df397ed7ad49a17bfaf18eeffa1ccc9484f092d.png" />
+<img alt="../_images/7a902065d6935217ca6c9faed034ccb66a4c0c6b9cddd389041bd17082db6d58.png" src="../_images/7a902065d6935217ca6c9faed034ccb66a4c0c6b9cddd389041bd17082db6d58.png" />
 </div>
 </div>
 <p>Given a trained CNN, we can also investigate what are e.g. the operation learnt on the first convolutional layer:</p>
@@ -635,7 +633,7 @@ SSIM: 0.9405
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/57b1bdad4b9dc81f7206baaa526be8bad5c452a320721bbb85b6dda99274c3a1.png" src="../_images/57b1bdad4b9dc81f7206baaa526be8bad5c452a320721bbb85b6dda99274c3a1.png" />
+<img alt="../_images/12ae2f0efd2196429e99c783bb6c3c174031d456d4185e8a8d7d0f231b7ae5ee.png" src="../_images/12ae2f0efd2196429e99c783bb6c3c174031d456d4185e8a8d7d0f231b7ae5ee.png" />
 </div>
 </div>
 <p>As you can see, each convolutional layer visualizes a particular pattern of the input image, each of which is then processed again by the second convolutional layer to attempt to solve the image reconstruction task.</p>
@@ -743,8 +741,8 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/27456bc8de5571c7cb607fd74c1c7c1e426e3af4783c03c303695af81ca57630.png" src="../_images/27456bc8de5571c7cb607fd74c1c7c1e426e3af4783c03c303695af81ca57630.png" />
-<img alt="../_images/6f214a8ea117dd79c93216fff8ff79bc283bb5c3db60b0da507fe9a8383d1d94.png" src="../_images/6f214a8ea117dd79c93216fff8ff79bc283bb5c3db60b0da507fe9a8383d1d94.png" />
-<img alt="../_images/f8b1a71badd89c42ccf2ee3289952630add299cafd9e843137a467745b6c6334.png" src="../_images/f8b1a71badd89c42ccf2ee3289952630add299cafd9e843137a467745b6c6334.png" />
+<img alt="../_images/9a2899a9a81c484f5738fb5be3d072f2f8edbe171cd2d2b3a738103f398f7e82.png" src="../_images/9a2899a9a81c484f5738fb5be3d072f2f8edbe171cd2d2b3a738103f398f7e82.png" />
+<img alt="../_images/b54c14772761f615c16449e77a365a265592c74973d2a5cf019768020e8d33ce.png" src="../_images/b54c14772761f615c16449e77a365a265592c74973d2a5cf019768020e8d33ce.png" />
 </div>
 </div>
 <p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed before, where the network is trained to learn <strong>not</strong> the reconstructed image, but rather the <strong>residual</strong>, which is then converted to the actual image by just adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back to the output with the aim of learning the residual is usually called <strong>residual connection</strong> or <strong>skip connection</strong>. This architectures are named <strong>Residual Convolutional Neural Netowork (ResCNN)</strong>.</p>
@@ -886,10 +884,10 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(1.))
-SSIM: 0.9404
+SSIM: 0.9407
 </pre></div>
 </div>
-<img alt="../_images/5b975305ffcb006efa333d45b76b3710d2d2866ab420eec6cc337198f0fce8ed.png" src="../_images/5b975305ffcb006efa333d45b76b3710d2d2866ab420eec6cc337198f0fce8ed.png" />
+<img alt="../_images/8ea2fa66f38195066de4b8eaeb40e5b824a11d31dfab356f1589ef15fbf4ed39.png" src="../_images/8ea2fa66f38195066de4b8eaeb40e5b824a11d31dfab356f1589ef15fbf4ed39.png" />
 </div>
 </div>
 </section>
@@ -939,10 +937,50 @@ As already said, the decoder is symmetric to the encoder, with upsampling convol
 Usually, <code class="docutils literal notranslate"><span class="pre">Attention</span></code> layers are used in UNet at the second last resolution level, as it has shown to perform better in practice.</p>
 </section>
 </section>
-<section id="directing-the-model-via-loss-function-selection">
-<h2>Directing the model via loss function selection<a class="headerlink" href="#directing-the-model-via-loss-function-selection" title="Link to this heading">#</a></h2>
-<p>Up to this point, our default selection for the loss function is the <code class="docutils literal notranslate"><span class="pre">MSELoss</span></code>. While it generally works well in practice, it could be un-optimal in some specific scenario where one wants to focus on particular details of the image. Indeed, we already remarked that information content in images is usually <strong>local</strong>. Therefore, punctual metrics such as MSE fails in capturing pattern information that are identified as <strong>good</strong> by the human eye.</p>
+<section id="guiding-the-model-via-loss-function-selection">
+<h2>Guiding the Model via Loss Function Selection<a class="headerlink" href="#guiding-the-model-via-loss-function-selection" title="Link to this heading">#</a></h2>
+<p>Up to this point, our default selection for the loss function has been the <code class="docutils literal notranslate"><span class="pre">MSELoss</span></code> (Mean Squared Error). While it generally performs reasonably well, it can be suboptimal in specific scenarios, particularly when focusing on fine details within an image is crucial. As we’ve previously noted, meaningful information content in images is often <strong>local</strong> in nature. Consequently, pixel-wise metrics like MSE fail to adequately capture pattern information or structural details that the human visual system readily identifies as indicative of <strong>good</strong> image quality.</p>
+<p>A practical example highlights this issuem indicated in the figure below: often, multiple images that appear significantly different to the human eye can exhibit the exact same MSE distance from a ground-truth image. Therefore, selecting the best candidate <em>solution</em> among these cannot be based solely on the MSE metric.</p>
 <a class="reference internal image-reference" href="../_images/MSEIssue.png"><img alt="../_images/MSEIssue.png" class="align-center" src="../_images/MSEIssue.png" style="width: 800px;" /></a>
+<p>To address this limitation, a significant line of research in applying neural networks to image reconstruction tasks focuses on developing better loss functions (or combinations thereof) to achieve visually superior reconstruction quality. Below, we list and briefly discuss some common and effective loss functions:</p>
+<ul>
+<li><p><strong><span class="math notranslate nohighlight">\(\ell_{L1}\)</span> (L1 Loss / MAE)</strong>: The <span class="math notranslate nohighlight">\(\ell_{L1}\)</span> loss, also known as Mean Absolute Error (MAE), represents the <span class="math notranslate nohighlight">\(\ell_1\)</span>-norm equivalent of the MSELoss (which uses the <span class="math notranslate nohighlight">\(\ell_2\)</span>-norm). It is readily available in PyTorch via <code class="docutils literal notranslate"><span class="pre">torch.nn.L1Loss()</span></code> and is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+    \ell_{L1}(y_{true}, y_{pred}) = \frac{1}{N} \sum_{i=1}^N || y^{(i)}_{true} - y^{(i)}_{pred} ||_1,
+    \]</div>
+<p>where <span class="math notranslate nohighlight">\(|| y^{(i)}_{true} - y^{(i)}_{pred} ||_1\)</span> denotes the sum over all pixels of the absolute value of the difference between the true image <span class="math notranslate nohighlight">\(y^{(i)}_{true}\)</span> and the corresponding prediction <span class="math notranslate nohighlight">\(y^{(i)}_{pred}\)</span>. While the <span class="math notranslate nohighlight">\(\ell_{L1}\)</span> loss is often associated with producing sharper images compared to MSELoss, it has the theoretical drawback of not being differentiable at zero. In practice, subgradient methods are effective, but this can sometimes lead to less stable training compared to MSE. Furthermore, it still suffers from limitations similar to MSELoss, as it remains a pixel-wise metric, potentially failing to capture structural context.</p>
+</li>
+<li><p><strong><span class="math notranslate nohighlight">\(\ell_{Fourier}\)</span> (Fourier Loss)</strong>: The <span class="math notranslate nohighlight">\(\ell_{Fourier}\)</span> loss exploits the observation that high frequencies in an image (representing fine details and textures) are often harder for convolution-based neural networks to reconstruct accurately than low frequencies (representing overall intensity and large structures). Moreover, accurately recovering these fine details often makes the reconstructed image appear sharper and more realistic to the human eye. It is typically defined based on the difference in the Fourier domain:</p>
+<div class="math notranslate nohighlight">
+\[
+    \ell_{Fourier}(y_{true}, y_{pred}) = \frac{1}{N} \sum_{i=1}^N || HP(\mathcal{F}y^{(i)}_{true} - \mathcal{F}y^{(i)}_{pred}) ||_p^p,
+    \]</div>
+<p>Here, <span class="math notranslate nohighlight">\(\mathcal{F}\)</span> denotes the 2D Fourier transform operator, <span class="math notranslate nohighlight">\(HP(\cdot)\)</span> represents a high-pass filter (which attenuates or removes low frequencies while preserving high frequencies), and <span class="math notranslate nohighlight">\(|| \cdot ||_p^p\)</span> usually indicates the squared <span class="math notranslate nohighlight">\(\ell_2\)</span>-norm (<span class="math notranslate nohighlight">\(p=2\)</span>) or the <span class="math notranslate nohighlight">\(\ell_1\)</span>-norm (<span class="math notranslate nohighlight">\(p=1\)</span>).
+Note that while this loss operates pixel-wise in the <em>Fourier domain</em>, each Fourier coefficient relates to global spatial frequency content (like patterns or textures) in the image domain. Therefore, it can be considered less strictly local than pixel-wise losses in the image spatial domain and potentially closer to how humans perceive certain aspects of image quality compared to MSELoss or the <span class="math notranslate nohighlight">\(\ell_{L1}\)</span> loss. However, a significant drawback is that focusing primarily on high frequencies neglects low-frequency information. Thus, the <span class="math notranslate nohighlight">\(\ell_{Fourier}\)</span> loss is typically used <em>in combination</em> with other losses (like MSE or <span class="math notranslate nohighlight">\(\ell_{L1}\)</span>) to ensure the overall structure and context of the image are also reconstructed accurately, leading to a satisfactory result.</p>
+</li>
+<li><p><strong><span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span> (SSIM Loss)</strong>: An alternative approach focusing on perceptual similarity is the <span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span> loss. It is based on the Structural Similarity Index Measure (SSIM), a widely used metric designed to quantify the <em>visual similarity</em> between two images. SSIM is known for correlating well with human perception of image quality because it compares local patches based on luminance, contrast, and structure. SSIM typically outputs a value where 1 indicates higher similarity. Since neural network training aims to <strong>minimize</strong> the loss, the <span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span> loss is commonly defined by subtracting the SSIM value from 1:</p>
+<div class="math notranslate nohighlight">
+\[
+    \ell_{SSIM}(y_{true}, y_{pred}) = \frac{1}{N} \sum_{i=1}^N \left( 1 - SSIM(y^{(i)}_{true}, y^{(i)}_{pred}) \right).
+    \]</div>
+<p>The <span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span> loss is popular in image processing tasks because optimizing it often leads to visually pleasing results. This success is partly attributed to SSIM’s mechanism, which analyzes images in terms of local structure, making it inherently more sensitive to context than purely pixel-wise metrics.</p>
+</li>
+<li><p><strong><span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span> (Perceptual Loss)</strong>: Building upon the idea of using metrics relevant to human perception, Perceptual Losses (<span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span>) offer another powerful alternative. Instead of comparing pixels directly or using hand-crafted metrics like SSIM, this approach leverages features extracted by a deep neural network (typically a network pre-trained on a large dataset like ImageNet, e.g., VGG or ResNet). The core idea is that the intermediate layers of these networks learn hierarchical representations of visual features (edges, textures, parts of objects, etc.) that are relevant to perception. The <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span> loss is calculated by comparing these feature representations for the predicted and ground-truth images:</p>
+<div class="math notranslate nohighlight">
+\[
+    \ell_{Perceptual}(y_{true}, y_{pred}) = \frac{1}{N} \sum_{i=1}^N \sum_{l} \lambda_l || \phi_l(y^{(i)}_{true}) - \phi_l(y^{(i)}_{pred}) ||_p^p,
+    \]</div>
+<p>where <span class="math notranslate nohighlight">\(\phi_l(y)\)</span> represents the feature map activation of image <span class="math notranslate nohighlight">\(y\)</span> extracted from a specific layer <span class="math notranslate nohighlight">\(l\)</span> of the pre-trained network, <span class="math notranslate nohighlight">\(|| \cdot ||_p^p\)</span> is typically the <span class="math notranslate nohighlight">\(\ell_1\)</span> (<span class="math notranslate nohighlight">\(p=1\)</span>) or <span class="math notranslate nohighlight">\(\ell_2\)</span> (<span class="math notranslate nohighlight">\(p=2\)</span>) distance computed across the feature map dimensions, and <span class="math notranslate nohighlight">\(\lambda_l\)</span> are weighting factors for combining losses from multiple layers (<span class="math notranslate nohighlight">\(l\)</span>). During training, the pre-trained network used for feature extraction (<span class="math notranslate nohighlight">\(\phi\)</span>) is kept frozen (its weights are not updated).
+The <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span> loss often yields reconstructions that are considered highly realistic and visually detailed, excelling at capturing complex textures and structures. However, it is computationally more expensive than other losses as it requires an additional forward pass through the feature extractor network. It also introduces a dependency on the specific pre-trained model and the chosen layers, which might require tuning for optimal performance on a given task. Furthermore, a key limitation is its reliance on these large pre-trained networks. This dependency can make <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span> impractical or unsuitable for applications where such large models are not readily available, cannot be easily deployed due to computational or memory constraints, or where the features learned on general datasets like ImageNet may not be optimal. This is particularly relevant in specialized domains like medical imaging (e.g., Computed Tomography - CT), where domain-specific features are crucial and the use of large, general-purpose models might be inappropriate or less effective.</p>
+</li>
+</ul>
+<p>Given that each of the aforementioned loss functions (<span class="math notranslate nohighlight">\(\ell_{L1}\)</span>, <span class="math notranslate nohighlight">\(\ell_{Fourier}\)</span>, <span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span>, <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span>, as well as MSE) possesses distinct advantages and disadvantages, a common and often highly effective strategy in practice is to utilize a <strong>Combination Loss</strong>. This approach involves combining multiple loss functions into a single objective function, typically as a weighted sum. For instance, a combination loss <span class="math notranslate nohighlight">\(\ell_{Combined}\)</span> could be formulated as:</p>
+<div class="math notranslate nohighlight">
+\[
+\ell_{Combined} = \lambda_1 \ell_{Loss1} + \lambda_2 \ell_{Loss2} + \dots + \lambda_K \ell_{LossK}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ell_{LossK}\)</span> represents one of the individual loss functions discussed (e.g., MSE, <span class="math notranslate nohighlight">\(\ell_{L1}\)</span>, <span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span>, <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span>), and <span class="math notranslate nohighlight">\(\lambda_k \ge 0\)</span> are hyperparameters representing the weight assigned to each component loss. By carefully tuning these weights <span class="math notranslate nohighlight">\(\lambda_k\)</span>, researchers and practitioners can aim to strike an optimal balance, leveraging the strengths of different losses (e.g., pixel accuracy from MSE, sharpness from <span class="math notranslate nohighlight">\(\ell_{L1}\)</span>, structural fidelity from <span class="math notranslate nohighlight">\(\ell_{SSIM}\)</span>, perceptual realism from <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span>) while potentially mitigating their individual weaknesses. This allows for greater flexibility in tailoring the optimization process towards achieving the desired reconstruction quality, finding a suitable compromise between the various trade-offs.</p>
 </section>
 </section>
 
@@ -986,11 +1024,11 @@ Usually, <code class="docutils literal notranslate"><span class="pre">Attention<
       </div>
     </a>
     <a class="right-next"
-       href="../hybrid/intro.html"
+       href="preprocessing-and-postprocessing.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">An introduction to Hybrid Reconstruction methods</p>
+        <p class="prev-next-title">Preprocessing and Postprocessing</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1023,7 +1061,7 @@ Usually, <code class="docutils literal notranslate"><span class="pre">Attention<
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attentionconvblock">AttentionConvBlock</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directing-the-model-via-loss-function-selection">Directing the model via loss function selection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guiding-the-model-via-loss-function-selection">Guiding the Model via Loss Function Selection</a></li>
 </ul>
   </nav></div>
 
