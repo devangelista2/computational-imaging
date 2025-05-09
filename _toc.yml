@@ -13,9 +13,8 @@ parts:
       - file: end-to-end/processing-images-with-nn
       - file: end-to-end/deep-dive-into-IPPy
       - file: end-to-end/end-to-end
-  - caption: Hybrid methods for Image Reconstruction
+      - file: end-to-end/crossdomain
+  - caption: Diffusion Models
     chapters:
-      - file: hybrid/intro
-      - file: hybrid/unrolling
-      - file: hybrid/plug-and-play
-      - file: hybrid/diffusion
+      - file: diffusion/generative-models
+      - file: diffusion/introduction-to-diffusion-models

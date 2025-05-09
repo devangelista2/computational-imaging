@@ -191,13 +191,12 @@
 <li class="toctree-l1"><a class="reference internal" href="processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/intro.html">An introduction to Hybrid Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/unrolling.html">Algorithm Unrolling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/plug-and-play.html">Plug-and-Play (PnP) algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/diffusion.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Introduction to Diffusion Models</a></li>
 </ul>
 
     </div>
@@ -529,6 +528,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/davideevangelista/computational-imaging/end-to-end/../IPPy/operators.py:16: UserWarning: CuPy not found. GPU acceleration for ASTRA via CuPy will be disabled.
+  warnings.warn(
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -660,7 +665,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/39d406fd3e47b413247907f41bdab9f51b011d039cdd4d12988ac8b610297402.png" src="../_images/39d406fd3e47b413247907f41bdab9f51b011d039cdd4d12988ac8b610297402.png" />
+<img alt="../_images/8abac01a35be39ebe7920a2f38ab6e46ced69144d4bef655d38f6783380466f8.png" src="../_images/8abac01a35be39ebe7920a2f38ab6e46ced69144d4bef655d38f6783380466f8.png" />
 </div>
 </div>
 <p>Feel free to test different operators to see how they work.</p>
@@ -700,7 +705,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grad_x = 0.2142
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grad_x = 0.2149
 </pre></div>
 </div>
 </div>
@@ -748,10 +753,10 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reconstruction SSIM: 0.9324.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reconstruction SSIM: 0.9325.
 </pre></div>
 </div>
-<img alt="../_images/1a3f873bde16ae0a03850690c69e3fe16e195e29cf403060c89d3815e124159b.png" src="../_images/1a3f873bde16ae0a03850690c69e3fe16e195e29cf403060c89d3815e124159b.png" />
+<img alt="../_images/a22869033e65d61d91cdea175e7132d0b9c6be1983446564d3847d1ba11350ac.png" src="../_images/a22869033e65d61d91cdea175e7132d0b9c6be1983446564d3847d1ba11350ac.png" />
 </div>
 </div>
 </section>
@@ -911,7 +916,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7077108f16251cbc5f4e8319efb2a58e35778eb92afcd72fe68ef24d3e2a6c62.png" src="../_images/7077108f16251cbc5f4e8319efb2a58e35778eb92afcd72fe68ef24d3e2a6c62.png" />
+<img alt="../_images/ad17acde60603225c145988ea2d3da69f0d7458d8bc280737513766938b46d98.png" src="../_images/ad17acde60603225c145988ea2d3da69f0d7458d8bc280737513766938b46d98.png" />
 </div>
 </div>
 <p>Now that we learned how to implement, train and test a neural network model, we are ready to get into the details.</p>
