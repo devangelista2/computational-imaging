@@ -62,7 +62,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/crossdomain';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to Diffusion Models" href="../diffusion/introduction-to-diffusion-models.html" />
+    <link rel="next" title="Introduction to Generative Models for Image Synthesis" href="../diffusion/generative-models.html" />
     <link rel="prev" title="End-to-End Image Reconstruction methods" href="end-to-end.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -195,6 +195,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Introduction to Diffusion Models</a></li>
 </ul>
 
@@ -393,6 +394,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resizing">Resizing?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-processing">Pre-processing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-full-pipeline-to-train-end-to-end-cross-domain-unet">A full pipeline to train end-to-end cross-domain UNet</a></li>
 </ul>
             </nav>
         </div>
@@ -408,6 +410,7 @@ document.write(`
 <h1>Cross-Domain End-to-End Reconstruction<a class="headerlink" href="#cross-domain-end-to-end-reconstruction" title="Link to this heading">#</a></h1>
 <p>Despite the impressive performance (in terms of both reconstruction quality and efficiency) often achieved by convolution-based neural networks, their direct application in practice can be limited by a crucial constraint: their inherent structure typically requires the input data and the output solution to have matching dimensions. They struggle to process data where the dimensionality of the input datum <span class="math notranslate nohighlight">\(y\)</span> differs significantly from the dimensionality of the desired solution <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>Consider, for example, the popular UNet architecture. Due to its symmetric encoding-decoding structure, the dimensionality of the model’s input remains unchanged at the output. This poses a challenge in applications such as Computed Tomography (CT) or Super-Resolution (SR), where the <strong>domain</strong> (and thus, often the dimensionality and structure) of the measured datum <span class="math notranslate nohighlight">\(y\)</span> is inherently different from the <strong>domain</strong> of the desired solution image <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<a class="reference internal image-reference" href="../_images/CNN-issue.png"><img alt="../_images/CNN-issue.png" class="align-center" src="../_images/CNN-issue.png" style="width: 800px;" /></a>
 <section id="resizing">
 <h2>Resizing?<a class="headerlink" href="#resizing" title="Link to this heading">#</a></h2>
 <p>A seemingly straightforward solution to this limitation is to <strong>resize</strong> the input datum <span class="math notranslate nohighlight">\(y\)</span> so that its dimensions match the expected dimensions of the reconstruction <span class="math notranslate nohighlight">\(x\)</span>. This could be achieved using functions like <code class="docutils literal notranslate"><span class="pre">Resize()</span></code> from the <code class="docutils literal notranslate"><span class="pre">torchvision</span></code> package. While this modification allows a model like UNet to technically process the mapping from the resized <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(x\)</span>, this approach has generally been shown to be ineffective in practice for many inverse problems.</p>
@@ -425,6 +428,153 @@ document.write(`
 \]</div>
 <p>Clearly, <span class="math notranslate nohighlight">\(\tilde{x}\)</span> will generally be a low-quality image, as <span class="math notranslate nohighlight">\(K^T\)</span> maps <span class="math notranslate nohighlight">\(y\)</span> back to the image domain without explicitly optimizing for reconstruction fidelity. However, this transformation is often computationally inexpensive, making it suitable for this pre-processing role. It stands to reason that if a <em>better</em> initial reconstruction <span class="math notranslate nohighlight">\(\tilde{x}\)</span> could be obtained efficiently (without significantly increasing computational time), the subsequent neural network might achieve a better final result, thereby increasing the overall effectiveness of the pipeline.</p>
 <p>For this reason, more advanced pre-processing techniques have been developed, particularly in recent years. These methods are typically task-specific, as they often need to exploit the specific mathematical properties of the forward operator <span class="math notranslate nohighlight">\(K\)</span> to yield a higher-quality initial estimate than simple transposition or back-projection. In the following sections, we might discuss specific pre-processing approaches for common inverse problems like CT and SR. For other inverse problems where specialized pre-processing methods are not readily available, recall that using the transposed operator <span class="math notranslate nohighlight">\(K^T\)</span> always provides a basic, universally applicable pre-processing option.</p>
+<a class="reference internal image-reference" href="../_images/preprocessing.png"><img alt="../_images/preprocessing.png" class="align-center" src="../_images/preprocessing.png" style="width: 800px;" /></a>
+</section>
+<section id="a-full-pipeline-to-train-end-to-end-cross-domain-unet">
+<h2>A full pipeline to train end-to-end cross-domain UNet<a class="headerlink" href="#a-full-pipeline-to-train-end-to-end-cross-domain-unet" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#-----------------</span>
+<span class="c1"># This is just for rendering on the website</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="c1">#-----------------</span>
+
+<span class="kn">from</span> <span class="nn">IPPy</span> <span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">IPPy.nn</span> <span class="kn">import</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">losses</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Set device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
+
+<span class="c1"># Define model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">UNet</span><span class="p">(</span><span class="n">ch_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                    <span class="n">ch_out</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">middle_ch</span><span class="o">=</span><span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
+                    <span class="n">n_layers_per_block</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">down_layers</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ResDownBlock&quot;</span><span class="p">,</span> <span class="s2">&quot;ResDownBlock&quot;</span><span class="p">),</span>
+                    <span class="n">up_layers</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ResUpBlock&quot;</span><span class="p">,</span> <span class="s2">&quot;ResUpBlock&quot;</span><span class="p">),</span>
+                    <span class="n">final_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="c1"># Define dataset class</span>
+<span class="k">class</span> <span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+
+        <span class="c1"># We expect data_path to be like &quot;./data/Mayo/train&quot; or &quot;./data/Mayo/test&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">/*/*.png&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># Load the idx&#39;s image from fname_list</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+         <span class="c1"># To load the image as grey-scale</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert to numpy array -&gt; (512, 512)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> 
+
+        <span class="c1"># Convert to pytorch tensor -&gt; (1, 512, 512) &lt;-&gt; (c, n_x, n_y)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Resize to the required shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (1, n_x, n_y)</span>
+
+        <span class="c1"># Normalize in [0, 1] range</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="c1"># --- Load data</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Define CTProjector operator</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">CTProjector</span><span class="p">(</span>
+    <span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+    <span class="n">angles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+    <span class="n">det_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">geometry</span><span class="o">=</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># --- Parameters</span>
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">losses</span><span class="o">.</span><span class="n">MixedLoss</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">(),</span> <span class="n">losses</span><span class="o">.</span><span class="n">SSIMLoss</span><span class="p">(),</span> <span class="n">losses</span><span class="o">.</span><span class="n">FourierLoss</span><span class="p">()),</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+
+<span class="c1"># Cycle over the epochs</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+
+    <span class="c1"># Cycle over the batches with tqdm</span>
+    <span class="n">epoch_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ssim_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+        <span class="c1"># Send x and y to device</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="c1"># Compute associated y_delta</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+            <span class="c1"># --- PREPROCESSING</span>
+            <span class="n">x_FBP</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">FBP</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+
+        <span class="c1"># zero the parameter gradients</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="c1"># forward + backward + optimize</span>
+        <span class="n">x_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_FBP</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="c1"># update loss</span>
+        <span class="n">epoch_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">ssim_loss</span> <span class="o">+=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">SSIM</span><span class="p">(</span><span class="n">x_pred</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+
+        <span class="c1"># Update tqdm bar</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;Loss&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">epoch_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SSIM&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ssim_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Save model every 5 epochs (overwrite)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Save model state</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/CTUNet&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CUDA not available. CTProjector will use CPU.
+Attempting to create ASTRA projector type: &#39;linear&#39; for &#39;parallel&#39; geometry...
+Successfully created ASTRA projector type: &#39;linear&#39;
+CTProjector initialized. Geometry: parallel. Using GPU: False. FBP Algorithm: FBP
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -468,11 +618,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="../diffusion/introduction-to-diffusion-models.html"
+       href="../diffusion/generative-models.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introduction to Diffusion Models</p>
+        <p class="prev-next-title">Introduction to Generative Models for Image Synthesis</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -494,6 +644,7 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resizing">Resizing?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-processing">Pre-processing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-full-pipeline-to-train-end-to-end-cross-domain-unet">A full pipeline to train end-to-end cross-domain UNet</a></li>
 </ul>
   </nav></div>
 

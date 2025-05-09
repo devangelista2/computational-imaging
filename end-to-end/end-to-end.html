@@ -195,6 +195,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Introduction to Diffusion Models</a></li>
 </ul>
 
@@ -595,13 +596,15 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/davideevangelista/computational-imaging/end-to-end/../IPPy/operators.py:16: UserWarning: CuPy not found. GPU acceleration for ASTRA via CuPy will be disabled.
+  warnings.warn(
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(1.))
+SSIM: 0.9405
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SSIM: 0.9407
-</pre></div>
-</div>
-<img alt="../_images/92edfea823b9e199316f5746a579817e377bbe5f7151fa7e9c59adf995cb843c.png" src="../_images/92edfea823b9e199316f5746a579817e377bbe5f7151fa7e9c59adf995cb843c.png" />
+<img alt="../_images/7a638d4222432ec4ff110b1c38b1276172b90602d8279aa02aeaf725de63c8be.png" src="../_images/7a638d4222432ec4ff110b1c38b1276172b90602d8279aa02aeaf725de63c8be.png" />
 </div>
 </div>
 <p>Given a trained CNN, we can also investigate what are e.g. the operation learnt on the first convolutional layer:</p>
@@ -635,7 +638,7 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2aa922baf66dfb91847fb4cd0a955b9ee776125d8bb248cf5c00c1cac1bfbf97.png" src="../_images/2aa922baf66dfb91847fb4cd0a955b9ee776125d8bb248cf5c00c1cac1bfbf97.png" />
+<img alt="../_images/666934a74279ac3f8d6663d214b7f9f6eacb5e5a5788787074b28de2d8cc0558.png" src="../_images/666934a74279ac3f8d6663d214b7f9f6eacb5e5a5788787074b28de2d8cc0558.png" />
 </div>
 </div>
 <p>As you can see, each convolutional layer visualizes a particular pattern of the input image, each of which is then processed again by the second convolutional layer to attempt to solve the image reconstruction task.</p>
@@ -743,8 +746,8 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/27456bc8de5571c7cb607fd74c1c7c1e426e3af4783c03c303695af81ca57630.png" src="../_images/27456bc8de5571c7cb607fd74c1c7c1e426e3af4783c03c303695af81ca57630.png" />
-<img alt="../_images/6d9e630347682533d12fb30d85fcb4a91a30b78665290fdaad25a1a1919c8ec3.png" src="../_images/6d9e630347682533d12fb30d85fcb4a91a30b78665290fdaad25a1a1919c8ec3.png" />
-<img alt="../_images/31dcd40ef2905c9d83e1b8ef6c2aa0cf6b5c8d44a7c3aad4c6bef811d4361ac8.png" src="../_images/31dcd40ef2905c9d83e1b8ef6c2aa0cf6b5c8d44a7c3aad4c6bef811d4361ac8.png" />
+<img alt="../_images/241aa6a719be338979d05a4c1dd735e42157a13c2fbc0900bbe552f09fab9891.png" src="../_images/241aa6a719be338979d05a4c1dd735e42157a13c2fbc0900bbe552f09fab9891.png" />
+<img alt="../_images/b52368a83a684c81c41afc2421c1d16b0b1d2e1352f8d474556b270bf7fb061f.png" src="../_images/b52368a83a684c81c41afc2421c1d16b0b1d2e1352f8d474556b270bf7fb061f.png" />
 </div>
 </div>
 <p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed before, where the network is trained to learn <strong>not</strong> the reconstructed image, but rather the <strong>residual</strong>, which is then converted to the actual image by just adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back to the output with the aim of learning the residual is usually called <strong>residual connection</strong> or <strong>skip connection</strong>. This architectures are named <strong>Residual Convolutional Neural Netowork (ResCNN)</strong>.</p>
@@ -886,10 +889,10 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(1.))
-SSIM: 0.9405
+SSIM: 0.9408
 </pre></div>
 </div>
-<img alt="../_images/8c0bb7c2c9d8339985c188627620ce922225e60ac01fdb49b2bc52e70c6edecf.png" src="../_images/8c0bb7c2c9d8339985c188627620ce922225e60ac01fdb49b2bc52e70c6edecf.png" />
+<img alt="../_images/c5372e681b944a8b4d43b876047363a2c2858b2cf3e8923643145aad50e91397.png" src="../_images/c5372e681b944a8b4d43b876047363a2c2858b2cf3e8923643145aad50e91397.png" />
 </div>
 </div>
 </section>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Introduction to Diffusion Models &#8212; Computational Imaging</title>
+    <title>Diffusion Models for Image Generation &#8212; Computational Imaging</title>
   
   
   
@@ -57,10 +57,12 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'diffusion/introduction-to-diffusion-models';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Preprocessing and Postprocessing" href="../end-to-end/preprocessing-and-postprocessing.html" />
+    <link rel="prev" title="Introduction to Generative Models for Image Synthesis" href="generative-models.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -188,11 +190,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/preprocessing-and-postprocessing.html">Preprocessing and Postprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction to Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Diffusion Models for Image Generation</a></li>
 </ul>
 
     </div>
@@ -365,7 +368,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -376,11 +381,36 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Introduction to Diffusion Models</h1>
+    <h1>Diffusion Models for Image Generation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-diffusion-models">Introduction to Diffusion Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-forward-process-gradual-noising">The Forward Process: Gradual Noising</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-reverse-process-learning-to-denoise">The Reverse Process: Learning to Denoise</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#denoising-score-matching-simplified-view">Denoising Score Matching (Simplified View)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-diffusion-model-structure">Summary of Diffusion Model Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-diffusion-models">Training Diffusion Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-sampling-from-the-forward-process">Recap: Sampling from the Forward Process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-loss-function">The Loss Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-procedure-in-pytorch">Training Procedure in PyTorch</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-generation">Image Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-reverse-sampling-process">The Reverse Sampling Process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudocode-of-the-sampling-process">Pseudocode of the Sampling Process</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -390,8 +420,212 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-diffusion-models">
-<h1>Introduction to Diffusion Models<a class="headerlink" href="#introduction-to-diffusion-models" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="diffusion-models-for-image-generation">
+<h1>Diffusion Models for Image Generation<a class="headerlink" href="#diffusion-models-for-image-generation" title="Link to this heading">#</a></h1>
+<p>As previously introduced, in this final chapter we will discuss more in details the working mechanism of Diffusion Models, the state-of-the-art for image generation.</p>
+<section id="introduction-to-diffusion-models">
+<h2>Introduction to Diffusion Models<a class="headerlink" href="#introduction-to-diffusion-models" title="Link to this heading">#</a></h2>
+<p>Diffusion models are a class of generative models that produce data samples by <strong>iteratively denoising a Gaussian noise vector</strong>. Unlike GANs or VAEs, they are <strong>likelihood-based models</strong> that combine principles from <strong>non-equilibrium thermodynamics</strong> and <strong>probabilistic modeling</strong>.</p>
+<p>The key idea is to define a <strong>Markov chain</strong> that slowly destroys the structure of data by adding Gaussian noise over several steps, and then train a neural network to <strong>reverse this noising process</strong>, recovering the original data.</p>
+<a class="reference internal image-reference" href="../_images/diffusion-diagram.png"><img alt="../_images/diffusion-diagram.png" class="align-center" src="../_images/diffusion-diagram.png" style="width: 800px;" /></a>
+<section id="the-forward-process-gradual-noising">
+<h3>The Forward Process: Gradual Noising<a class="headerlink" href="#the-forward-process-gradual-noising" title="Link to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(x_0 \sim p_{\text{data}}(x)\)</span> be a sample from the real data distribution.</p>
+<p>We define a sequence of latent variables <span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_T\)</span> where noise is added at each step according to a predefined variance schedule <span class="math notranslate nohighlight">\( \beta_1, \dots, \beta_T\)</span>. The forward (noising) process is defined as:</p>
+<div class="math notranslate nohighlight">
+\[
+q(x_t \mid x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} \, x_{t-1}, \beta_t I)
+\]</div>
+<p>This is a <strong>Markov process</strong> that gradually transforms the data into pure noise.</p>
+<p>We can also write the marginal distribution of <span class="math notranslate nohighlight">\(x_t\)</span> directly given <span class="math notranslate nohighlight">\(x_0\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[
+q(x_t \mid x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
+\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha_t = 1 - \beta_t, \quad \bar{\alpha}_t = \prod_{s=1}^t \alpha_s
+\]</div>
+<p>Intuitively, as <span class="math notranslate nohighlight">\(t \to T\)</span>, <span class="math notranslate nohighlight">\(x_t\)</span> becomes close to an isotropic Gaussian <span class="math notranslate nohighlight">\(\mathcal{N}(0, I)\)</span>.</p>
+</section>
+<section id="the-reverse-process-learning-to-denoise">
+<h3>The Reverse Process: Learning to Denoise<a class="headerlink" href="#the-reverse-process-learning-to-denoise" title="Link to this heading">#</a></h3>
+<p>Our goal is to learn the <strong>reverse-time process</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+p_\theta(x_{t-1} \mid x_t)
+\]</div>
+<p>Unlike the forward process, this is <strong>not known analytically</strong>. We approximate it using a neural network parameterized by <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>Assuming a Gaussian form for the reverse conditional:</p>
+<div class="math notranslate nohighlight">
+\[
+p_\theta(x_{t-1} \mid x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \Sigma_\theta(x_t, t))
+\]</div>
+<p>Most models fix <span class="math notranslate nohighlight">\(\Sigma_\theta\)</span> and train the network to predict only the mean (or alternatively the noise that was added, as we’ll see next).</p>
+</section>
+<section id="denoising-score-matching-simplified-view">
+<h3>Denoising Score Matching (Simplified View)<a class="headerlink" href="#denoising-score-matching-simplified-view" title="Link to this heading">#</a></h3>
+<p>Rather than modeling the full posterior <span class="math notranslate nohighlight">\(p_\theta(x_{t-1} \mid x_t)\)</span>, the training objective is simplified by using <strong>denoising score matching</strong>. The network learns to <strong>predict the noise</strong> <span class="math notranslate nohighlight">\(\epsilon\)</span> added at each step:</p>
+<div class="math notranslate nohighlight">
+\[
+x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \, \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
+\]</div>
+<p>A neural network <span class="math notranslate nohighlight">\(\epsilon_\theta(x_t, t)\)</span> is trained to minimize the expected squared error:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}_{\text{simple}}(\theta) = \mathbb{E}_{x_0, \epsilon, t} \left[ \left\| \epsilon - \epsilon_\theta(x_t, t) \right\|^2 \right]
+\]</div>
+<p>This formulation greatly simplifies training and leads to excellent sample quality.</p>
+</section>
+<section id="summary-of-diffusion-model-structure">
+<h3>Summary of Diffusion Model Structure<a class="headerlink" href="#summary-of-diffusion-model-structure" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Forward process</strong>: adds small amounts of Gaussian noise step-by-step to data</p></li>
+<li><p><strong>Reverse process</strong>: learned by a neural network to denoise</p></li>
+<li><p><strong>Final sample generation</strong>: starts from pure Gaussian noise and applies the learned denoising steps</p></li>
+</ul>
+<p>This framework allows for <strong>stable training</strong>, unlike GANs, and for <strong>high-quality image synthesis</strong>, often outperforming VAEs and GANs in perceptual quality.</p>
+</section>
+</section>
+<section id="training-diffusion-models">
+<h2>Training Diffusion Models<a class="headerlink" href="#training-diffusion-models" title="Link to this heading">#</a></h2>
+<p>Once we have defined the forward noising process and the reverse denoising model, the training phase consists in teaching the neural network to <strong>predict the noise</strong> that was added to a clean image.</p>
+<p>We use a <strong>time-dependent neural network</strong> <span class="math notranslate nohighlight">\(\epsilon_\theta(x_t, t)\)</span> that receives as input a noisy image <span class="math notranslate nohighlight">\(x_t\)</span> and a timestep <span class="math notranslate nohighlight">\(t\)</span>, and tries to estimate the noise <span class="math notranslate nohighlight">\(\epsilon\)</span> used to corrupt the original clean image <span class="math notranslate nohighlight">\(x_0\)</span>.</p>
+<section id="recap-sampling-from-the-forward-process">
+<h3>Recap: Sampling from the Forward Process<a class="headerlink" href="#recap-sampling-from-the-forward-process" title="Link to this heading">#</a></h3>
+<p>Recall that we can sample a noisy image <span class="math notranslate nohighlight">\(x_t\)</span> directly given the clean image <span class="math notranslate nohighlight">\(x_0\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[
+x_t = \sqrt{\bar{\alpha}_t} \, x_0 + \sqrt{1 - \bar{\alpha}_t} \, \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
+\]</div>
+<p>This gives us a way to <strong>synthetically generate training data pairs</strong> ((x_t, \epsilon)) from a dataset of real images <span class="math notranslate nohighlight">\(x_0\)</span>.</p>
+</section>
+<section id="the-loss-function">
+<h3>The Loss Function<a class="headerlink" href="#the-loss-function" title="Link to this heading">#</a></h3>
+<p>The model is trained by minimizing the <strong>mean squared error</strong> between the predicted noise and the actual sampled noise:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}_{\text{simple}}(\theta) = \mathbb{E}_{x_0, \epsilon, t} \left[ \left\| \epsilon - \epsilon_\theta(x_t, t) \right\|^2 \right]
+\]</div>
+<p>This approach has the following advantages:</p>
+<ul class="simple">
+<li><p>It avoids explicitly computing the reverse conditional distribution.</p></li>
+<li><p>It is <strong>simple to implement</strong>.</p></li>
+<li><p>It works well in practice.</p></li>
+</ul>
+</section>
+<section id="training-procedure-in-pytorch">
+<h3>Training Procedure in PyTorch<a class="headerlink" href="#training-procedure-in-pytorch" title="Link to this heading">#</a></h3>
+<p>Here is a minimal example of how this training step might look like using PyTorch:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+
+<span class="k">def</span> <span class="nf">get_alphas</span><span class="p">(</span><span class="n">beta_schedule</span><span class="p">):</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">beta_schedule</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">beta</span>
+    <span class="n">alpha_bar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">alpha_bar</span>
+
+<span class="k">class</span> <span class="nc">SimpleUNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Minimal UNet-like model for illustration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="c1"># Embed time as additional channel or via positional encoding</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Assume we already have: x0: (B, C, H, W), sampled from data</span>
+<span class="c1"># t: timestep indices uniformly sampled in [1, T]</span>
+<span class="k">def</span> <span class="nf">sample_xt</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bar</span><span class="p">):</span>
+    <span class="n">sqrt_alpha_bar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">alpha_bar</span><span class="p">[</span><span class="n">t</span><span class="p">])[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">sqrt_one_minus_alpha_bar</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha_bar</span><span class="p">[</span><span class="n">t</span><span class="p">])[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+    <span class="n">xt</span> <span class="o">=</span> <span class="n">sqrt_alpha_bar</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">sqrt_one_minus_alpha_bar</span> <span class="o">*</span> <span class="n">noise</span>
+    <span class="k">return</span> <span class="n">xt</span><span class="p">,</span> <span class="n">noise</span>
+
+<span class="c1"># Training step</span>
+<span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bar</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+    <span class="n">xt</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="n">sample_xt</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bar</span><span class="p">)</span>
+    <span class="n">pred_noise</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">xt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()(</span><span class="n">pred_noise</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="image-generation">
+<h2>Image Generation<a class="headerlink" href="#image-generation" title="Link to this heading">#</a></h2>
+<p>Once the model has been trained to predict the noise added during the forward process, we can <strong>generate new images</strong> by reversing the diffusion process. This process begins from <strong>pure Gaussian noise</strong> and proceeds step-by-step, applying the learned denoising network.</p>
+<a class="reference internal image-reference" href="../_images/DM.png"><img alt="../_images/DM.png" class="align-center" src="../_images/DM.png" style="width: 800px;" /></a>
+<section id="the-reverse-sampling-process">
+<h3>The Reverse Sampling Process<a class="headerlink" href="#the-reverse-sampling-process" title="Link to this heading">#</a></h3>
+<p>Given a trained model <span class="math notranslate nohighlight">\(\epsilon_\theta(x_t, t)\)</span>, we start from <span class="math notranslate nohighlight">\(x_T \sim \mathcal{N}(0, I)\)</span> and apply the following iterative update:</p>
+<div class="math notranslate nohighlight">
+\[
+x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \right) + \sigma_t z
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha_t = 1 - \beta_t\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{\alpha}_t = \prod_{s=1}^t \alpha_s\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(z \sim \mathcal{N}(0, I)\)</span> is fresh Gaussian noise</p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma_t^2\)</span> is typically set to <span class="math notranslate nohighlight">\(\beta_t\)</span>, the variance of the forward process</p></li>
+</ul>
+<p>At each step, we use the network to predict the noise added to <span class="math notranslate nohighlight">\(x_t\)</span>, and subtract it out to get <span class="math notranslate nohighlight">\(x_{t-1}\)</span>, optionally adding some randomness (except at <span class="math notranslate nohighlight">\(t = 1\)</span>).</p>
+</section>
+<section id="pseudocode-of-the-sampling-process">
+<h3>Pseudocode of the Sampling Process<a class="headerlink" href="#pseudocode-of-the-sampling-process" title="Link to this heading">#</a></h3>
+<p>Here is a simplified description of the denoising loop:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">alpha_bar</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span> <span class="c1"># Set device</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="n">image_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># Start from pure noise</span>
+
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">)):</span>
+        <span class="n">t_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="n">t</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">epsilon_theta</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t_tensor</span><span class="p">)</span>
+
+        <span class="n">alpha_t</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">alpha_bar_t</span> <span class="o">=</span> <span class="n">alpha_bar</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">beta_t</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
+        <span class="n">coef1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">alpha_t</span><span class="p">)</span>
+        <span class="n">coef2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha_t</span><span class="p">)</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha_bar_t</span><span class="p">)</span>
+
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">coef1</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">coef2</span> <span class="o">*</span> <span class="n">epsilon_theta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">noise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">beta_t</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">noise</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">mean</span>  <span class="c1"># Final step: no noise added</span>
+
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -425,12 +659,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../end-to-end/preprocessing-and-postprocessing.html"
+       href="generative-models.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Preprocessing and Postprocessing</p>
+        <p class="prev-next-title">Introduction to Generative Models for Image Synthesis</p>
       </div>
     </a>
 </div>
@@ -439,6 +673,38 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-diffusion-models">Introduction to Diffusion Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-forward-process-gradual-noising">The Forward Process: Gradual Noising</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-reverse-process-learning-to-denoise">The Reverse Process: Learning to Denoise</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#denoising-score-matching-simplified-view">Denoising Score Matching (Simplified View)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-diffusion-model-structure">Summary of Diffusion Model Structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-diffusion-models">Training Diffusion Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recap-sampling-from-the-forward-process">Recap: Sampling from the Forward Process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-loss-function">The Loss Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-procedure-in-pytorch">Training Procedure in PyTorch</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-generation">Image Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-reverse-sampling-process">The Reverse Sampling Process</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pseudocode-of-the-sampling-process">Pseudocode of the Sampling Process</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

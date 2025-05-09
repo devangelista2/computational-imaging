@@ -191,13 +191,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/processing-images-with-nn.html">Processing images with Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Hybrid methods for Image Reconstruction</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/intro.html">An introduction to Hybrid Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/unrolling.html">Algorithm Unrolling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/plug-and-play.html">Plug-and-Play (PnP) algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hybrid/diffusion.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Introduction to Diffusion Models</a></li>
 </ul>
 
     </div>
@@ -579,8 +578,8 @@ tensor([[0., 0., 0.],
         [0., 0., 0.]])
 tensor([[1., 1., 1., 1.],
         [1., 1., 1., 1.]])
-tensor([[0.0687, 0.6593],
-        [0.1290, 0.1942]])
+tensor([[0.2745, 0.0137],
+        [0.6782, 0.3994]])
 </pre></div>
 </div>
 </div>
@@ -738,7 +737,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([1.4975, 1.1357]), y: tensor([5.9950, 5.2714])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([-0.0101, -1.7990]), y: tensor([ 2.9799, -0.5980])
 </pre></div>
 </div>
 </div>
@@ -896,7 +895,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_batch: torch.Size([16, 8]). Shape of y_batch: torch.Size([16, 1])
-Real value: 3.5. Model prediction: -0.3208339810371399.
+Real value: 1.2940000295639038. Model prediction: -0.1022803857922554.
 </pre></div>
 </div>
 </div>
@@ -1033,7 +1032,7 @@ This is done as follows:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 0.8688. True: 1.0830.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 2.0243. True: 1.8320.
 </pre></div>
 </div>
 </div>
