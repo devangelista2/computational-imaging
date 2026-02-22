@@ -1,0 +1,881 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Processing images with Neural Networks &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/processing-images-with-nn';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Deep dive into IPPy" href="deep-dive-into-IPPy.html" />
+    <link rel="prev" title="A brief overview of PyTorch" href="../intro/a-brief-overview-pytorch.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Computational Imaging (CI)
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A brief overview of PyTorch</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing images with Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Diffusion Models for Image Generation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fend-to-end/processing-images-with-nn.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/end-to-end/processing-images-with-nn.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Processing images with Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-recall-on-image-reconstruction">A Brief Recall on Image Reconstruction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural Networks for Image Processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid-approaches">End-to-End vs. Hybrid Approaches</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-supervised-learning">Self-Supervised Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-data-for-neural-network-processing">Preparing the data for Neural Network processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshaping">Reshaping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization">Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-type">Data type</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-and-dataloading">Dataset and Dataloading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mayo-s-dataset">The Mayo’s dataset</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="processing-images-with-neural-networks">
+<h1>Processing images with Neural Networks<a class="headerlink" href="#processing-images-with-neural-networks" title="Link to this heading">#</a></h1>
+<p>After introducing the concept of Neural Networks (in its simplest form, that is the MLP), we are now ready to move back to the main topic of this course: <strong>image reconstruction</strong>. In the following, we will quickly recall the problem setup, mainly to fix some notation, and we will discuss how the basic architecture of MLP can be modified to address the task of image reconstruction.
+This discussion will include the concept of <strong>Convolutional Neural Networks (CNN)</strong>, a particular modifications to the already-described MLP that allows for a more flexible processing of the input image, which generalizes better on new data by imitating the behavior of the human eye. To this aim, we will introduce the concept of <strong>Receptive Field (RF)</strong>, as the sub-portion of input image that provides the context in image reconstruction. To improve the RF, we will then discuss <strong>U-Net</strong>, arguably the most-used neural network architecture for every possible task related to images, highlighiting its main advantages and limitations.</p>
+<p>Finally, we will introduce <strong>Vision Transformers (ViT)</strong>: a recently-introduced architecture which seems to perform particularly well on computer vision tasks trying to imitate the success that Transformers already had in Language Processing.</p>
+<section id="a-brief-recall-on-image-reconstruction">
+<h2>A Brief Recall on Image Reconstruction<a class="headerlink" href="#a-brief-recall-on-image-reconstruction" title="Link to this heading">#</a></h2>
+<p>In the first module of this course, you already discussed the problem of image reconstruction from measurements acquired via <strong>linear operators</strong>. In particular, this was done by considering the following acquisition system:</p>
+<div class="math notranslate nohighlight">
+\[
+y^\delta = Kx_{true} + e,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> represents the <strong>acquisition operator</strong>, <span class="math notranslate nohighlight">\(x_{true} \in \mathbb{R}^n\)</span> is the <strong>true datum</strong> we want to reconstruct (here represented in <em>vectorized</em> form), <span class="math notranslate nohighlight">\(e \in \mathbb{R}^m\)</span> is the <strong>measurement noise</strong>, which satisfies <span class="math notranslate nohighlight">\(|| e ||_2 \leq \delta\)</span>, and <span class="math notranslate nohighlight">\(y^\delta \in \mathbb{R}^m\)</span> is the <strong>acquired datum</strong>.</p>
+<p>The task of image reconstruction is to approximate <span class="math notranslate nohighlight">\(x_{true}\)</span> (denoted as <span class="math notranslate nohighlight">\(x^*\)</span> in the following), starting from <span class="math notranslate nohighlight">\(y^\delta\)</span> and, possibly, some information about the noise—e.g., <span class="math notranslate nohighlight">\(e\)</span> could be Gaussian noise with zero mean and a given standard deviation <span class="math notranslate nohighlight">\(\sigma&gt;0\)</span>.</p>
+<p>For simplicity, in the first part of this course, <span class="math notranslate nohighlight">\(x_{true}\)</span> was usually represented as a matrix of shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span>, where <span class="math notranslate nohighlight">\(n_x\)</span> and <span class="math notranslate nohighlight">\(n_y\)</span> denote the number of pixels per row and column, respectively. Clearly, this implies that <span class="math notranslate nohighlight">\((n_x, n_y)\)</span> satisfies <span class="math notranslate nohighlight">\(n_x \cdot n_y = n\)</span>. Similarly, the acquired measurement data <span class="math notranslate nohighlight">\(y^\delta\)</span> is also treated as an image, with shape <span class="math notranslate nohighlight">\(m_x \times m_y\)</span> such that <span class="math notranslate nohighlight">\(m_x \cdot m_y = m\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Due to the dimensions of the reconstructed image <span class="math notranslate nohighlight">\(x_{true}\)</span>, the operator <span class="math notranslate nohighlight">\(K\)</span> <strong>cannot</strong> be stored in memory. For this reason, we typically consider an <strong>operator</strong> that <em>simulates</em> the application of <span class="math notranslate nohighlight">\(K\)</span> to the input <span class="math notranslate nohighlight">\(x_{true}\)</span>.</p>
+</div>
+<p>We also recall that most classical methods for solving the image reconstruction problem defined above rely on the <strong>regularized least squares optimization problem</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{x \in \mathcal{X}} \frac{1}{2} || K x - y^\delta ||_2^2 + \lambda R(x),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{X}\)</span> denotes the image domain (typically, <span class="math notranslate nohighlight">\(\mathcal{X} = \{ x \geq 0 \}\)</span>), <span class="math notranslate nohighlight">\(R(x)\)</span> is the regularizer, which incorporates prior information about the solution, and <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span> is the <em>regularization parameter</em>.</p>
+<p>This optimization problem is then solved using an <em>optimizer</em>, which depends on the mathematical properties of <span class="math notranslate nohighlight">\(R(x)\)</span>.</p>
+</section>
+<section id="neural-networks-for-image-processing">
+<h2>Neural Networks for Image Processing<a class="headerlink" href="#neural-networks-for-image-processing" title="Link to this heading">#</a></h2>
+<p>When working with neural networks, we need to take a slightly different approach. As we already noted in the previous sections, a neural network pipeline consists of two main components:</p>
+<ul class="simple">
+<li><p>A <strong>model architecture</strong>, defined by the type of layers, the number of layers (<span class="math notranslate nohighlight">\(L\)</span>), and the activation functions (<span class="math notranslate nohighlight">\(\rho\)</span>), and represented as <span class="math notranslate nohighlight">\(f_\Theta\)</span> for simplicity.</p></li>
+<li><p>A <strong>training set</strong> <span class="math notranslate nohighlight">\(D\)</span> containing <span class="math notranslate nohighlight">\(N\)</span> pairs of input-output data, which is used to train the model by optimizing its parameters to perform the task described by <span class="math notranslate nohighlight">\(D\)</span>.</p></li>
+</ul>
+<p>While we will describe the neural network model in detail in the next sections, we focus here on how the dataset is typically constructed for image processing tasks.</p>
+<section id="end-to-end-vs-hybrid-approaches">
+<h3>End-to-End vs. Hybrid Approaches<a class="headerlink" href="#end-to-end-vs-hybrid-approaches" title="Link to this heading">#</a></h3>
+<p>A key distinction when using neural networks for image reconstruction is between the <strong>end-to-end</strong> approach and the <strong>hybrid</strong> approach.</p>
+<ul class="simple">
+<li><p>An <strong>end-to-end</strong> neural network is a model <span class="math notranslate nohighlight">\(f_\Theta\)</span> trained to take the corrupted datum <span class="math notranslate nohighlight">\(y^\delta\)</span> as input and <strong>directly</strong> compute the reconstruction, i.e., <span class="math notranslate nohighlight">\(x^* = f_\Theta(y^\delta)\)</span>, in a single forward pass. This approach is significantly faster than, for example, a regularized variational method. Moreover, due to the power and flexibility of neural networks, the visual quality of the reconstructed image is often superior. However, such methods are known to suffer from severe instabilities—for instance, the quality of the solution may degrade unexpectedly when <span class="math notranslate nohighlight">\(y^\delta\)</span> is corrupted with additional noise. This makes them unreliable for applications such as medical imaging, where consistency between the solution and the measured data is crucial.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/end-to-end.png"><img alt="../_images/end-to-end.png" class="align-center" src="../_images/end-to-end.png" style="width: 600px;" /></a>
+<ul class="simple">
+<li><p>A <strong>hybrid</strong> algorithm for image reconstruction, on the other hand, alternates the application of a neural network with a step of a classical algorithm that ensures the solution remains consistent with the measurements. Due to the inherently iterative nature of this approach, these methods tend to be slower, often requiring multiple (sometimes hundreds of) applications of the neural network. Additionally, the consistency step may not always be parallelizable on a GPU, which further slows down the process due to the frequent transfer of data between the GPU and CPU. However, these models typically achieve comparable quality to end-to-end models while being significantly more stable, making them more suitable for applications such as medical imaging.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/hybrid-approach.png"><img alt="../_images/hybrid-approach.png" class="align-center" src="../_images/hybrid-approach.png" style="width: 800px;" /></a>
+<p>The class of hybrid algorithms is broad and includes methods such as Plug-and-Play (PnP), Algorithm Unrolling, and Deep Generative Priors. Later in this course, we will explore some of these methods, which are widely used in the literature.</p>
+</section>
+<section id="self-supervised-learning">
+<h3>Self-Supervised Learning<a class="headerlink" href="#self-supervised-learning" title="Link to this heading">#</a></h3>
+<p>How to build a training dataset for end-to-end neural network models is quite interesting. In fact, we already remarked that neural networks are usually trained in a <strong>supervised</strong> way, meaning that the training data is supposed to be composed on <span class="math notranslate nohighlight">\(N\)</span> input-output pairs.
+However, this would require to collect a set of <span class="math notranslate nohighlight">\(N\)</span> pairs of corrupted image - associated ground truth solution, which is undoable in practice as it would require to acquire the exact same datum twice: once for the corrupted image, and once for the ground truth. Clearly, this is impossible to do most of the time, and in particular for applications such as medical imaging, where measuring a patient twice in a row would cause him to handle twice the radiation, with consequences on his health. Therefore, how to collect data such a dataset for image reconstruction?</p>
+<p>The short answer is: <strong>you dont</strong>.
+Indeed, neural networks for image reconstruction are usually trained with a variant of the supervised learning approach, named <strong>self-supervised learning</strong>. The idea is as follows:</p>
+<ul class="simple">
+<li><p>Collect a set <span class="math notranslate nohighlight">\(\{ x^{(1)}, x^{(2)}, \dots, x^{(N)} \}\)</span> of ground-truth images.</p></li>
+<li><p><strong>Synthetically</strong> construct the associated corrupted measurement by considering the corruption operator <span class="math notranslate nohighlight">\(K\)</span>, a given noise variance <span class="math notranslate nohighlight">\(\sigma^2 &gt; 0\)</span>, and computing <span class="math notranslate nohighlight">\(y^{(i)} = K x^{(i)} + e^{(i)}\)</span> for any <span class="math notranslate nohighlight">\(i = 1, \dots, N\)</span>.</p></li>
+<li><p>Generate the final dataset as <span class="math notranslate nohighlight">\(D = \{ (y^{(1)}, x^{(1)}), (y^{(2)}, x^{(2)}), \dots, (y^{(N)}, x^{(N)}) \}\)</span>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that, compared to the classical notation we used previously, here we consider the training pair as <span class="math notranslate nohighlight">\((y^{(i)}, x^{(i)})\)</span> instead of <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span>. This is because the network should take as input the corrupted image <span class="math notranslate nohighlight">\(y^{(i)}\)</span> and return a reconstructed solution <span class="math notranslate nohighlight">\(x^{(i)}\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="preparing-the-data-for-neural-network-processing">
+<h2>Preparing the data for Neural Network processing<a class="headerlink" href="#preparing-the-data-for-neural-network-processing" title="Link to this heading">#</a></h2>
+<section id="reshaping">
+<h3>Reshaping<a class="headerlink" href="#reshaping" title="Link to this heading">#</a></h3>
+<p>Data preparation for image processing tasks follows a set of simple, classical step, which is slightly different from the approach used in the previous module of this course. Indeed, classical imaging processing algorithm (variational methods) usually considers images to be either matrices of shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span> (for grey-scale images) or <span class="math notranslate nohighlight">\(n_x \times n_y \times 3\)</span> (for RGB images, where the last dimension refers to the channel dimension), which are then flattened to <span class="math notranslate nohighlight">\(n\)</span>-dimensional vectors of length <span class="math notranslate nohighlight">\(n\)</span> where <span class="math notranslate nohighlight">\(n = n_x \cdot n_y\)</span> or <span class="math notranslate nohighlight">\(n = n_x \cdot n_y \cdot 3\)</span> to be left-multiplied by the corruption matrix <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span>. In neural network applications, since we would like to work with a <strong>batch</strong> of images in parallel, we usually consider an image as a <strong>tensor</strong> with shape <span class="math notranslate nohighlight">\(N \times c \times n_x \times n_y\)</span>, where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> is the <strong>number of images in each batch</strong> (usually, <span class="math notranslate nohighlight">\(N = 1\)</span> when working with a single image).</p></li>
+<li><p><span class="math notranslate nohighlight">\(c\)</span> is the <strong>number of channels</strong>, whose value is:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(c = 1\)</span> for grey-scale images,</p></li>
+<li><p><span class="math notranslate nohighlight">\(c = 3\)</span> for RGB images,</p></li>
+<li><p><span class="math notranslate nohighlight">\(c &gt; 3\)</span> for hyperspectral images, where <span class="math notranslate nohighlight">\(c\)</span> contains all the hyperspectral information together.</p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\(n_x\)</span> and <span class="math notranslate nohighlight">\(n_y\)</span> are the number of rows and the number of columns of the image matrix, respectively.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Differently from classical methods, images are usually not flattened in neural network-based algorithms. Therefore, one should be careful when defining the corrupting operator <span class="math notranslate nohighlight">\(K\)</span>, which won’t be a real matrix, rather it will be represented as a general operator <span class="math notranslate nohighlight">\(K: \mathbb{R}^{N \times c \times n_x \times n_y} \to \mathbb{R}^{N \times c' \times m_x \times m_y}\)</span> such that <span class="math notranslate nohighlight">\(y = K(x)\)</span>.
+Note then, when required, these operators should implement a <em>Transpose</em> counterpart, <span class="math notranslate nohighlight">\(x = K^T(y)\)</span>, that simulates the application of the transposed of the operator <span class="math notranslate nohighlight">\(K\)</span> when seen as a matrix.<br />
+All this structure has been already implemented on a few operators on the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> package, as we will see later in this course.</p>
+</div>
+</section>
+<section id="normalization">
+<h3>Normalization<a class="headerlink" href="#normalization" title="Link to this heading">#</a></h3>
+<p>Normalization is the operation of re-scaling the features of a dataset so that they fit in the same, pre-determined range of values. For example, in the California Housing example from the previous section, we had multiple input features, some of which has values that are naturally larger (or smaller) than the others. For example, the size of the house in square foot or the distance from the city center will be tipically larger than its number of bedrooms. This imbalance in the feature range causes the model to focus more on those variables and partially ignoring the others.
+As a consequence, every ML-based algorithm requires its training data to be pre-processed so that all the features have approximately the same magnitude. This process (called normalization), is mostly done in two possible ways:</p>
+<ul class="simple">
+<li><p><strong>min-max normalization:</strong> Each input data is re-scaled into the range <span class="math notranslate nohighlight">\([0, 1]\)</span> by a min-max rescaling, i.e.
+$<span class="math notranslate nohighlight">\(
+      x^{(i)} \leftarrow \frac{x^{(i)} - m}{M - x},
+  \)</span><span class="math notranslate nohighlight">\(
+  where \)</span>M<span class="math notranslate nohighlight">\( and \)</span>m$ are the maximum of the training data and its minimum, respectively.</p></li>
+<li><p><strong>gaussian normalization:</strong> Each input data is re-scaled so that its mean becomes 0 and its standard deviation becomes 1, i.e.
+$<span class="math notranslate nohighlight">\(
+      x^{(i)} \leftarrow \frac{x^{(i)} - \mu}{\sigma},
+  \)</span><span class="math notranslate nohighlight">\(
+  where \)</span>\mu<span class="math notranslate nohighlight">\( is the mean of the training set \)</span>D<span class="math notranslate nohighlight">\(, while \)</span>\sigma$ is its standard deviation.</p></li>
+</ul>
+<p>While Gaussian normalization is the most commonly used nowadays for any general-use machine learning task, it is meaningful for image processing task, as by definition, after normalization,half of the pixels are negative, and negative pixels has no physical intepretation.</p>
+<p>For this reason, in the field of image processing, it is most common to employ min-max normalization (and this is the approach we will follow from now on). Let’s define the Python function to perform dataset normalization, which will be useful in the following.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Assuming the input x is a Pytorch tensor with shape (N, c, n_x, n_y), it normalizes it</span>
+<span class="sd">    with min-max normalization and returns a tensor with the same shape, in the range [0, 1].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">M</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd">     Assuming the input x is a Pytorch tensor with shape (N, c, n_x, n_y), it normalizes it</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span><span class="sd">     with min-max normalization and returns a tensor with the same shape, in the range [0, 1].</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span><span class="sd">     &quot;&quot;&quot;</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-type">
+<h3>Data type<a class="headerlink" href="#data-type" title="Link to this heading">#</a></h3>
+<p>A last common pre-processing step for image processing tasks is that of converting all the data into the same data type. We already discuss that the main datatypes for Pytorch tensors are <code class="docutils literal notranslate"><span class="pre">uint8</span></code>, <code class="docutils literal notranslate"><span class="pre">float16</span></code>, <code class="docutils literal notranslate"><span class="pre">float32</span></code> and <code class="docutils literal notranslate"><span class="pre">float64</span></code>.
+Classically, images are converted into <code class="docutils literal notranslate"><span class="pre">float32</span></code> as it is a good trade-off between efficiency and precision:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert a tensor x to float32</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Convert a tensor x to float32</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="dataset-and-dataloading">
+<h2>Dataset and Dataloading<a class="headerlink" href="#dataset-and-dataloading" title="Link to this heading">#</a></h2>
+<p>Now that we discussed how data should be prepared, we are ready to define a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class in <code class="docutils literal notranslate"><span class="pre">torch</span></code> to work with our data. For this example we will consider an example which we will use multiple time throughout this module: the <strong>Mayo’s dataset</strong>.</p>
+<section id="the-mayo-s-dataset">
+<h3>The Mayo’s dataset<a class="headerlink" href="#the-mayo-s-dataset" title="Link to this heading">#</a></h3>
+<p>The Mayo’s dataset is a commonly-used dataset for benchmarking algorithms for Computed Tomography (CT) image reconstruction from sparse measurement. It can be downloaded from the following link: <a class="reference external" href="https://drive.google.com/drive/folders/13BEiz6t57qSbwBpCtfqllmYTLmkhQeFE?usp=share_link">Mayo’s Dataset Download</a>.</p>
+<p>This dataset comprises a total of <span class="math notranslate nohighlight">\(N = 3305\)</span> training images and <span class="math notranslate nohighlight">\(N = 327\)</span> test images, representing the CT scan of 10 human chests.</p>
+<a class="reference internal image-reference" href="data/Mayo/test/C081/0.png"><img alt="data/Mayo/test/C081/0.png" class="align-center" src="data/Mayo/test/C081/0.png" style="width: 400px;" /></a>
+<p>Each image is a <span class="math notranslate nohighlight">\(512 \times 512\)</span> grey-scale image representing, for each patient, a different <strong>slice</strong> of the scan, from the top of the chest to the bottom. The data is saved as <code class="docutils literal notranslate"><span class="pre">uint8</span></code> for space-efficiency. The file structure of the data folder is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span>
+<span class="o">|---</span> <span class="n">Mayo</span>
+<span class="o">|------|</span> <span class="n">train</span>
+<span class="o">|----------|</span> <span class="n">C002</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C004</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C012</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C016</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C027</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C030</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C050</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C052</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C067</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|----------|</span> <span class="n">C077</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+<span class="o">|------|</span> <span class="n">test</span>
+<span class="o">|----------|</span> <span class="n">C081</span>
+<span class="o">|-------------|</span> <span class="mf">0.</span><span class="n">png</span>
+<span class="o">|-------------|</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>Where each folder inside e.g. the <code class="docutils literal notranslate"><span class="pre">train</span></code> folder represents a patient, whose slice are indicated with an increasing integer number, in <code class="docutils literal notranslate"><span class="pre">.png</span></code> format. We need to take care of this folder structure when we load data into memory via the custom <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class.</p>
+<p>When working with self-supervised learning as we will do next, it is common practice to define a dataset that only returns the input <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, and the corresponding corrupted data <span class="math notranslate nohighlight">\(y^{(i)} = Kx^{(i)} + e^{(i)}\)</span> is usually generated online inside the training loop itself. Thus, we expect our <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> class to only return <span class="math notranslate nohighlight">\(x^{(i)}\)</span> when the <code class="docutils literal notranslate"><span class="pre">__getitem__(self,</span> <span class="pre">idx)</span></code> method is called.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+
+        <span class="c1"># We expect data_path to be like &quot;./data/Mayo/train&quot; or &quot;./data/Mayo/test&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">/*/*.png&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># Load the idx&#39;s image from fname_list</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+         <span class="c1"># To load the image as grey-scale</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert to numpy array -&gt; (512, 512)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> 
+
+        <span class="c1"># Convert to pytorch tensor -&gt; (1, 512, 512) &lt;-&gt; (c, n_x, n_y)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Resize to the required shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (1, n_x, n_y)</span>
+
+        <span class="c1"># Normalize in [0, 1] range</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_patient_and_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A utility function. Given an idx, it returns the patient ID and the number of slice of</span>
+<span class="sd">        that patient corresponding to the idx&#39;s datapoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">patient_id</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">slice_n</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">slice_n</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that our dataset now returns a normalized grey-scale image of the required shape as an <span class="math notranslate nohighlight">\((1, n_x, n_y)\)</span> pytorch tensor. The batch dimension <span class="math notranslate nohighlight">\(N\)</span> will be automatically provided by the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> class, as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Define dataset and dataloader (only train for now)</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Get a sample batch</span>
+<span class="n">x</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Visualize the sample with matplotlib (different everytime!)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Define dataset and dataloader (only train for now)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that the data is ready, we need one more step before going back to neural networks: defining imaging operators.</p>
+<p>While this step could be theoretically done by simply combining functions from existing libraries, for simplicity we will use functions from the package <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, which is meant to simplify the process.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./end-to-end"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../intro/a-brief-overview-pytorch.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">A brief overview of PyTorch</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="deep-dive-into-IPPy.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-recall-on-image-reconstruction">A Brief Recall on Image Reconstruction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks-for-image-processing">Neural Networks for Image Processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#end-to-end-vs-hybrid-approaches">End-to-End vs. Hybrid Approaches</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-supervised-learning">Self-Supervised Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-data-for-neural-network-processing">Preparing the data for Neural Network processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshaping">Reshaping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization">Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-type">Data type</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-and-dataloading">Dataset and Dataloading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mayo-s-dataset">The Mayo’s dataset</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
