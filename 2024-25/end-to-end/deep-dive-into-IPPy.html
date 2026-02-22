@@ -1,0 +1,1240 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Deep dive into IPPy &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/deep-dive-into-IPPy';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="End-to-End Image Reconstruction methods" href="end-to-end.html" />
+    <link rel="prev" title="Processing images with Neural Networks" href="processing-images-with-nn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Computational Imaging (CI)
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A brief overview of PyTorch</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="processing-images-with-nn.html">Processing images with Neural Networks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Diffusion Models for Image Generation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fend-to-end/deep-dive-into-IPPy.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/end-to-end/deep-dive-into-IPPy.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Deep dive into IPPy</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-and-requirements">Introduction and requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-tensors">Standard tensors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-operators-module">The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-the-negative-operator">Example: the Negative operator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-operators">Built-in operators</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backpropagate-through-ippy-operators">Backpropagate through <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-solvers-module">The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-nn-module">The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="deep-dive-into-ippy">
+<h1>Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code><a class="headerlink" href="#deep-dive-into-ippy" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is a simple library, developed by me specifically for this course (and to support me during my experiments for papers). It includes multiple modules:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn</span></code>: contains functions to easy define complex neural network models, such as UNet, ViT, and others, with a flexible design.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solvers</span></code>: implements a few optimization algorithms already discussed in the first module of this course, such as the <code class="docutils literal notranslate"><span class="pre">ChambollePock</span></code> algorithm for TV minimization, the <code class="docutils literal notranslate"><span class="pre">SGP</span></code> algorithm for smoothed-TV regularization, and others.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">operators</span></code>: implements multiple operators (we will check some of them below) specifically designed to work well with pytorch tensors. Not only they are developed so that they can efficiently work with batched, multidimensional data, but they also implement gradient tracking, useful to backpropagate the gradient back from the output to the input of the inverse process. This is useful in applications such as Algorithm Unrolling or Deep Generative Prior (DGP).</p></li>
+</ul>
+<p>The code for <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> can be simply dowloaded from my Github page at: <a class="github reference external" href="https://github.com/devangelista2/IPPy">devangelista2/IPPy</a>.</p>
+<a class="reference internal image-reference" href="../_images/IPPy-structure.png"><img alt="../_images/IPPy-structure.png" class="align-center" src="../_images/IPPy-structure.png" style="width: 600px;" /></a>
+<section id="introduction-and-requirements">
+<h2>Introduction and requirements<a class="headerlink" href="#introduction-and-requirements" title="Link to this heading">#</a></h2>
+<p>IPPy is built upon a few commonly used libraries for tensor manipulation, linear algebra, Computed Tomography, neural networks and visualization. Here is a list of the libraries you need to install to make IPPy run smoothly:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numba</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">astra-toolbox</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scikit-image</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PIL</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matplotlib</span></code></p></li>
+</ul>
+<p>Moreover, it is <strong>required</strong> to have access to a cuda GPU, both for training neural network models and for fast Computed Tomography simulations. In particular, some <code class="docutils literal notranslate"><span class="pre">astra-toolbox</span></code> operators won’t work if CUDA is not available.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In case one has no access to a <code class="docutils literal notranslate"><span class="pre">cuda</span></code> GPU, it can be also installed the <code class="docutils literal notranslate"><span class="pre">cpu</span></code> version of <code class="docutils literal notranslate"><span class="pre">astra-toolbox</span></code> (a few geometries won’t work in this setup, but it is ok for the topic of this course).</p>
+</div>
+<p>Basically all the required libraries can be simply install with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">PACKAGE_NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>or by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">PACKAGE_NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The only exception is <code class="docutils literal notranslate"><span class="pre">astra-toolbox</span></code>, whose installation instruction can be found in its official documentation website, at: <a class="reference external" href="https://astra-toolbox.com">https://astra-toolbox.com</a>.</p>
+<section id="standard-tensors">
+<h3>Standard tensors<a class="headerlink" href="#standard-tensors" title="Link to this heading">#</a></h3>
+<p>As already remarked, all the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> functions are thought to work with Pytorch tensors. In particular, with what is called a <strong>standardized pytorch tensor</strong>, that is a tensor with the following properties:</p>
+<ul class="simple">
+<li><p>Its shape is <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">c,</span> <span class="pre">n_x,</span> <span class="pre">n_y)</span></code>, where <code class="docutils literal notranslate"><span class="pre">c</span></code> is either equal to 1 or 3.</p></li>
+<li><p>It is normalized so that its maximum is 1 and its minimum is 0.</p></li>
+<li><p>Its <code class="docutils literal notranslate"><span class="pre">ndtype</span></code> is <code class="docutils literal notranslate"><span class="pre">float32</span></code>.</p></li>
+</ul>
+<p>While most of the functions still works if some of these properties are not satisfied, the obtained results could be artificious.</p>
+<p>Given that, we can now move to the core of the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> package: the <code class="docutils literal notranslate"><span class="pre">operators</span></code> module.</p>
+</section>
+</section>
+<section id="the-operators-module">
+<h2>The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module<a class="headerlink" href="#the-operators-module" title="Link to this heading">#</a></h2>
+<p>An <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operator is a Python class that simulates the application of a corruption matrix <span class="math notranslate nohighlight">\(K\)</span> to an input tensor <span class="math notranslate nohighlight">\(x\)</span>. The basic <code class="docutils literal notranslate"><span class="pre">Operator</span></code> class is defined as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Operator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Applies operator using PyTorch autograd wrapper&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">OperatorFunction</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Matrix-vector multiplication&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transpose operator (adjoint)&quot;&quot;&quot;</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">device</span>
+        <span class="c1"># Apply adjoint to the batch</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adjoint</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_matvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the operator to a single (c, h, w) tensor&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the adjoint operator to a single (c, h, w) tensor&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">class</span><span class="w"> </span><span class="nc">Operator</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>As you can see, the <code class="docutils literal notranslate"><span class="pre">Operator</span></code> class implements a few basic methods, such as <code class="docutils literal notranslate"><span class="pre">__call__</span></code>, <code class="docutils literal notranslate"><span class="pre">__matmul__</span></code> and <code class="docutils literal notranslate"><span class="pre">T</span></code> that should not be modified by the user, and two methods that are specific for the kind of operator and should be customized: <code class="docutils literal notranslate"><span class="pre">_matvec</span></code> and <code class="docutils literal notranslate"><span class="pre">_adjoint</span></code>.</p>
+<p>As you can easily imagine, the <code class="docutils literal notranslate"><span class="pre">_matvec</span></code> method describes how the operator should corrupt the input tensor, i.e. how to compute the forward <span class="math notranslate nohighlight">\(K(x)\)</span>. Similarly, the <code class="docutils literal notranslate"><span class="pre">_adjoint</span></code> method represents the application of the transposed of the operator, i.e. <span class="math notranslate nohighlight">\(K^T(y)\)</span>.</p>
+<p>Note that, thanks to the support of the <code class="docutils literal notranslate"><span class="pre">OperatorFunction</span></code>, each operator needs to be defined only on a tensor of shape <code class="docutils literal notranslate"><span class="pre">(c,</span> <span class="pre">n_x,</span> <span class="pre">n_y)</span></code>, and it will automatically handle the parallelization over the batch dimension <code class="docutils literal notranslate"><span class="pre">N</span></code> of the input tensor.</p>
+<section id="example-the-negative-operator">
+<h3>Example: the Negative operator<a class="headerlink" href="#example-the-negative-operator" title="Link to this heading">#</a></h3>
+<p>As an example, let’s build a <strong>negative</strong> operator, i.e. an operator that reverse the colors of the input image, based on the <code class="docutils literal notranslate"><span class="pre">Operator</span></code> class in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>. We will consider an image from Mayo’s dataset from the previous notebook as an example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#-----------------</span>
+<span class="c1"># This is just for rendering on the website</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="c1">#-----------------</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NegativeOperator</span><span class="p">(</span><span class="n">operators</span><span class="o">.</span><span class="n">Operator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_matvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Since x is a standardized Tensor (i.e. its in the range [0, 1]), the negative image</span>
+<span class="sd">        can be obtained by simply computing y = 1 - x.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The adjoint of the negative operator is again x = 1 - y.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1">#-----------------</span>
+<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="k">class</span><span class="w"> </span><span class="nc">NegativeOperator</span><span class="p">(</span><span class="n">operators</span><span class="o">.</span><span class="n">Operator</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="k">def</span><span class="w"> </span><span class="nf">_matvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+
+        <span class="c1"># We expect data_path to be like &quot;./data/Mayo/train&quot; or &quot;./data/Mayo/test&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">/*/*.png&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># Load the idx&#39;s image from fname_list</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+         <span class="c1"># To load the image as grey-scale</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert to numpy array -&gt; (512, 512)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> 
+
+        <span class="c1"># Convert to pytorch tensor -&gt; (1, 512, 512) &lt;-&gt; (c, n_x, n_y)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Resize to the required shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (1, n_x, n_y)</span>
+
+        <span class="c1"># Normalize in [0, 1] range</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">x</span>
+    
+<span class="c1"># Get sample image</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Define corruption operator</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">NegativeOperator</span><span class="p">()</span>
+
+<span class="c1"># Compute negative of x</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Visualize</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Corrupted&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="built-in-operators">
+<h3>Built-in operators<a class="headerlink" href="#built-in-operators" title="Link to this heading">#</a></h3>
+<p>Clearly, <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> implements a few built-in operators commonly used in literature. At this moment, it has built-in support for:</p>
+<ul class="simple">
+<li><p><strong>Computed Tomography</strong> operator: implementing the forward and backward acquisition of a general Computed Tomography projector,</p></li>
+<li><p><strong>Image Deblurring</strong> operator: implementing a general Blurring and Deblurring operator, taking as input either a general blurring kernel or the parameters for a built-in Gaussian kernel (specifying the variance and the kernel size), and a Motion kernel (specifying the motion angle and the kernel size);</p></li>
+<li><p><strong>Downscaling</strong> operator: which downscale the input image by a given factor.;</p></li>
+<li><p><strong>Gradient</strong> operator: mostly used to implement TV-based reconstruction algorithm.</p></li>
+</ul>
+<p>But more operators will be added in the future.</p>
+<p>Let’s see how to blur an image with a MotionBlur kernel of specified parameters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
+
+<span class="c1"># Get sample image from MayoDataset</span>
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Define MotionBlur operator (with a 45° angle)</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span><span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> 
+                       <span class="n">kernel_type</span><span class="o">=</span><span class="s2">&quot;motion&quot;</span><span class="p">,</span> 
+                       <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> 
+                       <span class="n">motion_angle</span><span class="o">=</span><span class="mi">45</span><span class="p">,)</span>
+
+<span class="c1"># Compute blurred version of x_true</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span>
+
+<span class="c1"># Add noise</span>
+<span class="n">y_delta</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="c1"># Compute (just for the sake of the explanation, the transpose)</span>
+<span class="n">x_T</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+
+<span class="c1"># Visualize</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_true</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Corrupted&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_T</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;K^T(y_delta)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Get sample image from MayoDataset</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Feel free to test different operators to see how they work.</p>
+</section>
+<section id="backpropagate-through-ippy-operators">
+<h3>Backpropagate through <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators<a class="headerlink" href="#backpropagate-through-ippy-operators" title="Link to this heading">#</a></h3>
+<p>A great feature of <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators is that they allow backpropagating through them by the usual Pytorch backpropagation. For example, consider the following objective function:</p>
+<div class="math notranslate nohighlight">
+\[
+f(x) = || Kx - y^\delta ||_2^2,
+\]</div>
+<p>and note that:</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla_x f(x) = 2 * K^T(Kx - y^\delta).
+\]</div>
+<p>This operation can be automatically performed for <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators via the <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> method in Pytorch:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define x_true and track its gradient</span>
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_true</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Compute y_delta with no gradient tracking</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+
+<span class="c1"># Example: compute f(x)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_delta</span><span class="p">))</span>
+
+<span class="c1"># Compute gradient</span>
+<span class="n">f</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">grad_x</span> <span class="o">=</span> <span class="n">x_true</span><span class="o">.</span><span class="n">grad</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Grad_x = </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad_x</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Define x_true and track its gradient</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">x_true</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Compute y_delta with no gradient tracking</span>
+
+<span class="ne">NameError</span>: name &#39;test_data&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>This property, while it seems of limited use, will be crucial for basically any hybrid method. We will come back to this later in the course.</p>
+</section>
+</section>
+<section id="the-solvers-module">
+<h2>The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module<a class="headerlink" href="#the-solvers-module" title="Link to this heading">#</a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> one can also find a few built-in solvers for regularized least-squares problem, mainly with the aim of comparing the results of neural network predictions with the classical algorithm discussed in the first module of this course.</p>
+<p>As classical solvers are beyond the scope of this course, we will only report here an example on how to use an <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> solver on the data defined above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span><span class="p">,</span> <span class="n">metrics</span>
+
+<span class="c1"># Define the solver (e.g. ChambollePock)</span>
+<span class="n">solver</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">ChambollePockTpVUnconstrained</span><span class="p">(</span><span class="n">K</span><span class="p">)</span> <span class="c1"># -&gt; takes as input the operator</span>
+
+<span class="c1"># Compute solution</span>
+<span class="n">x_rec</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="n">y_delta</span><span class="p">,</span> 
+               <span class="n">lmbda</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+               <span class="n">x_true</span><span class="o">=</span><span class="n">x_true</span><span class="p">,</span> 
+               <span class="n">starting_point</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_true</span><span class="p">),</span>
+               <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstruction SSIM: </span><span class="si">{</span><span class="n">metrics</span><span class="o">.</span><span class="n">SSIM</span><span class="p">(</span><span class="n">x_rec</span><span class="p">,</span><span class="w"> </span><span class="n">x_true</span><span class="p">)</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+<span class="c1"># Visualize</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_true</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Corrupted&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_rec</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reconstruction&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span><span class="p">,</span> <span class="n">metrics</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Define the solver (e.g. ChambollePock)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">solver</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">ChambollePockTpVUnconstrained</span><span class="p">(</span><span class="n">K</span><span class="p">)</span> <span class="c1"># -&gt; takes as input the operator</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-nn-module">
+<h2>The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module<a class="headerlink" href="#the-nn-module" title="Link to this heading">#</a></h2>
+<p>We are finally ready to jump into the main topic of this course, i.e. neural networks and their use for end-to-end image reconstruction. In the remainder of this chapter, we will discuss how to implement a neural network for processing and reconstructing images with <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, with the aim of recovering the motion-blurred image from the previous example.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In the following we will learn how to implement a few neural network architectures, such as <code class="docutils literal notranslate"><span class="pre">CNN</span></code> or <code class="docutils literal notranslate"><span class="pre">UNet</span></code>, which we <strong>didn’t introduced yet</strong>. For now, just threat them as general neural network used to reconstruct images. We will deeply discuss how they work in the next chapter of this course.</p>
+</div>
+<p>Defining a training a neural network model with <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is straightforward: just choose one of the available architecture from the <code class="docutils literal notranslate"><span class="pre">nn</span></code> module, set the parameters (or implement one yourself), and you are ready to go!</p>
+<p>Let’s see how to implement a <code class="docutils literal notranslate"><span class="pre">UNet</span></code> model for image reconstruction using <code class="docutils literal notranslate"><span class="pre">IPPy.nn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPPy.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+
+<span class="c1"># Set device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
+
+<span class="c1"># Defining neural network architecture (IGNORE now)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">UNet</span><span class="p">(</span><span class="n">ch_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                    <span class="n">ch_out</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">middle_ch</span><span class="o">=</span><span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">],</span>
+                    <span class="n">n_layers_per_block</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">down_layers</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ResDownBlock&quot;</span><span class="p">,</span> <span class="s2">&quot;ResDownBlock&quot;</span><span class="p">),</span>
+                    <span class="n">up_layers</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ResUpBlock&quot;</span><span class="p">,</span> <span class="s2">&quot;ResUpBlock&quot;</span><span class="p">),</span>
+                    <span class="n">final_activation</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># Send model to device</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Set device</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can define the data (train and test) to train our model on it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate train and test data</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Generate train and test data</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;MayoDataset&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>And the training loop…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
+
+<span class="c1">#--- Parameters</span>
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+
+<span class="c1"># Cycle over the epochs</span>
+<span class="n">loss_total</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,))</span>
+<span class="n">ssim_total</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,))</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+
+    <span class="c1"># Cycle over the batches</span>
+    <span class="n">epoch_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">ssim_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+        <span class="c1"># Send x and y to device</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># Compute associated y_delta</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="c1"># zero the parameter gradients</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="c1"># forward + backward + optimize</span>
+        <span class="n">x_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="c1"># update loss</span>
+        <span class="n">epoch_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">ssim_loss</span> <span class="o">+=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">SSIM</span><span class="p">(</span><span class="n">x_pred</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">(),</span> <span class="n">x</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span>
+
+        <span class="c1"># Infos</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Epoch (</span><span class="si">{</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="n">n_epochs</span><span class="si">}</span><span class="s2">) -&gt; Loss = </span><span class="si">{</span><span class="n">epoch_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;SSIM = </span><span class="si">{</span><span class="n">ssim_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Update the history</span>
+    <span class="n">loss_total</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_loss</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ssim_total</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssim_loss</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1">#--- Parameters</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>After the model is trained, it’s recommended to save the final state so that we can re-use it without waiting for the training to finish. This is done by the <code class="docutils literal notranslate"><span class="pre">trainer</span></code> module of <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, which saves both the final state of the model and a <code class="docutils literal notranslate"><span class="pre">json</span></code> file containing the specification of model architecture, so that you can re-load it afterwards.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPPy.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">trainer</span>
+
+<span class="c1"># Save model state</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">trainer</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Save model state</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Loading the model is straightforward. Just provide the <code class="docutils literal notranslate"><span class="pre">trainer</span></code> with the correct path and it will handle everything:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Load model</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;trainer&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can test the loaded model over the test set to see how it performs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test on test data</span>
+<span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">x_test</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_loader</span><span class="p">):</span>
+    <span class="c1"># Send to device</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># Compute y_delta</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="c1"># Predict with model (without computing the gradient to save memory)</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">x_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+    
+    <span class="c1"># Visualize the input-output-prediction triplet</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_delta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Corrupted&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reconstructed&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">break</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Test on test data</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">x_test</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_loader</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># Send to device</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="c1"># Compute y_delta</span>
+
+<span class="ne">NameError</span>: name &#39;test_loader&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we learned how to implement, train and test a neural network model, we are ready to get into the details.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./end-to-end"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="processing-images-with-nn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Processing images with Neural Networks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="end-to-end.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">End-to-End Image Reconstruction methods</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-and-requirements">Introduction and requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-tensors">Standard tensors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-operators-module">The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-the-negative-operator">Example: the Negative operator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-operators">Built-in operators</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#backpropagate-through-ippy-operators">Backpropagate through <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-solvers-module">The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-nn-module">The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

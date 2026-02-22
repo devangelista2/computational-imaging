@@ -1,0 +1,1304 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>A brief overview of PyTorch &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro/a-brief-overview-pytorch';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Processing images with Neural Networks" href="../end-to-end/processing-images-with-nn.html" />
+    <link rel="prev" title="From Machine Learning to Neural Networks" href="from-ml-to-nn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Computational Imaging (CI)
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">A brief overview of PyTorch</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/processing-images-with-nn.html">Processing images with Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Diffusion Models for Image Generation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro/a-brief-overview-pytorch.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/intro/a-brief-overview-pytorch.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>A brief overview of PyTorch</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-pytorch">What is PyTorch?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features-of-pytorch">Key Features of PyTorch</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch-vs-tensorflow">PyTorch vs. TensorFlow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#which-one-should-you-choose">Which One Should You Choose?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch-tensors">Pytorch Tensors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-properties">Tensor Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-tensor-operations">Basic Tensor Operations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#moving-tensors-to-gpu">Moving Tensors to GPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataloading">DataLoading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dataset-class">The Dataset Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dataloader-class">The DataLoader Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-the-california-housing-dataset">An example: the California Housing Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing-the-data">Preprocessing the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-custom-pytorch-dataset">Creating a Custom PyTorch Dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-our-first-model-in-pytorch">Defining Our First Model in PyTorch</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-a-simple-neural-network">Defining a Simple Neural Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passing-data-through-the-model">Passing Data Through the Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-model">Training a Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-differentiation">Automatic Differentiation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-neural-network">Training a neural network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-the-trained-model">Testing the trained model</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="a-brief-overview-of-pytorch">
+<h1>A brief overview of PyTorch<a class="headerlink" href="#a-brief-overview-of-pytorch" title="Link to this heading">#</a></h1>
+<p>In this chapter, we will briefly introduce PyTorch: arguably the most used library for developing Neural Network models in Python. In particular, we will focus on few key components:</p>
+<ul class="simple">
+<li><p><strong>Tensors:</strong> Tensors are the building block of any pytorch model. Since we will largely use them, we need to at least learn their main properties and functionalities;</p></li>
+<li><p><strong>Data:</strong> Loading data in memory is a fundamental step in developing Neural Network-based models, and it requires special attention when the number of datapoints is large;</p></li>
+<li><p><strong>Model Design:</strong> A good model requires carefully optimizing its architecture (i.e. number of layers, number of neurons per layer, activation function, …). In this chapter we will learn how to deploy a simple MLP network, and we will come back to architecture design later in the course;</p></li>
+<li><p><strong>Training:</strong> Training a model (i.e. optimizing its parameters to achieve the task described by the dataset) requires setting up a few basic components. In this chapter, we will learn how to train a neural network model on a fairly simple dataset, with the default choices of each component.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While we will try to cover all the basics of Neural Network in this course, what described in the following is far from being a complete introduction to the topic. Please refer to the official <a class="reference external" href="https://pytorch.org">pytorch documentation</a> or to any tutorial on Youtube for a more complete introduction.</p>
+</div>
+<section id="what-is-pytorch">
+<h2>What is PyTorch?<a class="headerlink" href="#what-is-pytorch" title="Link to this heading">#</a></h2>
+<p>PyTorch is an <strong>open-source deep learning framework</strong> developed by Facebook’s AI Research Lab (FAIR). It provides <strong>tensor computation</strong>, <strong>automatic differentiation</strong>, and <strong>deep learning model building</strong> capabilities with a user-friendly and Pythonic interface.</p>
+<p>PyTorch is widely used in both research and industry due to its <strong>flexibility</strong>, <strong>ease of debugging</strong>, and <strong>strong community support</strong>. It enables researchers and developers to quickly prototype and train neural networks using GPUs for acceleration.</p>
+<section id="key-features-of-pytorch">
+<h3>Key Features of PyTorch<a class="headerlink" href="#key-features-of-pytorch" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Dynamic Computational Graphs</strong>: Unlike TensorFlow 1.x, which relied on static graphs, PyTorch dynamically builds computational graphs, making it easier to debug and modify models.</p></li>
+<li><p><strong>Automatic Differentiation (Autograd)</strong>: PyTorch automatically computes gradients, making it seamless to implement <strong>backpropagation</strong> for neural networks (a topic which will be deeper explained later).</p></li>
+<li><p><strong>GPU Acceleration</strong>: PyTorch seamlessly integrates with CUDA and MPS (on Apple Silicon CPUs) for <strong>fast GPU computing</strong>.</p></li>
+<li><p><strong>Strong Ecosystem</strong>: Includes tools like <code class="docutils literal notranslate"><span class="pre">torchvision</span></code> for images, <code class="docutils literal notranslate"><span class="pre">torchtext</span></code> for NLP, and <code class="docutils literal notranslate"><span class="pre">torchaudio</span></code> for speech processing.</p></li>
+</ul>
+</section>
+<section id="pytorch-vs-tensorflow">
+<h3>PyTorch vs. TensorFlow<a class="headerlink" href="#pytorch-vs-tensorflow" title="Link to this heading">#</a></h3>
+<p>PyTorch and TensorFlow are the two most popular deep learning frameworks. Here’s a <strong>comparison of their strengths and weaknesses</strong>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>PyTorch</p></th>
+<th class="head"><p>TensorFlow</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Ease of Use</strong></p></td>
+<td><p>Intuitive, Pythonic</p></td>
+<td><p>More complex, requires more boilerplate</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dynamic Graphs</strong></p></td>
+<td><p>✅ Yes</p></td>
+<td><p>🚫 No (TF 1.x), ✅ Yes (TF 2.x)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Debugging</strong></p></td>
+<td><p>Easier (native Python debugging tools)</p></td>
+<td><p>More difficult (static graphs in TF 1.x)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Performance</strong></p></td>
+<td><p>Excellent for research and fast prototyping</p></td>
+<td><p>Optimized for large-scale deployment</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Ecosystem</strong></p></td>
+<td><p>Torchvision, TorchText, TorchAudio</p></td>
+<td><p>TensorFlow Hub, TF-Agents (RL), TensorFlow.js</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Industry Adoption</strong></p></td>
+<td><p>Preferred in research</p></td>
+<td><p>Preferred in large-scale industry applications</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Community Support</strong></p></td>
+<td><p>Strong in academia and research</p></td>
+<td><p>Larger enterprise-level adoption</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="which-one-should-you-choose">
+<h3>Which One Should You Choose?<a class="headerlink" href="#which-one-should-you-choose" title="Link to this heading">#</a></h3>
+<p>During your master degree, you will get in touch with both the frameworks described above. In particular, the course <em>Deep Learning</em> from professor Andrea Asperti will teach you Tensorflow, while we will use Pytorch in this course. However, you should:</p>
+<ul class="simple">
+<li><p><strong>Choose PyTorch if</strong>:</p>
+<ul>
+<li><p>You prioritize <strong>ease of use</strong> and fast prototyping.</p></li>
+<li><p>You work in <strong>research</strong> or academia.</p></li>
+<li><p>You need <strong>dynamic graphs</strong> for flexible model structures.</p></li>
+</ul>
+</li>
+<li><p><strong>Choose TensorFlow if</strong>:</p>
+<ul>
+<li><p>You want <strong>better production-ready tools</strong> for deployment.</p></li>
+<li><p>You are working in <strong>enterprise applications</strong> with large-scale models.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
+<p>PyTorch provides an easy installation process. You can install it using <code class="docutils literal notranslate"><span class="pre">pip</span></code> (for Python users) or <code class="docutils literal notranslate"><span class="pre">conda</span></code> (for Anaconda users). It is sufficient to copy and paste the command from the official website: <a class="reference external" href="https://pytorch.org/get-started/locally/">https://pytorch.org/get-started/locally/</a> by selecting your system preferences from the menu.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I recommend to always use <code class="docutils literal notranslate"><span class="pre">pip</span></code> to install pytorch as it usually causes less issues.</p>
+</div>
+<p>Once installed, verify the installation by running the following command in Python:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CUDA Available:&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CUDA Available:&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">torch</span></code> is installed correctly, it should print the version number and confirm whether CUDA is available.</p>
+</section>
+</section>
+<section id="pytorch-tensors">
+<h2>Pytorch Tensors<a class="headerlink" href="#pytorch-tensors" title="Link to this heading">#</a></h2>
+<p>At the core of Pytorch is the <code class="docutils literal notranslate"><span class="pre">tensor</span></code>, a multi-dimensional array similar to numpy arrays but with additional capabilities, such as GPU acceleration and automatic differentiation.</p>
+<p>Pytorch provides multiple ways to create tensors, most of which have the same syntax as numpy arrays:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="c1"># Creating a tensor from a list</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+
+<span class="c1"># Creating a tensor with predefined values</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 3x3 matrix of zeros</span>
+<span class="n">t3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>   <span class="c1"># 2x4 matrix of ones</span>
+<span class="n">t4</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># 2x2 matrix of random values between 0 and 1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">t2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Creating a tensor from a list</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="tensor-properties">
+<h3>Tensor Properties<a class="headerlink" href="#tensor-properties" title="Link to this heading">#</a></h3>
+<p>Each <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensor has several key attributes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Dimensions of the tensor</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data type: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Data type (default is float32)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Device: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># CPU or GPU</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Dimensions of the tensor</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data type: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Data type (default is float32)</span>
+
+<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="basic-tensor-operations">
+<h3>Basic Tensor Operations<a class="headerlink" href="#basic-tensor-operations" title="Link to this heading">#</a></h3>
+<p>Tensors support element-wise operations, matrix multiplications, and reshaping.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]])</span>
+
+<span class="c1"># Element-wise operations</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># Addition</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># Multiplication</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">float</span><span class="p">()))</span>  <span class="c1"># Square root (requires float type)</span>
+
+<span class="c1"># Matrix multiplication</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># Equivalent to torch.matmul(x, y)</span>
+
+<span class="c1"># Reshaping tensors</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]])</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Element-wise operations</span>
+
+<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="moving-tensors-to-gpu">
+<h3>Moving Tensors to GPU<a class="headerlink" href="#moving-tensors-to-gpu" title="Link to this heading">#</a></h3>
+<p><strong>If</strong> a GPU is available, we can move tensors to it for faster computation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>  <span class="c1"># Use GPU</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tensor is now on: </span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CUDA is not available. Running on CPU.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>  <span class="c1"># Use GPU</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="dataloading">
+<h2>DataLoading<a class="headerlink" href="#dataloading" title="Link to this heading">#</a></h2>
+<p>In deep learning, we often work with <em>large datasets</em> that cannot fit into memory all at once. <code class="docutils literal notranslate"><span class="pre">torch</span></code> provides efficient tools to handle data loading through the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> and <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> classes.</p>
+<section id="the-dataset-class">
+<h3>The Dataset Class<a class="headerlink" href="#the-dataset-class" title="Link to this heading">#</a></h3>
+<p>Pytorch’s <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code> is an abstract class that must be subclassed to define custom datasets. A <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object should implement three methods:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">__init__</span></code>: Initializes the dataset (e.g., loads file paths, applies transformations).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__len__</span></code>: Returns the total number of samples in the dataset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>: Retrieves a single sample by index.</p></li>
+</ul>
+<p><strong>Creating a Custom Dataset:</strong> Mathematically, a dataset is a sequence of pairs <span class="math notranslate nohighlight">\(\{ (x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \dots, (x^{(N)}, y^{(N)}) \}\)</span>, where each <span class="math notranslate nohighlight">\(x^{(i)}\)</span> is a <span class="math notranslate nohighlight">\(d\)</span>-dimensional vector, while <span class="math notranslate nohighlight">\(y^{(i)}\)</span> is an <span class="math notranslate nohighlight">\(s\)</span>-dimensional vector.</p>
+<p>To create a dataset in <code class="docutils literal notranslate"><span class="pre">torch</span></code>, we need to build a dataset class so that, when it is called on index <code class="docutils literal notranslate"><span class="pre">i</span></code>, it returns the couple <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> as a <code class="docutils literal notranslate"><span class="pre">tuple</span></code> of tensors with shape <code class="docutils literal notranslate"><span class="pre">(d,</span> <span class="pre">)</span></code> and <code class="docutils literal notranslate"><span class="pre">(s,</span> <span class="pre">)</span></code>, called <strong>input</strong> and <strong>output</strong> shape, respectively.</p>
+<p>Sometimes (when the dimensionality of the data allows it), all the datapoints gets stacked together in two large tensors <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code>, which thus have shape <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">d)</span></code> and <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">s)</span></code>. Clearly, <code class="docutils literal notranslate"><span class="pre">X[i,</span> <span class="pre">:]</span></code> corresponds to the input tensor <span class="math notranslate nohighlight">\(x^{(i)}\)</span>, and <code class="docutils literal notranslate"><span class="pre">Y[i,</span> <span class="pre">:]</span></code> corresponds to the output tensor <span class="math notranslate nohighlight">\(y^{(i)}\)</span>.</p>
+<p>Consider, as an example, the dataset <span class="math notranslate nohighlight">\(D = \{ (x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \dots, (x^{(N)}, y^{(N)}) \}\)</span>, such that <span class="math notranslate nohighlight">\(x^{(i)}\)</span> are uniformly distributed datapoints in the range <span class="math notranslate nohighlight">\([-2, 2]\)</span>, while <span class="math notranslate nohighlight">\(y^{(i)} = 2 x^{(i)} + 3\)</span>. In the following, we will avoid building <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> explicitly, relying instead on definining a constructor that returns the pair <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> upon request.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span>  <span class="c1"># Linear function</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+<span class="c1"># Create dataset instance</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">SimpleDataset</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Fetch a single data point</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">x_sample</span><span class="p">,</span> <span class="n">y_sample</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x: </span><span class="si">{</span><span class="n">x_sample</span><span class="si">}</span><span class="s2">, y: </span><span class="si">{</span><span class="n">y_sample</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="k">class</span><span class="w"> </span><span class="nc">SimpleDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-dataloader-class">
+<h3>The DataLoader Class<a class="headerlink" href="#the-dataloader-class" title="Link to this heading">#</a></h3>
+<p>We already observed that when the dataset is too large, sometimes it cannot be loaded into memory as a whole (expecially when working with GPU, which has usually lower dedicated memory compared to the system). On the other side, relying on single samples is usually too complex, as we would need more time to process the whole dataset.</p>
+<p>For this reason, when working with basically any Machine Learning algorithm (and in particular with neural networks), it is common to work with <strong>mini-batches</strong>.
+A minibatch is a subset of the dataset which contains a limited amount of memory, built by concatenating together multiple datapoints <strong>randomly</strong> extracted by the dataset. Usually, in Pytorch, a mini-batch (often called simply <strong>batch</strong>) is represented as a pair of tensors <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> with shapes <code class="docutils literal notranslate"><span class="pre">(b,</span> <span class="pre">d)</span></code> and <code class="docutils literal notranslate"><span class="pre">(b,</span> <span class="pre">s)</span></code>, respectively, where the <strong>first</strong> dimension represents the batch axis, where the number of elements <code class="docutils literal notranslate"><span class="pre">b</span></code> is called <code class="docutils literal notranslate"><span class="pre">batch_size</span></code>.</p>
+<p>The operation of randomly sampled a given number of datapoints from the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> object in Pytorch is called a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+
+<span class="c1"># Create a DataLoader</span>
+<span class="n">dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Iterate through batches</span>
+<span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
+    <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="n">batch</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Batch - x: </span><span class="si">{</span><span class="n">x_batch</span><span class="si">}</span><span class="s2">, y: </span><span class="si">{</span><span class="n">y_batch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">break</span> <span class="c1"># For site impagination</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Create a DataLoader</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">dataloader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Key Parameters of DataLoader:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: Number of samples per batch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shuffle</span></code>: Whether to shuffle the data at the beginning of each epoch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_workers</span></code>: Number of subprocesses to use for data loading (useful for large datasets).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">drop_last</span></code>: Whether to drop the last incomplete batch if dataset size isn’t divisible by batch size.</p></li>
+</ul>
+</section>
+<section id="an-example-the-california-housing-dataset">
+<h3>An example: the California Housing Dataset<a class="headerlink" href="#an-example-the-california-housing-dataset" title="Link to this heading">#</a></h3>
+<p>Let’s see an example on how to load a built-in dataset using <code class="docutils literal notranslate"><span class="pre">sklearn.datasets</span></code>. In particular, we we’ll load we will use the <strong>California Housing</strong> dataset, which is a regression dataset where the goal is to predict house prices based on features such as median income, number of rooms, and population in an area. This dataset contains 8 numerical features (e.g., median income, total rooms, housing age, etc.) and one target variable (median house value in $100,000s).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_california_housing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="c1"># Load dataset from sklearn</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">fetch_california_housing</span><span class="p">()</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">fetch_california_housing</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="preprocessing-the-data">
+<h3>Preprocessing the Data<a class="headerlink" href="#preprocessing-the-data" title="Link to this heading">#</a></h3>
+<p>Since neural networks work best with normalized inputs, we standardize the features using StandardScaler.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standardize features for better training stability</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape target to be a column vector</span>
+
+<span class="c1"># Split into training and test sets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Convert to PyTorch tensors</span>
+<span class="n">X_train_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">X_test_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">y_train_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">y_test_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Standardize features for better training stability</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Reshape target to be a column vector</span>
+
+<span class="ne">NameError</span>: name &#39;StandardScaler&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-custom-pytorch-dataset">
+<h3>Creating a Custom PyTorch Dataset<a class="headerlink" href="#creating-a-custom-pytorch-dataset" title="Link to this heading">#</a></h3>
+<p>We define a custom dataset by subclassing torch.utils.data.Dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CaliforniaHousingDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+<span class="c1"># Create Dataset instances</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CaliforniaHousingDataset</span><span class="p">(</span><span class="n">X_train_tensor</span><span class="p">,</span> <span class="n">y_train_tensor</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CaliforniaHousingDataset</span><span class="p">(</span><span class="n">X_test_tensor</span><span class="p">,</span> <span class="n">y_test_tensor</span><span class="p">)</span>
+
+<span class="c1"># Create DataLoaders</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">class</span><span class="w"> </span><span class="nc">CaliforniaHousingDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>         <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>
+
+<span class="ne">NameError</span>: name &#39;Dataset&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we’ll define our first neural network model for classification using this dataset.</p>
+</section>
+</section>
+<section id="defining-our-first-model-in-pytorch">
+<h2>Defining Our First Model in PyTorch<a class="headerlink" href="#defining-our-first-model-in-pytorch" title="Link to this heading">#</a></h2>
+<p>Now that we understand how to load data, let’s build a simple fully connected (dense) neural network using <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. We’ll start with a basic model and then improve it step by step.</p>
+<section id="defining-a-simple-neural-network">
+<h3>Defining a Simple Neural Network<a class="headerlink" href="#defining-a-simple-neural-network" title="Link to this heading">#</a></h3>
+<p>PyTorch models are created by subclassing <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code>. The key components are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">__init__</span></code>: Defines the layers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forward</span></code>: Defines how data flows through the model.</p></li>
+</ul>
+<p>Let’s create a simple Multi-Layer Perceptron (MLP) with one hidden layer:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SimpleNN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>  <span class="c1"># First fully connected layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span> <span class="c1"># Output layer</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1"># Apply ReLU activation to first layer</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Output layer (no activation for now)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="c1"># Create an instance of the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">SimpleNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> 
+                 <span class="n">hidden_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> 
+                 <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">class</span><span class="w"> </span><span class="nc">SimpleNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Explanation:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.Linear(input_size,</span> <span class="pre">hidden_size)</span></code>: Fully connected layer transforming the input.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nn.ReLU()(x)</span></code>: Applies a non-linear activation function (ReLU activation).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">forward(x)</span></code>: Defines how the input data is processed.</p></li>
+<li><p>No activation on the last layer: Typically, output activations depend on the task (e.g., <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code> for binary classification, <code class="docutils literal notranslate"><span class="pre">softmax</span></code> for multi-class classification).</p></li>
+</ul>
+</section>
+<section id="passing-data-through-the-model">
+<h3>Passing Data Through the Model<a class="headerlink" href="#passing-data-through-the-model" title="Link to this heading">#</a></h3>
+<p>Given the model and the dataset, we can check its prediction over a random batch of datapoints (given by the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample data from the dataset</span>
+<span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+
+<span class="c1"># Check the shape of the batch</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of x_batch: </span><span class="si">{</span><span class="n">x_batch</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Shape of y_batch: </span><span class="si">{</span><span class="n">y_batch</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Forward pass through the model</span>
+<span class="n">y_prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+
+<span class="c1"># Visualizing a value compared to the real (expected) solution</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Real value: </span><span class="si">{</span><span class="n">y_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">. Model prediction: </span><span class="si">{</span><span class="n">y_prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Sample data from the dataset</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Check the shape of the batch</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of x_batch: </span><span class="si">{</span><span class="n">x_batch</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Shape of y_batch: </span><span class="si">{</span><span class="n">y_batch</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;train_loader&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="training-a-model">
+<h2>Training a Model<a class="headerlink" href="#training-a-model" title="Link to this heading">#</a></h2>
+<p>You probably noticed that the model prediction is completely different from the real value of the target variable. This happens as the model has not been <strong>trained</strong> yet. As already remarked, training a model is the process of iteratively update its parameters <span class="math notranslate nohighlight">\(\Theta\)</span> so that it matches the training data.</p>
+<p>A neural network model is usually trained by a variant of the <strong>Stochastic Gradient Descent (SGD)</strong> algorithm: the stochastic version of the Gradient Descent optimization algorithm. In particular, given an initial value for the model parameters <span class="math notranslate nohighlight">\(\Theta_0\)</span>, a loss function <span class="math notranslate nohighlight">\(\ell: \mathbb{R}^s \times \mathbb{R}^s \to \mathbb{R}_+\)</span>, and a training dataset <span class="math notranslate nohighlight">\(D\)</span>, the SGD algorithms iteratively update the parameters based on the following procedure:</p>
+<ul class="simple">
+<li><p>Sample a batch <span class="math notranslate nohighlight">\((x_b, y_b)\)</span> from <span class="math notranslate nohighlight">\(D\)</span>.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(g_k = \nabla_{\Theta} \ell(f_{\Theta_k}(x^{(i)}_b), y^{(i)}_b)\)</span>.</p></li>
+<li><p>Update <span class="math notranslate nohighlight">\(\Theta_{k+1} = \Theta_k - \nu g_k\)</span>.</p></li>
+</ul>
+<p>At this point, we already discussed how to create and sample a batch of data from <span class="math notranslate nohighlight">\(D\)</span>. The next step we need to learn is how to compute <span class="math notranslate nohighlight">\(g_k\)</span>, and here is where Pytorch becomes really useful.</p>
+<section id="automatic-differentiation">
+<h3>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Link to this heading">#</a></h3>
+<p>Pytorch tensors differs from numpy arrays mainly in that they keep track of each operations leading from a leaf tensor (i.e. a freshly created tensor) to the present tensor. This option (which is activated by default), can be modified by accessing the <code class="docutils literal notranslate"><span class="pre">requires_grad</span></code> property of the tensor.</p>
+<p>When a leaf tensor is declared with <code class="docutils literal notranslate"><span class="pre">requires_grad</span> <span class="pre">=</span> <span class="pre">True</span></code>, each operation involving it gets memorized. This way, it is possible to automatically compute the gradient of any function with respect to the leaf tensor by <strong>backpropagating</strong> from the output to the input via the computational graph, using the <strong>chain rule</strong> to combine the derivative at each step.</p>
+<p>Indeed, we recall that if <span class="math notranslate nohighlight">\(g: \mathbb{R}^n \to \mathbb{R}^n\)</span> is a function mapping a leaf tensor to an intermediate value <span class="math notranslate nohighlight">\(z = g(x)\)</span>, and <span class="math notranslate nohighlight">\(f: \mathbb{R}^n \to \mathbb{R}\)</span> is a scalar function (such as a loss function), mapping <span class="math notranslate nohighlight">\(z\)</span> to an output <span class="math notranslate nohighlight">\(y = f(z)\)</span>, then the gradient of <span class="math notranslate nohighlight">\(f(g(x))\)</span> with respect of <span class="math notranslate nohighlight">\(x\)</span> can be easily computed as:</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla_x f(g(x)) = J_g(x) \nabla_z f(z).
+\]</div>
+<p>This process is automatically performed in Pytorch by calling the <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> method on any non-leaf tensor. The gradient with respect to <span class="math notranslate nohighlight">\(x\)</span> can then be accessed by calling <code class="docutils literal notranslate"><span class="pre">x.grad</span></code>. For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="c1"># Create a leaf tensor</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Compute y = x**2</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Compute loss = sum(x**2)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Compute gradient of the loss</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="c1"># Extract gradient wrt x -&gt; d/dx loss(x^**2) = 2*x</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">grad</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Create a leaf tensor</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training-a-neural-network">
+<h3>Training a neural network<a class="headerlink" href="#training-a-neural-network" title="Link to this heading">#</a></h3>
+<p>This process can be exploited to run the Stochastic Gradient Descent (SGD) algorithm and train the neural network on our train loader.</p>
+<p>To do that, we should initialize an <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> which keeps track of the gradient of the loss function with respect to the parameters <span class="math notranslate nohighlight">\(\Theta\)</span> when the <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> method is called on the loss function, and it also applies the gradient descent step to the model parameters to update them.
+This is done as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define loss function (for example, MSE)</span>
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+
+<span class="c1"># Define optimizer (feeding the model parameters into it)</span>
+<span class="c1"># Adam -&gt; variant of SGD algorithm commonly used nowadays</span>
+<span class="c1">#   lr -&gt; &quot;learning rate&quot;</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+
+<span class="c1"># Set other parameters (e.g. the number of epochs: number of times the training loop is repeated)</span>
+<span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="c1"># Epoch cycle</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+    <span class="n">avg_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Training loop</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+        <span class="c1"># Get x, y from data</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="c1"># Send to device</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># Compute neural network prediction</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># Compare y_pred with the real y</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Compute gradient</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+        <span class="c1"># Update model weights</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span> <span class="c1"># Reset the optimizer state: IMPORTANT</span>
+
+        <span class="c1"># Print out the avg value of the loss</span>
+        <span class="c1"># Commented for site impagination</span>
+        <span class="c1"># print(f&quot;Epoch: {epoch}. Avg Loss: {loss.item() / (k+1):0.4f}&quot;, end=&quot;\r&quot;)</span>
+    <span class="c1"># print()</span>
+
+<span class="c1"># Saving the model after the cycle</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="s2">&quot;path-for-model.pth&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Define loss function (for example, MSE)</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Define optimizer (feeding the model parameters into it)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Adam -&gt; variant of SGD algorithm commonly used nowadays</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1">#   lr -&gt; &quot;learning rate&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;nn&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="testing-the-trained-model">
+<h3>Testing the trained model<a class="headerlink" href="#testing-the-trained-model" title="Link to this heading">#</a></h3>
+<p>Now that we optimized the neural network parameters, we are ready to check whether the prediction of the network on new data is good or not. To do that, we can simply load a batch from the test set, compute the prediction on it, and check if it matches the real value.</p>
+<p>To save memory, this operation can be done without tracking the gradient, as we won’t use it to update the model weights. This is done by calling the operation in bewteen the <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">torch.no_grad()</span></code> environment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Disable gradient memorization</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="c1"># Sample data from the dataset</span>
+    <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+
+    <span class="c1"># Send to device</span>
+    <span class="n">x_batch</span> <span class="o">=</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="c1"># Forward pass through the model</span>
+    <span class="n">y_prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prediction: </span><span class="si">{</span><span class="n">y_prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">. True: </span><span class="si">{</span><span class="n">y_batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">0.4f</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Disable gradient memorization</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># Sample data from the dataset</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="c1"># Send to device</span>
+
+<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now it is definitely better! Clearly, the prediction can be largely improved by optimizing all the parameters that we set up to this point. However, this is out of the scope of this course.</p>
+<p>We can now move to the next chapter, where we will learn how to actually reconstruct images with neural networks.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./intro"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="from-ml-to-nn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">From Machine Learning to Neural Networks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../end-to-end/processing-images-with-nn.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Processing images with Neural Networks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-pytorch">What is PyTorch?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features-of-pytorch">Key Features of PyTorch</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch-vs-tensorflow">PyTorch vs. TensorFlow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#which-one-should-you-choose">Which One Should You Choose?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch-tensors">Pytorch Tensors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-properties">Tensor Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-tensor-operations">Basic Tensor Operations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#moving-tensors-to-gpu">Moving Tensors to GPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataloading">DataLoading</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dataset-class">The Dataset Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dataloader-class">The DataLoader Class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#an-example-the-california-housing-dataset">An example: the California Housing Dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing-the-data">Preprocessing the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-custom-pytorch-dataset">Creating a Custom PyTorch Dataset</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-our-first-model-in-pytorch">Defining Our First Model in PyTorch</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-a-simple-neural-network">Defining a Simple Neural Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#passing-data-through-the-model">Passing Data Through the Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-model">Training a Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-differentiation">Automatic Differentiation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-a-neural-network">Training a neural network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-the-trained-model">Testing the trained model</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
