@@ -1,3 +1,4 @@
+# .github/workflows/deploy.yml
 name: build-and-deploy
 on:
   workflow_dispatch:
@@ -6,6 +7,7 @@ on:
     paths:
       - 'years/**'
       - '.github/workflows/deploy.yml'
+      - 'requirements.txt' # Added so the workflow triggers if you update dependencies
 
 jobs:
   build_and_deploy:
@@ -17,27 +19,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      # --- Setup Python & Automatic Pip Caching ---
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip' # This automatically looks for requirements.txt and caches based on it
 
+      # --- Dependencies Install ---
       - name: Install jupyter-book toolchain + runtime deps
         run: |
           python -m pip install --upgrade pip
-          pip install -U \
-            "jupyter-book>=1.0,<1.1" \
-            "sphinx==7.3.7" \
-            "docutils==0.20.1" \
-            "myst-nb>=1.1.0" \
-            "sphinx-external-toc>=1.0.0" \
-            "sphinx-copybutton>=0.5.2" \
-            "sphinx-design>=0.6.0" \
-            "sphinxcontrib-bibtex>=2.6.0" \
-            numpy \
-            matplotlib \
-            pandas \
-            scipy \
-            scikit-image
+          pip install -r requirements.txt
 
       # --- 2024-25 ---
       - name: Build 2024-25

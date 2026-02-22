@@ -1,3 +1,18 @@
-jupyter-book
-matplotlib
+# requirements.txt
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+jupyter-book>=1.0,<1.1
+sphinx==7.3.7
+docutils==0.20.1
+myst-nb>=1.1.0
+sphinx-external-toc>=1.0.0
+sphinx-copybutton>=0.5.2
+sphinx-design>=0.6.0
+sphinxcontrib-bibtex>=2.6.0
 numpy
+matplotlib
+pandas
+scipy
+scikit-image
+torch
+torchvision
