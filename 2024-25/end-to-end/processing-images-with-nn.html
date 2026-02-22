@@ -539,21 +539,6 @@ $<span class="math notranslate nohighlight">\(
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd">     Assuming the input x is a Pytorch tensor with shape (N, c, n_x, n_y), it normalizes it</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span><span class="sd">     with min-max normalization and returns a tensor with the same shape, in the range [0, 1].</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span><span class="sd">     &quot;&quot;&quot;</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="data-type">
@@ -565,18 +550,6 @@ Classically, images are converted into <code class="docutils literal notranslate
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert a tensor x to float32</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Convert a tensor x to float32</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -690,19 +663,6 @@ Classically, images are converted into <code class="docutils literal notranslate
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <p>Note that our dataset now returns a normalized grey-scale image of the required shape as an <span class="math notranslate nohighlight">\((1, n_x, n_y)\)</span> pytorch tensor. The batch dimension <span class="math notranslate nohighlight">\(N\)</span> will be automatically provided by the <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> class, as shown below.</p>
 <div class="cell docutils container">
@@ -727,13 +687,31 @@ Classically, images are converted into <code class="docutils literal notranslate
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Define dataset and dataloader (only train for now)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Get a sample batch</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">x</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/torch/utils/data/dataloader.py:394,</span> in <span class="ni">DataLoader.__init__</span><span class="nt">(self, dataset, batch_size, shuffle, sampler, batch_sampler, num_workers, collate_fn, pin_memory, drop_last, timeout, worker_init_fn, multiprocessing_context, generator, prefetch_factor, persistent_workers, pin_memory_device, in_order)</span>
+<span class="g g-Whitespace">    </span><span class="mi">392</span> <span class="k">else</span><span class="p">:</span>  <span class="c1"># map-style</span>
+<span class="g g-Whitespace">    </span><span class="mi">393</span>     <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">394</span>         <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+<span class="g g-Whitespace">    </span><span class="mi">395</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span>         <span class="n">sampler</span> <span class="o">=</span> <span class="n">SequentialSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/torch/utils/data/sampler.py:149,</span> in <span class="ni">RandomSampler.__init__</span><span class="nt">(self, data_source, replacement, num_samples, generator)</span>
+<span class="g g-Whitespace">    </span><span class="mi">144</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">145</span>         <span class="sa">f</span><span class="s2">&quot;replacement should be a boolean value, but got replacement=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replacement</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">146</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">148</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">149</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">150</span>         <span class="sa">f</span><span class="s2">&quot;num_samples should be a positive integer value, but got num_samples=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">151</span>     <span class="p">)</span>
+
+<span class="ne">ValueError</span>: num_samples should be a positive integer value, but got num_samples=0
 </pre></div>
 </div>
 </div>
