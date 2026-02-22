@@ -1,0 +1,20 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts: 
+  - caption: Introduction
+    chapters:
+      - file: intro/from-ml-to-nn
+      - file: intro/a-brief-overview-pytorch
+  - caption: End-to-End Neural Networks
+    chapters:
+      - file: end-to-end/processing-images-with-nn
+      - file: end-to-end/deep-dive-into-IPPy
+      - file: end-to-end/end-to-end
+      - file: end-to-end/crossdomain
+  - caption: Diffusion Models
+    chapters:
+      - file: diffusion/generative-models
+      - file: diffusion/introduction-to-diffusion-models
