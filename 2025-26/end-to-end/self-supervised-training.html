@@ -1,0 +1,796 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Self-Supervised Training for Inverse Problems &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/self-supervised-training';</script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Noise, Model Mismatch, and the Inverse Crime" href="../noise/the-inverse-crime.html" />
+    <link rel="prev" title="End-to-End Reconstruction and Imaging Architectures" href="end-to-end.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Self-Supervised Training for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fend-to-end/self-supervised-training.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/end-to-end/self-supervised-training.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Self-Supervised Training for Inverse Problems</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-self-supervised-reconstruction-problem">The Self-Supervised Reconstruction Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-self-supervised-strategies">Main Self-Supervised Strategies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-limitations-and-course-connections">Interpretation, Limitations, and Course Connections</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="self-supervised-training-for-inverse-problems">
+<h1>Self-Supervised Training for Inverse Problems<a class="headerlink" href="#self-supervised-training-for-inverse-problems" title="Link to this heading">#</a></h1>
+<section id="the-self-supervised-reconstruction-problem">
+<h2>The Self-Supervised Reconstruction Problem<a class="headerlink" href="#the-self-supervised-reconstruction-problem" title="Link to this heading">#</a></h2>
+<p>After presenting supervised end-to-end training, the next natural question is whether one can still train reconstruction networks when clean targets are unavailable. In computational imaging this is not a peripheral issue. It is one of the central practical difficulties of the field.</p>
+<p>The reason is straightforward. The object we want to reconstruct is usually not directly observable. If we had access to perfect target images for every measured datum, the inverse problem would already be partially solved. In many applications, collecting high-quality paired data is costly, dangerous, or physically impossible.</p>
+<p>Therefore, the course should now make a conceptual shift. Instead of assuming that the target image is always given, we ask which pieces of information remain available and how they can be used to define a training objective.</p>
+<p><strong>The basic difficulty.</strong></p>
+<p>Suppose we only observe measurements</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K\boldsymbol{x}^\dagger + \boldsymbol{e},
+\]</div>
+<p>but not the corresponding <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span>. If we still want to train a reconstructor <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}\)</span>, the most immediate idea is to enforce consistency with the measured datum:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\boldsymbol{\Theta}}
+\frac{1}{N}\sum_{i=1}^N
+\|Kf_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta)-\boldsymbol{y}_i^\delta\|_2^2.
+\]</div>
+<p>This objective is appealing because it involves only known quantities: the measurement, the forward operator, and the network output.</p>
+<p>However, from an inverse-problems perspective the difficulty is immediate. The set of solutions to</p>
+<div class="math notranslate nohighlight">
+\[
+K\boldsymbol{x}=\boldsymbol{y}^\delta
+\]</div>
+<p>is typically not a singleton. If <span class="math notranslate nohighlight">\(K\)</span> is ill-posed or rank-deficient, then many images are data-consistent. Therefore, pure measurement consistency is not enough to identify a meaningful reconstruction map.</p>
+<p>This is the key teaching point: <strong>self-supervision</strong> never means learning without prior information. It means learning without direct target labels, while obtaining the missing information from another structural source.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x1</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x2</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A x1 =&#39;</span><span class="p">,</span> <span class="n">y1</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A x2 =&#39;</span><span class="p">,</span> <span class="n">y2</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;x1 and x2 are different:&#39;</span><span class="p">,</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;But they are equally data-consistent:&#39;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A x1 = [1.0, 2.0]
+A x2 = [1.0, 2.0]
+x1 and x2 are different: True
+But they are equally data-consistent: True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="main-self-supervised-strategies">
+<h2>Main Self-Supervised Strategies<a class="headerlink" href="#main-self-supervised-strategies" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A useful teaching principle is that <strong>self-supervision</strong> does not mean the absence of assumptions. It means that the assumptions are moved from explicit target images into the <strong>structure of the loss</strong>, the <strong>splitting of the data</strong>, or the <strong>architecture itself</strong>.</p>
+</div>
+<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id8" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">16</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\boldsymbol{\Theta}} \|Kg_{\boldsymbol{\Theta}}(\boldsymbol{z})-\boldsymbol{y}^\delta\|_2^2.
+\]</div>
+<p>At first sight this seems paradoxical. If no dataset is used and no explicit regularizer is present, where does the prior come from?</p>
+<p>The answer is that the architecture itself acts as an implicit prior. Convolutional networks tend to generate structured images before they start fitting fine-scale noise. Thus, early stopping becomes a form of regularization.</p>
+<p>This is a very instructive example to discuss in class because it shows that architecture is not only a computational convenience. It can itself encode a bias toward plausible images.</p>
+<p>At the same time, DIP has clear drawbacks:</p>
+<ul class="simple">
+<li><p>one must solve a new optimization problem for each datum;</p></li>
+<li><p>the stopping criterion is delicate;</p></li>
+<li><p>overfitting to noise eventually occurs;</p></li>
+<li><p>the implicit prior is difficult to characterize precisely.</p></li>
+</ul>
+<p>So DIP is both pedagogically valuable and practically limited.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># DIP-style optimization on one blurred Mayo image.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;Mayo.png&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="p">(</span><span class="n">kernel</span> <span class="o">/</span> <span class="n">kernel</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x_true</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="n">fixed_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">60</span><span class="p">):</span>
+    <span class="n">x_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">fixed_input</span><span class="p">)</span>
+    <span class="n">data_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">conv2d</span><span class="p">(</span><span class="n">x_hat</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">data_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">59</span><span class="p">]:</span>
+        <span class="n">recon_error</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">x_hat</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span> <span class="o">-</span> <span class="n">x_true</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Step </span><span class="si">{</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s1">02d</span><span class="si">}</span><span class="s1"> | data loss = </span><span class="si">{</span><span class="n">data_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1"> | image RMSE = </span><span class="si">{</span><span class="n">recon_error</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 01 | data loss = 0.146653 | image RMSE = 0.398066
+Step 10 | data loss = 0.030320 | image RMSE = 0.184844
+Step 30 | data loss = 0.030320 | image RMSE = 0.184844
+Step 60 | data loss = 0.030320 | image RMSE = 0.184844
+</pre></div>
+</div>
+</div>
+</div>
+<p>The important thing to observe here is the distinction between the data term and the image error. In a true self-supervised setting, the image error would not be accessible. It is printed here only for teaching purposes, to show what the network is implicitly recovering while optimizing only through the forward model.</p>
+<p><strong>Measurement splitting and cross-prediction.</strong></p>
+<p>A second family of self-supervised methods starts from the idea that one measurement can sometimes be split into parts that contain complementary information about the same object.</p>
+<p>Suppose that the measured datum can be decomposed as</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = (\boldsymbol{y}_1^\delta,\boldsymbol{y}_2^\delta),
+\]</div>
+<p>with associated forward operators <span class="math notranslate nohighlight">\(K_1\)</span> and <span class="math notranslate nohighlight">\(K_2\)</span>. One may then train a network to reconstruct from one subset and predict the other:</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\boldsymbol{\Theta}}
+\|K_2 f_{\boldsymbol{\Theta}}(\boldsymbol{y}_1^\delta)-\boldsymbol{y}_2^\delta\|^2.
+\]</div>
+<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id10" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">8</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id9" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">1</a>]</span>.</p>
+<p>The success of this idea depends on several assumptions that should be stated explicitly:</p>
+<ul class="simple">
+<li><p>the measurement can be split in a physically meaningful way;</p></li>
+<li><p>each split retains enough information about the underlying image;</p></li>
+<li><p>the noise in the different splits is independent or sufficiently decorrelated;</p></li>
+<li><p>the forward model relating each split to the unknown object is known accurately enough.</p></li>
+</ul>
+<p>This is a very good point to slow down during the lecture. Students often see the splitting trick and think it is universally applicable. It is not. Its validity depends strongly on acquisition geometry and noise structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x_true</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="n">odd_measurements</span> <span class="o">=</span> <span class="n">y</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">even_measurements</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Full measurement vector:&#39;</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Odd-index split:&#39;</span><span class="p">,</span> <span class="n">odd_measurements</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Even-index split:&#39;</span><span class="p">,</span> <span class="n">even_measurements</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A splitting strategy can ask the model to predict one subset from the other.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Full measurement vector: tensor([0.0770, 0.1282, 0.1768, 0.4570, 0.5172, 0.6444, 0.8773, 1.0419])
+Odd-index split: tensor([0.0770, 0.1768, 0.5172, 0.8773])
+Even-index split: tensor([0.1282, 0.4570, 0.6444, 1.0419])
+A splitting strategy can ask the model to predict one subset from the other.
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Equivariance-based self-supervision.</strong></p>
+<p>Another useful principle is to exploit symmetries. Suppose that a transformation <span class="math notranslate nohighlight">\(T\)</span> acts on image space and that the corresponding transformation in measurement space is <span class="math notranslate nohighlight">\(S\)</span>. Ideally, reconstruction should commute with these transformations:</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}(S\boldsymbol{y}^\delta)\approx T f_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta).
+\]</div>
+<p>This motivates a consistency term of the form</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}_{\mathrm{eq}}(\boldsymbol{\Theta})
+=
+\mathbb{E}\big[\|f_{\boldsymbol{\Theta}}(S\boldsymbol{y}^\delta)-Tf_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta)\|^2\big].
+\]</div>
+<p>The underlying idea is straightforward. Even if we do not know the ground truth, we often know that certain transformations should not alter the reconstruction logic in an arbitrary way.</p>
+<p>Equivariance alone is usually not enough to solve the reconstruction problem, but it can be a powerful regularizing ingredient when combined with data-consistency terms.</p>
+</section>
+<section id="interpretation-limitations-and-course-connections">
+<h2>Interpretation, Limitations, and Course Connections<a class="headerlink" href="#interpretation-limitations-and-course-connections" title="Link to this heading">#</a></h2>
+<p>From a probabilistic perspective, supervised training gives direct access to pairs sampled from the joint law of <span class="math notranslate nohighlight">\((\boldsymbol{y}^\delta,\boldsymbol{x}^\dagger)\)</span>. Self-supervised training removes the direct access to <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> and forces us to recover information about the unknown image indirectly.</p>
+<p>This means that one must bring in prior information somewhere else. Depending on the method, this prior may come from:</p>
+<ul class="simple">
+<li><p>the network architecture, as in DIP;</p></li>
+<li><p>the splitting protocol, as in cross-prediction approaches;</p></li>
+<li><p>a symmetry principle, as in equivariant training;</p></li>
+<li><p>an explicit regularizer or pretrained prior.</p></li>
+</ul>
+<p>This is an extremely important didactic sentence:</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Self-supervision does not eliminate the prior. It only changes where the prior enters the problem.</p>
+</div>
+<p>Once students understand this, they can evaluate self-supervised methods more critically and avoid treating them as label-free miracles.</p>
+<p><strong>Failure modes.</strong></p>
+<p>A careful course should also discuss how these methods can fail.</p>
+<p><strong>Null-space collapse.</strong></p>
+<p>If the training objective only checks whether the output matches the measurement after application of <span class="math notranslate nohighlight">\(K\)</span>, then the network may drift inside the null space of <span class="math notranslate nohighlight">\(K\)</span> and produce artifacts that are invisible to the loss.</p>
+<p><strong>Identity leakage.</strong></p>
+<p>If the task setup allows the network to replicate too much of the noisy measurement, then denoising performance may collapse and the model may simply preserve corruption.</p>
+<p><strong>Model mismatch.</strong></p>
+<p>If the operator used in the self-supervised loss is not the actual acquisition operator, then the method may optimize the wrong physics. In inverse problems this mismatch can be fatal.</p>
+<p><strong>Correlated noise.</strong></p>
+<p>Splitting-based methods often assume independent noise across measurement subsets. If this assumption is violated, then the mathematical justification of the training objective weakens substantially.</p>
+<p>These failure modes are not merely technical caveats. They are part of the conceptual understanding of self-supervised inverse problems.</p>
+<p><strong>How self-supervision connects to the rest of the course.</strong></p>
+<p>This chapter should naturally prepare the transition to noise modeling and to the <strong>inverse crime</strong>. Once one realizes that self-supervised training relies heavily on the forward model and on the statistical structure of the measurements, it becomes clear that poor simulation choices can invalidate the whole approach.</p>
+<p>In other words, <strong>self-supervision</strong> makes the quality of the acquisition model even more central. When the network is not anchored by direct ground-truth labels, every mismatch in physics, noise, or discretization becomes more dangerous.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>The pedagogical roadmap of this chapter is the following:</p>
+<ul class="simple">
+<li><p>self-<strong>supervised learning</strong> is necessary because paired clean targets are often unavailable;</p></li>
+<li><p>pure data-consistency training is insufficient due to ill-posedness;</p></li>
+<li><p>DIP uses architecture as an implicit prior;</p></li>
+<li><p><strong>measurement splitting</strong> uses complementary subsets of the same acquisition;</p></li>
+<li><p><strong>equivariance</strong> exploits known symmetries of the reconstruction map;</p></li>
+<li><p>every self-supervised method hides a prior, even if that prior is not presented explicitly.</p></li>
+</ul>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Explain why the loss (|K f_{oldsymbol{\Theta}}(oldsymbol{y}^\delta)-oldsymbol{y}^\delta|^2) is generally insufficient on its own.</p></li>
+<li><p>Describe the source of prior information in <strong>Deep Image Prior</strong>.</p></li>
+<li><p>Give one example of a measurement-splitting idea that could be meaningful in an imaging problem, and one example where it would be questionable.</p></li>
+<li><p>Challenge exercise: compare self-supervised training and the <strong>inverse crime</strong>. Why does <strong>self-supervision</strong> make realistic forward modeling even more important?</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>This chapter sits exactly at the boundary between inverse-problem modeling and machine learning methodology. To go further, students should compare these ideas with works on <strong>Deep Image Prior</strong>, Noise2Noise, Noise2Inverse, and equivariant imaging. The main intellectual task is to identify where the missing supervision is being replaced by structural assumptions.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./end-to-end"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="end-to-end.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">End-to-End Reconstruction and Imaging Architectures</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../noise/the-inverse-crime.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Noise, Model Mismatch, and the Inverse Crime</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-self-supervised-reconstruction-problem">The Self-Supervised Reconstruction Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#main-self-supervised-strategies">Main Self-Supervised Strategies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-limitations-and-course-connections">Interpretation, Limitations, and Course Connections</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

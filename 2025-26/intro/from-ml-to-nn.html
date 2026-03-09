@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>From Machine Learning to Neural Networks &#8212; Computational Imaging</title>
+    <title>From Supervised Learning to Neural Networks &#8212; Computational Imaging</title>
   
   
   
@@ -32,9 +32,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -60,10 +61,11 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro/from-ml-to-nn';</script>
+    <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="A brief overview of PyTorch" href="a-brief-overview-pytorch.html" />
-    <link rel="prev" title="Computational Imaging (CI)" href="../intro.html" />
+    <link rel="next" title="A Brief PyTorch Viewpoint" href="a-brief-overview-pytorch.html" />
+    <link rel="prev" title="Computational Imaging" href="../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -173,30 +175,30 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="../intro.html">
-                    Computational Imaging (CI)
-                </a>
-            </li>
-        </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">From Machine Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/processing-images-with-nn.html">Processing images with Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Diffusion Models for Image Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
     </div>
@@ -382,7 +384,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>From Machine Learning to Neural Networks</h1>
+    <h1>From Supervised Learning to Neural Networks</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -392,21 +394,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-formulation-of-machine-learning-models">Mathematical Formulation of Machine Learning Models</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity">Linearity</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks">Neural Networks</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-multiple-linear-functions">Stacking Multiple Linear Functions</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-linear-activation-functions">Non-linear Activation Functions</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notations">Notations</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deep-neural-networks">Deep Neural Networks</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activation-functions-beyond-relu">Activation Functions: Beyond ReLU</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-chapter-comes-first">Why This Chapter Comes First</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-formulation-and-risk-minimization">Learning Formulation and Risk Minimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-linear-predictors-to-deep-nonlinear-models">From Linear Predictors to Deep Nonlinear Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-backpropagation-and-generalization">Optimization, Backpropagation, and Generalization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
 </ul>
             </nav>
         </div>
@@ -418,346 +412,341 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="from-machine-learning-to-neural-networks">
-<h1>From Machine Learning to Neural Networks<a class="headerlink" href="#from-machine-learning-to-neural-networks" title="Link to this heading">#</a></h1>
-<p>In the first module of this course, we explored the problem of image reconstruction using measurements acquired through linear operators. Now, we’ll tackle the same problem from a different angle—using <strong>neural networks</strong> to solve the inverse problem of recovering an unknown image from (noisy) measurements.</p>
-<p>We’ll start this module by introducing some fundamental Machine Learning concepts, including linearity, parameters, and regression. Then, we’ll dive into neural networks as a specialized branch of Machine Learning, highlighting their key properties. The next section will focus on implementation.</p>
-<a class="reference internal image-reference" href="../_images/hybrid.png"><img alt="../_images/hybrid.png" class="align-center" src="../_images/hybrid.png" style="width: 400px;" /></a>
-<section id="basics-of-machine-learning">
-<h2>Basics of Machine Learning<a class="headerlink" href="#basics-of-machine-learning" title="Link to this heading">#</a></h2>
-<p>A learning problem involves extracting knowledge from a dataset of <span class="math notranslate nohighlight">\(N\)</span> points:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="from-supervised-learning-to-neural-networks">
+<h1>From Supervised Learning to Neural Networks<a class="headerlink" href="#from-supervised-learning-to-neural-networks" title="Link to this heading">#</a></h1>
+<section id="why-this-chapter-comes-first">
+<h2>Why This Chapter Comes First<a class="headerlink" href="#why-this-chapter-comes-first" title="Link to this heading">#</a></h2>
+<p>Before discussing CNNs, <strong>UNet</strong>s, transformers, or generative models, it is important to fix the conceptual transition from classical inverse problems to learning-based reconstruction. If this transition is not made carefully, neural networks risk appearing as a completely separate subject, disconnected from the operator-theoretic and variational language of computational imaging. In reality, the connection is very direct.</p>
+<p>In Module 1, the basic object of study was the forward model</p>
 <div class="math notranslate nohighlight">
 \[
-\{ (x^{(1)}, y^{(1)}), (x^{(2)}, y^{(2)}), \dots, (x^{(N)}, y^{(N)}) \}
+\boldsymbol{y}^\delta = K \boldsymbol{x}^\dagger + \boldsymbol{e},
 \]</div>
-<p>where each pair <span class="math notranslate nohighlight">\((x^{(i)}, y^{(i)})\)</span> consists of an input and its corresponding output. Think of the input data <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^d\)</span> as the available information and the output data <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}^s\)</span> as the quantity we want to predict. The input dimension, <span class="math notranslate nohighlight">\(d\)</span>, represents the number of input features, while the output dimension, <span class="math notranslate nohighlight">\(s\)</span>, corresponds to the number of variables we aim to predict. To simplify things, we usually represent these as vectors of size <span class="math notranslate nohighlight">\(d\)</span> and <span class="math notranslate nohighlight">\(s\)</span>, respectively.</p>
-<p>For example, Machine Learning is widely used to predict house prices based on property characteristics. Suppose we have a dataset where each house is described by features such as:</p>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger \in \mathbb{R}^n\)</span> denotes the unknown image, <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> is the acquisition operator, and <span class="math notranslate nohighlight">\(\boldsymbol{e} \in \mathbb{R}^m\)</span> models the perturbation due to noise and <strong>model mismatch</strong>. The reconstruction problem was to recover <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> from <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span> by exploiting knowledge of <span class="math notranslate nohighlight">\(K\)</span>, of the noise model, and of suitable regularity assumptions on the unknown image.</p>
+<p>The learning-based viewpoint starts from exactly the same physical model, but modifies the strategy used to invert it. Instead of solving a new optimization problem for each datum, we collect a training set of examples and learn a parameterized inverse map directly from data.</p>
+</section>
+<section id="learning-formulation-and-risk-minimization">
+<h2>Learning Formulation and Risk Minimization<a class="headerlink" href="#learning-formulation-and-risk-minimization" title="Link to this heading">#</a></h2>
+<p>Assume that we have access to a dataset</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{D} = \{(\boldsymbol{y}_i^\delta, \boldsymbol{x}_i^\dagger)\}_{i=1}^N,
+\]</div>
+<p>where each pair consists of a measured datum and the corresponding ground-truth image. From a mathematical viewpoint, these pairs are sampled from an unknown probability distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span> on the product space of data and images. The goal is to construct a function</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}} : \mathbb{R}^m \to \mathbb{R}^n,
+\]</div>
+<p>depending on parameters <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span>, such that <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta)\)</span> is a good approximation of <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> whenever <span class="math notranslate nohighlight">\((\boldsymbol{y}^\delta, \boldsymbol{x}^\dagger)\)</span> follows the same law as the training data.</p>
+<p>This is already a useful point to stress in class: a supervised neural reconstructor is not learning “the inverse of <span class="math notranslate nohighlight">\(K\)</span>” in a purely algebraic sense. It is learning an inverse map relative to a data distribution. In other words, it is trying to invert the forward model only on the subset of images that are considered plausible according to the training set.</p>
+<p>This observation has two immediate consequences:</p>
+<ol class="arabic simple">
+<li><p>the quality of the training distribution is as important as the quality of the architecture;</p></li>
+<li><p>a network that performs excellently on one image class may fail badly on another, even if the forward operator is the same.</p></li>
+</ol>
+<p><strong>Population risk and <strong>empirical risk</strong>.</strong></p>
+<p>To define training mathematically, introduce a loss function</p>
+<div class="math notranslate nohighlight">
+\[
+\ell : \mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ell(\widehat{\boldsymbol{x}},\boldsymbol{x}^\dagger)\)</span> measures the discrepancy between a reconstruction <span class="math notranslate nohighlight">\(\widehat{\boldsymbol{x}}\)</span> and the target image <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span>. The ideal objective is the <strong>population risk</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{R}(\boldsymbol{\Theta})
+=
+\mathbb{E}_{(\boldsymbol{y}^\delta,\boldsymbol{x}^\dagger)\sim\mathbb{P}}
+\big[\ell(f_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta),\boldsymbol{x}^\dagger)\big].
+\]</div>
+<p>Of course, the distribution <span class="math notranslate nohighlight">\(\mathbb{P}\)</span> is unknown, so one replaces it by the empirical distribution of the dataset and minimizes the <strong>empirical risk</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\mathcal{R}}_N(\boldsymbol{\Theta})
+=
+\frac{1}{N}\sum_{i=1}^N \ell\big(f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta),\boldsymbol{x}_i^\dagger\big).
+\]</div>
+<p>This is the standard framework of <strong>supervised learning</strong>, but in the inverse-problems setting the interpretation is especially rich. A broad machine learning background for this viewpoint can be found in <span id="id1">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">5</a>]</span>. The map <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}\)</span> is not an arbitrary predictor. It is a learned regularized inverse. The training procedure tries to identify, inside a chosen model class, the map that best reconstructs typical images from typical measurements.</p>
+<p><strong>What the loss really measures.</strong></p>
+<p>At first sight, the choice of loss may seem secondary. In practice it is central, because it determines what kind of estimator the network is pushed to approximate.</p>
+<p>If one uses the squared error</p>
+<div class="math notranslate nohighlight">
+\[
+\ell(\widehat{\boldsymbol{x}},\boldsymbol{x}^\dagger)=\|\widehat{\boldsymbol{x}}-\boldsymbol{x}^\dagger\|_2^2,
+\]</div>
+<p>then the corresponding Bayes-optimal estimator is the conditional expectation</p>
+<div class="math notranslate nohighlight">
+\[
+f^*(\boldsymbol{y}^\delta)=\mathbb{E}[\boldsymbol{x}^\dagger | \boldsymbol{y}^\delta].
+\]</div>
+<p>This means that MSE training pushes the network toward a posterior mean estimator. This is mathematically elegant, but it also explains a recurring phenomenon in imaging: if several reconstructions are compatible with the same data, then their average may be visually smoother than any actual plausible image. Hence the well-known tendency of MSE-trained models to blur high-frequency detail.</p>
+<p>If instead one uses an <span class="math notranslate nohighlight">\(\ell_1\)</span> loss, the target becomes closer to a conditional median estimator. If one adds perceptual or adversarial terms, then one departs even further from a simple point estimator and starts favoring reconstructions that look realistic in a distributional sense.</p>
+<p>Therefore, even before choosing the architecture, one should tell the students that the loss function is part of the inverse model. It encodes what is considered a good answer.</p>
+</section>
+<section id="from-linear-predictors-to-deep-nonlinear-models">
+<h2>From Linear Predictors to Deep Nonlinear Models<a class="headerlink" href="#from-linear-predictors-to-deep-nonlinear-models" title="Link to this heading">#</a></h2>
+<p>A natural starting point is the affine model</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}(\boldsymbol{y})=W\boldsymbol{y}+\boldsymbol{b},
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(W\in\mathbb{R}^{n\times m}\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{b}\in\mathbb{R}^n\)</span>. Such a model is attractive because it is easy to analyze, easy to optimize, and immediately connected to familiar linear inverse methods. However, it is limited in several decisive ways.</p>
+<p>First, the map from measured data to stable reconstructions is usually not linear, even when the forward model is linear. Classical regularization already demonstrates this. For instance, the Tikhonov estimator</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\boldsymbol{x}}_\lambda(\boldsymbol{y}^\delta)
+=
+\operatorname*{arg\,min}_{\boldsymbol{x}}
+\|K\boldsymbol{x}-\boldsymbol{y}^\delta\|_2^2+\lambda\|L\boldsymbol{x}\|_2^2
+\]</div>
+<p>depends on the regularization parameter, on the prior model, and on the noise level. If these ingredients are adapted to the observed datum, one immediately leaves the realm of simple fixed linear inversion.</p>
+<p>Second, even when a <strong>linear estimator</strong> is mathematically admissible, it may be too rigid to capture the structure of natural images. Images are not arbitrary vectors. They exhibit local patterns, edges, textures, repeated motifs, and large-scale organization. A dense affine map treats all coordinates as generic features and does not encode any of this structure.</p>
+<p>Third, the parameter count is prohibitive. Mapping an image-sized datum to an image-sized output through a full matrix is often infeasible. This already suggests the need for structured parameterizations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">41</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">solution</span>
+<span class="n">y_affine</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">theta</span>
+
+<span class="n">affine_mse</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_affine</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="n">mlp</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">mlp</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">5e-2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">600</span><span class="p">):</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">mlp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">y_mlp</span> <span class="o">=</span> <span class="n">mlp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">mlp_mse</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_mlp</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Affine model MSE: </span><span class="si">{</span><span class="n">affine_mse</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Tiny nonlinear network MSE: </span><span class="si">{</span><span class="n">mlp_mse</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample predictions:&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;x=</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">+.2f</span><span class="si">}</span><span class="s1"> | target=</span><span class="si">{</span><span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">+.3f</span><span class="si">}</span><span class="s1"> &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;| affine=</span><span class="si">{</span><span class="n">y_affine</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">+.3f</span><span class="si">}</span><span class="s1"> | mlp=</span><span class="si">{</span><span class="n">y_mlp</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">+.3f</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Affine model MSE: 0.097825
+Tiny nonlinear network MSE: 0.000165
+
+Sample predictions:
+x=-1.00 | target=+0.900 | affine=+0.250 | mlp=+0.876
+x=-0.50 | target=+0.200 | affine=+0.300 | mlp=+0.209
+x=-0.00 | target=-0.000 | affine=+0.350 | mlp=+0.017
+x=+0.50 | target=+0.300 | affine=+0.400 | mlp=+0.315
+x=+1.00 | target=+1.100 | affine=+0.450 | mlp=+1.088
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Why depth alone does not help.</strong></p>
+<p>At this point students often ask a very reasonable question: why not simply compose several affine maps? The answer is an excellent pedagogical opportunity, because it isolates the real source of expressive power in neural networks.</p>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[
+f_1(\boldsymbol{y})=W_1\boldsymbol{y}+\boldsymbol{b}_1,
+\qquad
+f_2(\boldsymbol{z})=W_2\boldsymbol{z}+\boldsymbol{b}_2.
+\]</div>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[
+f_2(f_1(\boldsymbol{y}))
+=
+W_2(W_1\boldsymbol{y}+\boldsymbol{b}_1)+\boldsymbol{b}_2
+=
+W_2W_1\boldsymbol{y}+W_2\boldsymbol{b}_1+\boldsymbol{b}_2,
+\]</div>
+<p>which is again affine. Thus, stacking linear maps without additional nonlinear operations does not enlarge the model class in any essential way.</p>
+<p>This is one of the cleanest moments in the course to explain why neural networks require <strong>nonlinear activation</strong> functions. Depth matters, but only once linearity has been broken.</p>
+<p><strong>The role of <strong>nonlinear activation</strong>s.</strong></p>
+<p>Let <span class="math notranslate nohighlight">\(\rho:\mathbb{R}\to\mathbb{R}\)</span> be a scalar nonlinear function, applied componentwise to vectors. A simple one-hidden-layer network has the form</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}(\boldsymbol{y})=W_2\rho(W_1\boldsymbol{y}+\boldsymbol{b}_1)+\boldsymbol{b}_2.
+\]</div>
+<p>Typical activations include:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(x_1\)</span>: Square footage</p></li>
-<li><p><span class="math notranslate nohighlight">\(x_2\)</span>: Number of bedrooms</p></li>
-<li><p><span class="math notranslate nohighlight">\(x_3\)</span>: Number of bathrooms</p></li>
-<li><p><span class="math notranslate nohighlight">\(x_4\)</span>: Distance to the city center</p></li>
-<li><p><span class="math notranslate nohighlight">\(x_5\)</span>: Age of the house</p></li>
+<li><p>ReLU, <span class="math notranslate nohighlight">\(\rho(t)=\max\{t,0\}\)</span>;</p></li>
+<li><p>leaky ReLU, <span class="math notranslate nohighlight">\(\rho(t)=\max\{\alpha t,t\}\)</span>;</p></li>
+<li><p>GELU, often used in transformer-based architectures.</p></li>
 </ul>
-<p>The goal is to predict the selling price <span class="math notranslate nohighlight">\(y\)</span> of a house given its features. Here, the input <span class="math notranslate nohighlight">\(x^{(i)} \in \mathbb{R}^5\)</span> represents a vector of property attributes, and the output <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}\)</span> is the house price.</p>
-<p>A Machine Learning model, such as <strong>linear regression</strong>, learns a function <span class="math notranslate nohighlight">\(f_\Theta\)</span> that maps inputs to outputs:</p>
-<div class="math notranslate nohighlight">
-\[
-y = f_\Theta(x_1, x_2, x_3, x_4, x_5).
-\]</div>
-<p>Initially, the model <strong>does not know</strong> how these features influence the price. By <strong>training</strong> on past sales data, it finds patterns and estimates parameters (or weights) that best fit the data. Once trained, the model can predict the price of new houses that were not in the dataset.</p>
-<p>This simple example illustrates the core idea of supervised learning: using past data to make future predictions. More generally, a Machine Learning model can be seen as a mathematical function that maps input features to an output of interest.</p>
+<p>The role of the activation is deeper than simply introducing a nonlinearity. It changes the geometry of the function class. A ReLU network, for example, represents a piecewise affine map, but with a very large number of affine regions. This already gives a hint of why such networks can approximate highly complex relations between measurements and images.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display a local course figure for the basic neural network architecture.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;NN.png&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">900</span><span class="p">,</span> <span class="mi">760</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a9f176c94a4dec3782fb54a65653826e9a852f0cff4f5dff8c60b3b302b5e8fa.png" src="../_images/a9f176c94a4dec3782fb54a65653826e9a852f0cff4f5dff8c60b3b302b5e8fa.png" />
+</div>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This setup assumes that all data is represented as real numbers (since both <span class="math notranslate nohighlight">\(x^{(i)}\)</span> and <span class="math notranslate nohighlight">\(y^{(i)}\)</span> are real-valued vectors). Handling non-numeric data is beyond the scope of this course, but for those interested, we recommend looking into <em>embedding</em> techniques for categorical variables.</p>
+<p>A common misunderstanding is to think that depth alone creates expressivity. Without <strong>nonlinear activation</strong> functions, composing affine maps still produces an affine map. This is why the activation is a structural ingredient, not an optional embellishment.</p>
 </div>
-<section id="mathematical-formulation-of-machine-learning-models">
-<h3>Mathematical Formulation of Machine Learning Models<a class="headerlink" href="#mathematical-formulation-of-machine-learning-models" title="Link to this heading">#</a></h3>
-<p>At its core, a Machine Learning (ML) model is a function</p>
+<p><strong>Neural networks as learned regularizers.</strong></p>
+<p>A very useful bridge with classical inverse problems is the following interpretation. Even if a neural network is trained end-to-end, one can still view it as approximating the solution map of an optimization problem of the form</p>
 <div class="math notranslate nohighlight">
 \[
-f_\Theta: \mathbb{R}^d \to \mathbb{R}^s
+\widehat{\boldsymbol{x}}(\boldsymbol{y}^\delta)
+=
+\operatorname*{arg\,min}_{\boldsymbol{x}}
+\Big(\mathcal{D}(K\boldsymbol{x},\boldsymbol{y}^\delta)+\mathcal{R}(\boldsymbol{x})\Big),
 \]</div>
-<p>that maps an input vector of length <span class="math notranslate nohighlight">\(d\)</span> to an output vector of length <span class="math notranslate nohighlight">\(s\)</span>. The choice of <span class="math notranslate nohighlight">\(s\)</span> depends on the application:</p>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> is a data-fidelity term and <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> is a regularizer.</p>
+<p>The network does not necessarily make <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> explicit, but it behaves as if it had absorbed them into a learned nonlinear reconstruction rule. This is why it is sensible to say that a trained network is a learned regularizer or a learned inverse map. It does not replace the inverse-problems viewpoint. It instantiates it in a different way.</p>
+<p><strong>Depth, features, and internal representations.</strong></p>
+<p>For a deep network we write</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{h}_0=\boldsymbol{y},
+\qquad
+\boldsymbol{h}_{\ell+1}=\rho_\ell(W_\ell \boldsymbol{h}_\ell+\boldsymbol{b}_\ell),
+\qquad
+f_{\boldsymbol{\Theta}}(\boldsymbol{y})=\boldsymbol{h}_L.
+\]</div>
+<p>The vectors <span class="math notranslate nohighlight">\(\boldsymbol{h}_\ell\)</span> are the internal features produced by the network. At this stage of the course it is useful to discuss what “feature” means concretely in imaging.</p>
+<p>In the early layers, one often finds detectors of simple local events such as oriented edges, contrast changes, or simple repeated textures. In the middle layers, these elementary features are combined into larger structures. In deeper layers, the representation becomes more task-specific and more global. The network is therefore not only computing a final answer. It is building a hierarchy of descriptions of the datum.</p>
+<p>This hierarchical viewpoint is one of the reasons depth is so important. A shallow model may in principle approximate the same function, but the parameter efficiency and representational organization can be dramatically worse.</p>
+<p><strong>Universal approximation is not the end of the story.</strong></p>
+<p>The universal approximation theorem is often cited when introducing neural networks. It states, roughly speaking, that sufficiently large networks can approximate continuous functions on compact sets. This result is mathematically important because it proves that nonlinear networks are not fundamentally limited in the way linear models are.</p>
+<p>However, this theorem should not be overemphasized in a computational imaging course. In practice, one does not only care about approximation in an abstract sense. One also cares about:</p>
 <ul class="simple">
-<li><p>If the model is used for classification, where an input belongs to one of <span class="math notranslate nohighlight">\(k\)</span> categories, then <span class="math notranslate nohighlight">\(s = k\)</span>.</p></li>
-<li><p>If the model is used for regression, <span class="math notranslate nohighlight">\(s\)</span> corresponds to the number of predicted values.</p></li>
-<li><p>If the model is used for image reconstruction, <span class="math notranslate nohighlight">\(s\)</span> typically represents the number of pixels in the reconstructed image.</p></li>
+<li><p>how many parameters are needed;</p></li>
+<li><p>whether the model can be trained stably;</p></li>
+<li><p>how the architecture reflects known properties of images;</p></li>
+<li><p>whether the reconstructor is robust to noise and operator mismatch.</p></li>
 </ul>
-<p>The model’s knowledge is encoded in the vector <span class="math notranslate nohighlight">\(\Theta\)</span>, which represents its parameters. To better understand the role of parameters in an ML model, let’s start with a simple example: Linear Regression.</p>
-<p>Consider a basic model <span class="math notranslate nohighlight">\(f_\Theta\)</span> with just two parameters, <span class="math notranslate nohighlight">\(\Theta_1\)</span> and <span class="math notranslate nohighlight">\(\Theta_2\)</span>:</p>
+<p>In other words, the relevant question is not only can a neural network represent the desired inverse map, but rather which neural network architecture represents it efficiently and stably.</p>
+<p>This is the precise point at which the course naturally moves from generic neural networks to image-specific architectures.</p>
+</section>
+<section id="optimization-backpropagation-and-generalization">
+<h2>Optimization, Backpropagation, and Generalization<a class="headerlink" href="#optimization-backpropagation-and-generalization" title="Link to this heading">#</a></h2>
+<p>Training a neural network means solving the nonconvex optimization problem</p>
 <div class="math notranslate nohighlight">
 \[
-f_\Theta(x) = \Theta_1 + \Theta_2 x.
+\min_{\boldsymbol{\Theta}} \widehat{\mathcal{R}}_N(\boldsymbol{\Theta}).
 \]</div>
-<p>This equation describes a straight line where <span class="math notranslate nohighlight">\(\Theta_1\)</span> is the intercept and <span class="math notranslate nohighlight">\(\Theta_2\)</span> is the slope.</p>
+<p>The main computational tool is <strong>backpropagation</strong>, which is simply an efficient implementation of the chain rule through the <strong>computational graph</strong>. If the training loss is denoted by <span class="math notranslate nohighlight">\(L(\boldsymbol{\Theta})\)</span>, then the gradient descent update reads</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{\Theta}_{k+1}
+=
+\boldsymbol{\Theta}_k-\eta_k\nabla L(\boldsymbol{\Theta}_k).
+\]</div>
+<p>In practice one rarely computes the full empirical gradient. Instead one uses mini<strong>batch</strong>es and obtains a stochastic approximation:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{\Theta}_{k+1}
+=
+\boldsymbol{\Theta}_k-\eta_k\nabla \widehat{\mathcal{R}}_{B_k}(\boldsymbol{\Theta}_k),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(B_k\)</span> denotes the current <strong>batch</strong>.</p>
+<p>This point should be connected to numerical optimization from Module 1. Neural-network training is still numerical optimization. The novelty is not the existence of optimization, but the scale, nonconvexity, and parameterization of the problem.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="c1"># Define parameterized function f</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
+<span class="n">layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">]])</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">]])</span>
 
-<span class="c1"># Choose two different values for the parameters</span>
-<span class="n">theta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
-<span class="n">theta2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
 
-<span class="c1"># Visualize the model prediction in the range [-5, 5]</span>
-<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">yy</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span>
-<span class="n">yy2</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta2</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy2</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A plot of f_theta(x)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Prediction:&#39;</span><span class="p">,</span> <span class="n">prediction</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss:&#39;</span><span class="p">,</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gradient with respect to the weight:&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gradient with respect to the bias:&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/8d8d691d9b8e9809ff04a83de5dc568cbda27d9831f210411976834add4e8a92.png" src="../_images/8d8d691d9b8e9809ff04a83de5dc568cbda27d9831f210411976834add4e8a92.png" />
-</div>
-</div>
-<p>Think of <span class="math notranslate nohighlight">\(x\)</span> as the input data that we use to predict an output <span class="math notranslate nohighlight">\(y\)</span>. Notice how different choices of <span class="math notranslate nohighlight">\(\Theta\)</span> can lead to vastly different predictions.</p>
-<p>Now, let’s overlay the available data on the same plot:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define synthetic datapoints</span>
-<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">y_data</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">x_data</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">x_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-<span class="c1"># Plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy2</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A plot of f_theta(x)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 0.5673959255218506
+Loss: 0.18714629113674164
+Gradient with respect to the weight: -1.7304162979125977
+Gradient with respect to the bias: -0.8652081489562988
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/f27eb7a916797d9c40dbfc138dd0fd04da4148aa12a498ac16c692f72e72048c.png" src="../_images/f27eb7a916797d9c40dbfc138dd0fd04da4148aa12a498ac16c692f72e72048c.png" />
 </div>
-</div>
-<p><em>Which of the two straight lines better fits the given data?</em>
-Clearly, the blue line—parameterized by <span class="math notranslate nohighlight">\(\Theta=(1,0.2)\)</span>. In fact, if we check the code used to generate the data, we’ll see that <span class="math notranslate nohighlight">\((1,0.2)\)</span> are the exact parameters that define $y^{(i)}.</p>
-<p>This highlights two fundamental characteristics common to almost all ML models:</p>
+<p><strong>Statistical <strong>generalization</strong>.</strong></p>
+<p>Another key topic to explain explicitly is <strong>generalization</strong>. A network may minimize the training loss very well and still fail on new data. In the inverse-problems setting this issue is even more delicate because the test datum may differ from training not only in image content, but also in:</p>
 <ul class="simple">
-<li><p>Different choices of <span class="math notranslate nohighlight">\(\Theta\)</span> lead to <em>very different</em> predictions.</p></li>
-<li><p>Given a training set, some parameter choices are better than others, and usually, there is one that is <em>optimal</em>. A good model should at least approximate this optimal choice.</p></li>
+<li><p>noise level;</p></li>
+<li><p>acquisition geometry;</p></li>
+<li><p>calibration;</p></li>
+<li><p>discretization;</p></li>
+<li><p>anatomical class or object class.</p></li>
 </ul>
-<p>The process of finding the optimal parameters for an ML model based on a training set is called <em>training</em>. We’ll revisit this topic later when discussing how models are typically trained.</p>
+<p>Thus, when we say that a network generalizes, we mean that the learned inverse map remains reliable under realistic variation in both the unknown image and the measurement process.</p>
+<p>This is why one should teach students very early that reconstruction quality cannot be separated from dataset design. A model trained on unrealistic synthetic pairs may generalize only inside a narrow artificial world.</p>
+<p><strong>Why the next step must be image-specific architectures.</strong></p>
+<p>At this point the motivation for image-oriented architectures is clear. Fully connected networks are conceptually useful but computationally and statistically inefficient for images. They do not respect locality, do not exploit translational patterns, and ignore the geometry of the image grid.</p>
+<p>This motivates the next chapter. Once the idea of a learned inverse map is clear, one asks how to design the architecture so that it matches the structure of image data. The answers will be <strong>convolution</strong>s, multiscale encoders and decoders, skip connections, and attention mechanisms.</p>
 </section>
-<section id="linearity">
-<h3>Linearity<a class="headerlink" href="#linearity" title="Link to this heading">#</a></h3>
-<p>In the example above, we assumed both the input and output dimensions were <span class="math notranslate nohighlight">\(d = 1\)</span> and <span class="math notranslate nohighlight">\(s = 1\)</span>. However, we can easily generalize a linear regression model to higher dimensions (<span class="math notranslate nohighlight">\(d &gt; 1\)</span>, <span class="math notranslate nohighlight">\(s &gt; 1\)</span>) using the general linear model:</p>
-<div class="math notranslate nohighlight">
-\[
-f_\Theta(x) = W x + b
-\]</div>
-<p>where the parameters <span class="math notranslate nohighlight">\(\Theta = \{ W, b \}\)</span> have dimensions <span class="math notranslate nohighlight">\(W \in \mathbb{R}^{s \times d}\)</span> and <span class="math notranslate nohighlight">\(b \in \mathbb{R}^s\)</span>. This means the total number of parameters to be learned is <span class="math notranslate nohighlight">\(s(d+1)\)</span>, which grows linearly with the input and output dimensions.</p>
-<p>When <span class="math notranslate nohighlight">\(d &gt; 1\)</span> and <span class="math notranslate nohighlight">\(s &gt; 1\)</span>, we can no longer visualize the model’s output in a simple plot, as it would require at least four dimensions.</p>
-<p>While linear models have several useful properties (which are beyond the scope of this course), their <strong>expressivity</strong>—i.e., their ability to approximate complex outputs—is quite limited. A linear model can only represent <em>linear functions</em> (such as straight lines and planes), making it incapable of even approximating simple functions like <span class="math notranslate nohighlight">\(\sin(x)\)</span>. This limitation makes linear models impractical for handling complex data, such as images or natural language.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define synthetic datapoints</span>
-<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_data</span><span class="p">)</span>
-
-<span class="c1"># Create a linear model approximation</span>
-<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">theta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="n">yy</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">xx</span><span class="p">)</span>
-
-<span class="c1"># Plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="s1">&#39;o--&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A plot of f_theta(x) approximating sin(x)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/911a11b7618525116b35f329048d8b2554420e0da591e91b54dc15c8e270bb13.png" src="../_images/911a11b7618525116b35f329048d8b2554420e0da591e91b54dc15c8e270bb13.png" />
-</div>
-</div>
-<p>To this aim, multiple ML algorithms have been proposed in the literature, with the most successful being Polynomial Regression, Support Vector Machines (SVM), Random Forest (RF), and XGBoost.</p>
-<p>However, while these models outperform linear regression in predictive performance, none of them are expressive enough to accurately approximate highly complex data, as required for image reconstruction tasks.</p>
-</section>
-</section>
-<section id="neural-networks">
-<h2>Neural Networks<a class="headerlink" href="#neural-networks" title="Link to this heading">#</a></h2>
-<p>A neural network is a specific type of Machine Learning (ML) model that has gained significant relevance in recent years due to several factors, including:</p>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>This chapter should leave the students with a precise conceptual map:</p>
 <ul class="simple">
-<li><p>The exponential increase in computational power, particularly with GPUs, which enable extreme <em>parallelization</em>—a key advantage of neural networks over other Artificial Intelligence (AI) methods.</p></li>
-<li><p>The vast amount of data available, largely thanks to the internet.</p></li>
-</ul>
-<p>In this section, we will provide a high-level overview of neural networks. We will then dive deeper into neural networks specifically designed for image processing.</p>
-<p>For a more in-depth understanding of neural networks, we recommend referring to the course by Professor Andrea Asperti which will be held at the beginning of the second year of this Master Degree.</p>
-<section id="stacking-multiple-linear-functions">
-<h3>Stacking Multiple Linear Functions<a class="headerlink" href="#stacking-multiple-linear-functions" title="Link to this heading">#</a></h3>
-<p>The basic idea behind neural networks is fairly simple: linear models are efficient but not expressive enough, so why not stack multiple linear models on top of each other to improve expressivity?</p>
-<p>For example, consider two linear models:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-f^1_{\Theta^1}(x) = W^1 x + b^1, \\
-f^2_{\Theta^2}(x) = W^2 x + b^2.
-\end{split}\]</div>
-<p>Now, let’s define a new model, <span class="math notranslate nohighlight">\(f_\Theta(x)\)</span>, by chaining these two functions so that the output of the first model serves as the input to the second:</p>
-<div class="math notranslate nohighlight">
-\[
-f_\Theta(x) := (f_{\Theta^2} \circ f_{\Theta^1})(x) = f_{\Theta^2} ( f_{\Theta^1} (x)).
-\]</div>
-<p>Does this give us a more flexible model? <strong>Unfortunately, no.</strong></p>
-<p>It’s easy to show that:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{aligned}
-f_\Theta(x) &amp;= f_{\Theta^2} ( f_{\Theta^1} (x)) = f_{\Theta^2} (W^1 x + b^1) \\  
-&amp;= W^2(W^1 x + b^1) + b^2 = W^2 W^1 x + W^2b^1 + b^2.
-\end{aligned}
-\end{split}\]</div>
-<p>If we rename <span class="math notranslate nohighlight">\(W := W^2 W^1\)</span> and <span class="math notranslate nohighlight">\(b := W^2b^1 + b^2\)</span>, we obtain:</p>
-<div class="math notranslate nohighlight">
-\[
-f_\Theta(x) = W x + b.
-\]</div>
-<p>This proves that <em>stacking multiple linear models still results in a linear model</em>. This isn’t surprising, as closure under composition is a fundamental property of linear functions.</p>
-</section>
-<section id="non-linear-activation-functions">
-<h3>Non-linear Activation Functions<a class="headerlink" href="#non-linear-activation-functions" title="Link to this heading">#</a></h3>
-<p>To build a model that is more expressive than a linear model, we can’t just stack multiple linear models. We also need something to break the linearity. In neural networks, the solution is quite simple: we insert non-linear functions between the linear models to introduce non-linearity.</p>
-<p>Consider, for example, a simple function like:</p>
-<div class="math notranslate nohighlight">
-\[
-\rho(x) = \max(0, x),
-\]</div>
-<p>The plot of this function looks as follows:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define ReLU</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-
-<span class="c1"># Define x</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-<span class="c1"># Plot</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Plot of ReLU(x)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/b28453a0fb8bad087e30cfe91d11b6924de8045d907155dec995772b78e4a7ba.png" src="../_images/b28453a0fb8bad087e30cfe91d11b6924de8045d907155dec995772b78e4a7ba.png" />
-</div>
-</div>
-<p>Re-define the model <span class="math notranslate nohighlight">\(f_\Theta\)</span> as above, but inserting <span class="math notranslate nohighlight">\(\rho(x)\)</span> between the two linear models <span class="math notranslate nohighlight">\(f_{\Theta^1}\)</span> and <span class="math notranslate nohighlight">\(f_{\Theta^2}\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[
-f_{\Theta}(x) := f_{\Theta^2} ( \rho (f_{\Theta^1} (x))) = W^2(\rho(W^1x + b^1)) + b^2.
-\]</div>
-<p>Surprisingly, while this simple modification doesn’t seem to drastically change the structure of the stacked linear model discussed earlier, it introduces an incredible property: <span class="math notranslate nohighlight">\(f_\Theta(x)\)</span> can approximate <em>arbitrarily well</em> any continuous function, thus exhibiting the <strong>Universal Approximation</strong> property. This model, originally called the Multi-layer Perceptron (MLP) due to its layered structure, is the simplest version of a <em>neural network</em>.</p>
-<p>As we will see in the following, more advanced versions of neural networks can be obtained by:</p>
-<ul class="simple">
-<li><p>Stacking more linear models (always placing a non-linear function in between them),</p></li>
-<li><p>Changing the non-linear function used,</p></li>
-<li><p>Limiting the structure of the parameter matrices <span class="math notranslate nohighlight">\(W^l\)</span> to allow for more efficient computation (this is particularly important for image reconstruction).</p></li>
+<li><p>supervised reconstruction is <strong>empirical risk</strong> minimization over parameterized inverse maps;</p></li>
+<li><p>the loss function determines the statistical target of the estimator;</p></li>
+<li><p>affine models are too limited for realistic imaging tasks;</p></li>
+<li><p><strong>nonlinear activation</strong>s make expressive inverse modeling possible;</p></li>
+<li><p>neural networks can be interpreted as learned regularized reconstructors;</p></li>
+<li><p>the structure of images demands specialized architectures rather than generic dense networks.</p></li>
 </ul>
 </section>
-<section id="notations">
-<h3>Notations<a class="headerlink" href="#notations" title="Link to this heading">#</a></h3>
-<p>To conclude this introductory section, we provide the most common naming notation for neural network models. First, note that the formal description of the MLP given above is equivalent to the classical visualization shown in the figure below.</p>
-<p>In particular, any neural network can be graphically represented as a layered graph, where each node is called a <em>neuron</em>. The first layer (depicted in blue in the figure) is called the <em>input layer</em>, and it contains a number of neurons equal to the input dimension <span class="math notranslate nohighlight">\(d\)</span> of our data. Connected to the input layer is an intermediate layer called the <em>hidden layer</em>, whose number of neurons <span class="math notranslate nohighlight">\(H\)</span> (called the <em>hidden dimension</em>) is a user-defined parameter. The name <em>hidden layer</em> comes from the fact that the values of its neurons are not accessible from the outside, as we usually only access its input and output. Each neuron in the hidden layer, <span class="math notranslate nohighlight">\(z_i\)</span>, is obtained by a linear transformation of the input data, i.e.</p>
-<div class="math notranslate nohighlight">
-\[
-z_i = w_i \cdot x + b_i,
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(w_i\)</span> and <span class="math notranslate nohighlight">\(b_i\)</span> are the neuron-specific parameters, usually called <em>weights</em> and <em>biases</em>, respectively. These are represented as the edges connecting the neurons from the input layer to <span class="math notranslate nohighlight">\(z_i\)</span>. The hidden layer is then processed by the non-linear activation function <span class="math notranslate nohighlight">\(\rho\)</span>, mapping each neuron to the corresponding <span class="math notranslate nohighlight">\(h_i = \rho(z_i)\)</span>.</p>
-<p>Finally, another linear transformation maps <span class="math notranslate nohighlight">\(h_i\)</span> to the output neuron <span class="math notranslate nohighlight">\(y\)</span>, which defines the <em>output layer</em> of our network.</p>
-<a class="reference internal image-reference" href="../_images/NN.png"><img alt="../_images/NN.png" class="align-center" src="../_images/NN.png" style="width: 400px;" /></a>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Show explicitly that the composition of three affine maps is still affine.</p></li>
+<li><p>Explain in your own words why the loss function changes the statistical estimator learned by the network.</p></li>
+<li><p>Give one example of an inverse problem where a <strong>linear estimator</strong> is mathematically natural, and explain why it may still be inadequate in practice.</p></li>
+<li><p>Discuss why image geometry suggests using structured architectures instead of generic fully connected networks.</p></li>
+</ol>
 </section>
-</section>
-<section id="deep-neural-networks">
-<h2>Deep Neural Networks<a class="headerlink" href="#deep-neural-networks" title="Link to this heading">#</a></h2>
-<p>The simple neural network architecture described above, since its debut in 1958, has evolved in multiple, different directions. One of the first and crucial evolutions was the adoption of multiple hidden layers. Indeed, note that we can simply iterate the process used to build the single hidden layer architecture above to define multiple hidden layers, each taking as input the output of the previous hidden layer and employing the classical linear transformation + non-linear activation, possibly improving the expressivity of the model.</p>
-<p>Thanks to the large increase in computational power, modern neural networks employ hundreds of hidden layers. Let <span class="math notranslate nohighlight">\(L\)</span> be the number of hidden layers in a deep neural network, so that the <span class="math notranslate nohighlight">\(l\)</span>-th layer has <span class="math notranslate nohighlight">\(H_l\)</span> neurons. Usually, <span class="math notranslate nohighlight">\(L\)</span> is referred to as the <em>depth</em> of the model, while the largest number of neurons among hidden layers, i.e. <span class="math notranslate nohighlight">\(\max_{l} H_l\)</span>, is usually called the <em>width</em> of the model.</p>
-<p>A neural network with a lot of hidden layers is therefore a <em>deep</em> neural network, which explains the reason behind its name. The set of algorithms based on deep neural networks is usually referred to as <strong>Deep Learning</strong>.</p>
-<a class="reference internal image-reference" href="../_images/MLP.png"><img alt="../_images/MLP.png" class="align-center" src="../_images/MLP.png" style="width: 600px;" /></a>
-<section id="activation-functions-beyond-relu">
-<h3>Activation Functions: Beyond ReLU<a class="headerlink" href="#activation-functions-beyond-relu" title="Link to this heading">#</a></h3>
-<p>As already discussed, another line of research in modern neural networks is the exploration of different activation functions. Here, we report a few of them, mainly as a reminder. We will investigate their properties in the next few sections.</p>
-<ul class="simple">
-<li><p><strong>ReLU</strong>: <span class="math notranslate nohighlight">\(ReLU(x) = \max \{0, x \}\)</span>;</p></li>
-<li><p><strong>Sigmoid</strong>: <span class="math notranslate nohighlight">\(\sigma(x) = \frac{\exp{(x)}}{1 + \exp{(x)}}\)</span>;</p></li>
-<li><p><strong>Tanh</strong>: <span class="math notranslate nohighlight">\(\tanh(x) = \frac{\exp{(x)} - \exp{(-x)}}{\exp{(x)} + \exp{(-x)}}\)</span>;</p></li>
-<li><p><strong>SiLU</strong>: <span class="math notranslate nohighlight">\(SiLU(x) = x \sigma(x)\)</span>;</p></li>
-<li><p><strong>LeakyReLU</strong>: <span class="math notranslate nohighlight">\(LReLU(x) = \begin{cases} x &amp; \text{ if } x &gt; 0, \\ ax &amp; \text{ otherwise;} \end{cases}\)</span></p></li>
-<li><p><strong>Softmax</strong>: <span class="math notranslate nohighlight">\(softmax(x)_i = \frac{\exp{(x_i)}}{\sum_{j=1}^d \exp{\exp{(x_j)}}}\)</span>.</p></li>
-</ul>
-<p>In the following, we provide a Python implementation of these activation functions, along with the corresponding plots in the range <span class="math notranslate nohighlight">\([-2, 2]\)</span>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">SiLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">LReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="mf">0.05</span>
-
-    <span class="n">y</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">y</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">y</span>
-
-<span class="c1"># Plots</span>
-<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;ReLU&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Sigmoid&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">tanh</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Tanh&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">SiLU</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;SiLU&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">LReLU</span><span class="p">(</span><span class="n">xx</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;LeakyReLU&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/a2fe873d97a6919d34502eca7fe2d6e406a52f24f0efeec76a1bafbee62848fd.png" src="../_images/a2fe873d97a6919d34502eca7fe2d6e406a52f24f0efeec76a1bafbee62848fd.png" />
-</div>
-</div>
-<p>In the next chapter, we will learn how to implement deep neural networks in Python using PyTorch.</p>
-</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>For a deeper background on neural networks in a broader machine learning setting, students should compare these notes with a standard deep learning text and with a more classical statistical learning perspective. When revising this chapter, it is especially useful to keep asking which statements are about approximation power, which are about optimization, and which are about statistical <strong>generalization</strong>.</p>
+<p>A good way to study this material is to revisit each formula and ask how it changes once the input is an image rather than a generic vector. That question leads naturally to the architectural material of the next chapter.</p>
 </section>
 </section>
 
@@ -797,7 +786,7 @@ z_i = w_i \cdot x + b_i,
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Computational Imaging (CI)</p>
+        <p class="prev-next-title">Computational Imaging</p>
       </div>
     </a>
     <a class="right-next"
@@ -805,7 +794,7 @@ z_i = w_i \cdot x + b_i,
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">A brief overview of PyTorch</p>
+        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -825,21 +814,13 @@ z_i = w_i \cdot x + b_i,
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-formulation-of-machine-learning-models">Mathematical Formulation of Machine Learning Models</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity">Linearity</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neural-networks">Neural Networks</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stacking-multiple-linear-functions">Stacking Multiple Linear Functions</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#non-linear-activation-functions">Non-linear Activation Functions</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notations">Notations</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deep-neural-networks">Deep Neural Networks</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#activation-functions-beyond-relu">Activation Functions: Beyond ReLU</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-chapter-comes-first">Why This Chapter Comes First</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-formulation-and-risk-minimization">Learning Formulation and Risk Minimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-linear-predictors-to-deep-nonlinear-models">From Linear Predictors to Deep Nonlinear Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-backpropagation-and-generalization">Optimization, Backpropagation, and Generalization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
 </ul>
   </nav></div>
 
