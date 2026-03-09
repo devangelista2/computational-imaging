@@ -14,5 +14,7 @@ matplotlib
 pandas
 scipy
 scikit-image
+scikit-learn
+numba
 torch
 torchvision

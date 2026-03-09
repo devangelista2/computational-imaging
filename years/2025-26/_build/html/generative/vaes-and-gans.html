@@ -1,0 +1,1003 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Variational Autoencoders and GANs &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generative/vaes-and-gans';</script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Diffusion Models" href="diffusion-models.html" />
+    <link rel="prev" title="Noise, Model Mismatch, and the Inverse Crime" href="../noise/the-inverse-crime.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="flow-matching.html">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fgenerative/vaes-and-gans.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generative/vaes-and-gans.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Variational Autoencoders and GANs</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-modeling-and-autoencoding">Latent Variable Modeling and Autoencoding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-autoencoders-as-probabilistic-generative-models">Variational Autoencoders as Probabilistic Generative Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adversarial-learning-and-gans">Adversarial Learning and <strong>GAN</strong>s</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-and-relevance-for-inverse-problems">Comparison and Relevance for Inverse Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="variational-autoencoders-and-gans">
+<h1>Variational Autoencoders and <strong>GAN</strong>s<a class="headerlink" href="#variational-autoencoders-and-gans" title="Link to this heading">#</a></h1>
+<section id="latent-variable-modeling-and-autoencoding">
+<h2>Latent Variable Modeling and Autoencoding<a class="headerlink" href="#latent-variable-modeling-and-autoencoding" title="Link to this heading">#</a></h2>
+<p>Up to this point the main object of study has been a discriminative reconstructor, namely a map that takes a measured datum and outputs a reconstructed image. This is a natural place to start, but it has a limitation. It typically returns a single answer, while inverse problems are often ambiguous. Several different images may be consistent with the same measurements, especially when the forward operator is ill-conditioned or undersampled.</p>
+<p>This motivates a broader question: instead of learning only how to map data to images, can we learn the image distribution itself? If we can do this, then we gain access to a learned image prior. This prior can later be combined with the data-consistency information coming from the forward model.</p>
+<p>The rest of the course therefore shifts from discriminative learning to generative modeling. Historically, the first major deep generative paradigms were variational <strong>autoencoder</strong>s and generative adversarial networks. They are different in philosophy, in mathematical formulation, and in the kind of prior they induce.</p>
+<p><strong>Latent variables and the low-dimensional hypothesis.</strong></p>
+<p>Both VAEs and <strong>GAN</strong>s are built around a common idea: high-dimensional images may be generated from lower-dimensional <strong>latent variable</strong>s. If <span class="math notranslate nohighlight">\(\boldsymbol{x} \in \mathbb{R}^n\)</span> is an image and <span class="math notranslate nohighlight">\(\boldsymbol{z} \in \mathbb{R}^k\)</span> is a latent code with <span class="math notranslate nohighlight">\(k \ll n\)</span>, then one posits a generator or decoder map</p>
+<div class="math notranslate nohighlight">
+\[
+G_{\boldsymbol{\Theta}} : \mathbb{R}^k \to \mathbb{R}^n,
+\qquad
+\boldsymbol{x} \approx G_{\boldsymbol{\Theta}}(\boldsymbol{z}).
+\]</div>
+<p>This expresses the belief that realistic images occupy only a tiny, structured region inside the ambient high-dimensional space. Inverse problems benefit enormously from this viewpoint, because restricting the search space from <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> to the range of a generator can act as a powerful regularizer.</p>
+<p><strong>Autoencoders as the starting point.</strong></p>
+<p>Before introducing VAEs, it is useful to recall the ordinary <strong>autoencoder</strong>. An <strong>autoencoder</strong> consists of:</p>
+<ul class="simple">
+<li><p>an encoder <span class="math notranslate nohighlight">\(E_\phi\)</span> that maps an image <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> to a latent representation <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span>;</p></li>
+<li><p>a decoder <span class="math notranslate nohighlight">\(G_{\boldsymbol{\Theta}}\)</span> that maps the latent representation back to an approximate reconstruction.</p></li>
+</ul>
+<p>The training problem is usually</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\phi,\boldsymbol{\Theta}}
+\mathbb{E}\big[\|\boldsymbol{x}-G_{\boldsymbol{\Theta}}(E_\phi(\boldsymbol{x}))\|^2\big].
+\]</div>
+<p>This architecture learns a compressed representation of the data, but by itself it does not define a full probabilistic generative model. In particular, it does not tell us how latent codes should be sampled in order to generate new images.</p>
+<p>This is the point where the VAE enters <span id="id1">[<a class="reference internal" href="../references.html#id11" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">11</a>]</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny autoencoder on local image patches.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;GoPro.jpg&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+<span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">16</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">patches</span><span class="p">)</span>
+
+<span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">latent_dim</span><span class="p">))</span>
+<span class="n">decoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">())</span>
+<span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">decoder</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">recon</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">recon</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">199</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1"> | reconstruction loss = </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | reconstruction loss = 0.059913
+Epoch 020 | reconstruction loss = 0.022438
+Epoch 100 | reconstruction loss = 0.002201
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 200 | reconstruction loss = 0.000237
+</pre></div>
+</div>
+</div>
+</div>
+<p>This example is deliberately small, but it shows the core <strong>autoencoder</strong> mechanism: an image patch is compressed into a low-dimensional latent representation and then decoded again. At this stage there is still no probabilistic latent model, only deterministic compression and reconstruction.</p>
+</section>
+<section id="variational-autoencoders-as-probabilistic-generative-models">
+<h2>Variational Autoencoders as Probabilistic Generative Models<a class="headerlink" href="#variational-autoencoders-as-probabilistic-generative-models" title="Link to this heading">#</a></h2>
+<p>A VAE defines a probabilistic latent-variable model</p>
+<div class="math notranslate nohighlight">
+\[
+p_{\boldsymbol{\Theta}}(\boldsymbol{x},\boldsymbol{z})=p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})p(\boldsymbol{z}),
+\]</div>
+<p>where the prior on the <strong>latent variable</strong> is often chosen as</p>
+<div class="math notranslate nohighlight">
+\[
+p(\boldsymbol{z})=\mathcal{N}(0,I).
+\]</div>
+<p>The induced model for the image is obtained by marginalization:</p>
+<div class="math notranslate nohighlight">
+\[
+p_{\boldsymbol{\Theta}}(\boldsymbol{x})=\int p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})p(\boldsymbol{z})\,dz.
+\]</div>
+<p>This is the key point. The VAE is not merely compressing images. It is trying to assign a probability law to them through <strong>latent variable</strong>s.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny VAE on the same local patch collection.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;GoPro.jpg&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">48</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+<span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">16</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">patches</span><span class="p">)</span>
+
+<span class="n">latent_dim</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">())</span>
+<span class="n">mu_head</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">latent_dim</span><span class="p">)</span>
+<span class="n">logvar_head</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">latent_dim</span><span class="p">)</span>
+<span class="n">decoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">latent_dim</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">())</span>
+<span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">mu_head</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">logvar_head</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">decoder</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">5e-3</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">250</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">encoder</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">mu_head</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">logvar</span> <span class="o">=</span> <span class="n">logvar_head</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">logvar</span><span class="p">)</span> <span class="o">*</span> <span class="n">eps</span>
+    <span class="n">recon</span> <span class="o">=</span> <span class="n">decoder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">recon_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">recon</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">kl</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">logvar</span><span class="p">)</span> <span class="o">+</span> <span class="n">mu</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">logvar</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">recon_loss</span> <span class="o">+</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">kl</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">249</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1"> | recon = </span><span class="si">{</span><span class="n">recon_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1"> | KL = </span><span class="si">{</span><span class="n">kl</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | recon = 0.064360 | KL = 0.031250
+Epoch 025 | recon = 0.052795 | KL = 0.002086
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 100 | recon = 0.050103 | KL = 0.011786
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 250 | recon = 0.044030 | KL = 0.081561
+</pre></div>
+</div>
+</div>
+</div>
+<p>Compared with the deterministic <strong>autoencoder</strong>, the VAE now pays an explicit KL price for keeping the latent distribution close to a Gaussian prior. This makes sampling possible, but it also explains why VAE reconstructions tend to be more regularized and often smoother.</p>
+<p><strong>Why the exact likelihood is difficult.</strong></p>
+<p>The log-likelihood</p>
+<div class="math notranslate nohighlight">
+\[
+\log p_{\boldsymbol{\Theta}}(\boldsymbol{x})
+=
+\log \int p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})p(\boldsymbol{z})\,dz
+\]</div>
+<p>is generally intractable because the integral over latent space cannot be computed exactly for a complex neural decoder. The VAE solves this by introducing an approximate posterior distribution</p>
+<div class="math notranslate nohighlight">
+\[
+q_\phi(\boldsymbol{z}| \boldsymbol{x}),
+\]</div>
+<p>often called the encoder distribution, and then deriving a tractable lower bound on the log-likelihood.</p>
+<p><strong>The ELBO.</strong></p>
+<p>The central identity of the VAE is</p>
+<div class="math notranslate nohighlight">
+\[
+\log p_{\boldsymbol{\Theta}}(\boldsymbol{x})
+\geq
+\mathbb{E}_{q_\phi(\boldsymbol{z}| \boldsymbol{x})}[\log p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})]
+-\operatorname{KL}\big(q_\phi(\boldsymbol{z}| \boldsymbol{x})\,\|\,p(\boldsymbol{z})\big).
+\]</div>
+<p>The right-hand side is the evidence lower bound, or <strong>ELBO</strong>. It has a very instructive decomposition.</p>
+<p>The first term is the reconstruction term. It asks the decoder to explain the observed image well when the <strong>latent variable</strong> is sampled from the encoder distribution.</p>
+<p>The second term is the KL regularization term. It pushes the encoder posterior toward the prior <span class="math notranslate nohighlight">\(p(\boldsymbol{z})\)</span>. This is what makes latent sampling possible and gives the model genuine generative semantics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+<span class="n">log_var</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="n">reconstruction_error</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.85</span><span class="p">)</span>
+
+<span class="n">kl</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_var</span><span class="p">)</span> <span class="o">+</span> <span class="n">mu</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">log_var</span><span class="p">)</span>
+<span class="n">elbo</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">reconstruction_error</span> <span class="o">+</span> <span class="n">kl</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy reconstruction term:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">reconstruction_error</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy KL term:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">kl</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy ELBO:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">elbo</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Toy reconstruction term: 0.8500000238418579
+Toy KL term: 0.22822201251983643
+Toy ELBO: -1.0782220363616943
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpreting the Gaussian decoder.</strong></p>
+<p>If the conditional model is chosen as</p>
+<div class="math notranslate nohighlight">
+\[
+p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})=\mathcal{N}(\mu_{\boldsymbol{\Theta}}(\boldsymbol{z}),\sigma^2I),
+\]</div>
+<p>then maximizing the reconstruction term is equivalent, up to constants, to minimizing</p>
+<div class="math notranslate nohighlight">
+\[
+\|\boldsymbol{x}-\mu_{\boldsymbol{\Theta}}(\boldsymbol{z})\|_2^2.
+\]</div>
+<p>This is one of the reasons VAEs are often associated with smooth reconstructions. The Gaussian decoder and the averaged nature of the likelihood term favor mean-like outputs.</p>
+<p>This is not a flaw of implementation. It is a direct consequence of the probabilistic assumptions built into the model.</p>
+<p><strong>The reparameterization trick.</strong></p>
+<p>There is one additional ingredient that deserves explicit explanation in teaching: how does one differentiate through the random <strong>latent variable</strong>? The standard answer is the <strong>reparameterization trick</strong>. If the encoder outputs a mean <span class="math notranslate nohighlight">\(\mu_\phi(\boldsymbol{x})\)</span> and a standard deviation <span class="math notranslate nohighlight">\(\sigma_\phi(\boldsymbol{x})\)</span>, then one writes</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{z} = \mu_\phi(\boldsymbol{x}) + \sigma_\phi(\boldsymbol{x})\odot \boldsymbol{\varepsilon},
+\qquad
+\boldsymbol{\varepsilon} \sim \mathcal{N}(0,I).
+\]</div>
+<p>This converts sampling into a deterministic function of the parameters and an auxiliary random variable. Backpropagation can then proceed normally.</p>
+<p>This is a good example of how probability and optimization interact in deep learning.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">])</span>
+<span class="n">std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">])</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">std</span> <span class="o">*</span> <span class="n">eps</span>
+    <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Five latent samples obtained through reparameterization:&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Five latent samples obtained through reparameterization:
+tensor([ 1.7705, -1.0734])
+tensor([-0.0894, -0.8579])
+tensor([ 0.4577, -1.3496])
+tensor([ 1.2017, -0.7905])
+tensor([ 0.6404, -1.1008])
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Strengths and weaknesses of VAEs.</strong></p>
+<p>VAEs have several attractive properties:</p>
+<ul class="simple">
+<li><p>a principled probabilistic interpretation;</p></li>
+<li><p>an explicit encoder and decoder;</p></li>
+<li><p>a latent space that is regularized and sampleable;</p></li>
+<li><p>a meaningful relation to approximate Bayesian inference.</p></li>
+</ul>
+<p>Their weaknesses are equally important:</p>
+<ul class="simple">
+<li><p>generated samples and reconstructions can be too smooth;</p></li>
+<li><p>the <strong>ELBO</strong> may not align perfectly with perceptual visual quality;</p></li>
+<li><p>the chosen likelihood model can be too simplistic for complex textures.</p></li>
+</ul>
+<p>For inverse problems, these strengths and weaknesses matter because a smooth latent prior may be mathematically convenient but may underrepresent fine imaging detail.</p>
+</section>
+<section id="adversarial-learning-and-gans">
+<h2>Adversarial Learning and <strong>GAN</strong>s<a class="headerlink" href="#adversarial-learning-and-gans" title="Link to this heading">#</a></h2>
+<p><strong>GAN</strong>s take a strikingly different path. Instead of optimizing a tractable lower bound on the data likelihood, a <strong>GAN</strong> trains two networks in competition:</p>
+<ul class="simple">
+<li><p>a generator <span class="math notranslate nohighlight">\(G_{\boldsymbol{\Theta}}(\boldsymbol{z})\)</span> that maps latent codes to images;</p></li>
+<li><p>a discriminator <span class="math notranslate nohighlight">\(D_\psi(\boldsymbol{x})\)</span> that tries to distinguish real samples from generated ones.</p></li>
+</ul>
+<p>The classical minimax problem is <span id="id2">[<a class="reference internal" href="../references.html#id12" title="Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in Neural Information Processing Systems, 2014.">6</a>]</span></p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\boldsymbol{\Theta}} \max_\psi
+\mathbb{E}_{\boldsymbol{x}\sim p_{\mathrm{data}}}[\log D_\psi(\boldsymbol{x})]
++
+\mathbb{E}_{\boldsymbol{z}\sim p(\boldsymbol{z})}[\log(1-D_\psi(G_{\boldsymbol{\Theta}}(\boldsymbol{z})))].
+\]</div>
+<p>The generator tries to fool the discriminator, while the discriminator tries not to be fooled.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A sharp-looking generated image is not the same thing as a well-calibrated probabilistic model. This distinction is especially important when one later uses the model as a prior for inverse problems.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny 1D GAN-style training loop on a simple target distribution.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">discriminator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">opt_g</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+<span class="n">opt_d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">discriminator</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">real</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.2</span> <span class="o">+</span> <span class="mf">1.5</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fake</span> <span class="o">=</span> <span class="n">generator</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+    <span class="n">d_real</span> <span class="o">=</span> <span class="n">discriminator</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
+    <span class="n">d_fake</span> <span class="o">=</span> <span class="n">discriminator</span><span class="p">(</span><span class="n">fake</span><span class="p">)</span>
+    <span class="n">loss_d</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">binary_cross_entropy_with_logits</span><span class="p">(</span><span class="n">d_real</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">d_real</span><span class="p">))</span> <span class="o">+</span>              <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">binary_cross_entropy_with_logits</span><span class="p">(</span><span class="n">d_fake</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">d_fake</span><span class="p">))</span>
+    <span class="n">opt_d</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss_d</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">opt_d</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fake</span> <span class="o">=</span> <span class="n">generator</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">d_fake</span> <span class="o">=</span> <span class="n">discriminator</span><span class="p">(</span><span class="n">fake</span><span class="p">)</span>
+    <span class="n">loss_g</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">binary_cross_entropy_with_logits</span><span class="p">(</span><span class="n">d_fake</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">d_fake</span><span class="p">))</span>
+    <span class="n">opt_g</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss_g</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">opt_g</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">step</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">199</span><span class="p">]:</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">generator</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Step </span><span class="si">{</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1"> | D loss = </span><span class="si">{</span><span class="n">loss_d</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | G loss = </span><span class="si">{</span><span class="n">loss_g</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | fake mean = </span><span class="si">{</span><span class="n">samples</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 001 | D loss = 1.4222 | G loss = 0.6463 | fake mean = 0.1051
+Step 050 | D loss = 1.2525 | G loss = 1.2192 | fake mean = 2.9288
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 100 | D loss = 1.3479 | G loss = 0.6396 | fake mean = 1.4250
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 200 | D loss = 1.2644 | G loss = 1.2425 | fake mean = 2.3706
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is only a 1D adversarial game, but it helps students see the characteristic <strong>GAN</strong> behavior: two networks are trained against each other, and the generator is judged through the discriminator rather than through a pointwise reconstruction loss.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">real_logits</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">])</span>
+<span class="n">fake_logits</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+
+<span class="n">real_prob</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">real_logits</span><span class="p">)</span>
+<span class="n">fake_prob</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">fake_logits</span><span class="p">)</span>
+
+<span class="n">discriminator_loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">real_prob</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">fake_prob</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">generator_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">fake_prob</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Discriminator probabilities on real samples:&#39;</span><span class="p">,</span> <span class="n">real_prob</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Discriminator probabilities on fake samples:&#39;</span><span class="p">,</span> <span class="n">fake_prob</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy discriminator loss:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">discriminator_loss</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy generator loss:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">generator_loss</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Discriminator probabilities on real samples: tensor([0.9241, 0.8581, 0.9608])
+Discriminator probabilities on fake samples: tensor([0.2315, 0.3318, 0.5250])
+Toy discriminator loss: 0.5608953237533569
+Toy generator loss: 1.0702883005142212
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Intuition behind adversarial training.</strong></p>
+<p>The key idea is that instead of comparing each generated sample to a specific target image, one asks whether generated images as a distribution are indistinguishable from real images. This is a radical conceptual shift.</p>
+<p>Because <strong>GAN</strong>s are not driven by pointwise reconstruction losses in the usual way, they can generate much sharper and more realistic fine detail than VAEs. This is one of the main reasons <strong>GAN</strong>s attracted enormous interest.</p>
+<p><strong>Typical difficulties of <strong>GAN</strong>s.</strong></p>
+<p>At the same time, <strong>GAN</strong>s are notoriously delicate. Three issues are especially important in teaching.</p>
+<p><strong>Mode collapse.</strong></p>
+<p>The generator may map many latent vectors to very similar images, thereby covering only a limited portion of the data distribution.</p>
+<p><strong>Training instability.</strong></p>
+<p>The optimization problem is not a simple minimization but a saddle-point game. This can produce oscillations, imbalance between generator and discriminator, and sensitivity to hyperparameters.</p>
+<p><strong>Lack of an explicit tractable likelihood.</strong></p>
+<p><strong>GAN</strong>s often generate excellent samples, but they do not naturally provide a convenient density model. This limits the direct probabilistic interpretation of the learned prior.</p>
+</section>
+<section id="comparison-and-relevance-for-inverse-problems">
+<h2>Comparison and Relevance for Inverse Problems<a class="headerlink" href="#comparison-and-relevance-for-inverse-problems" title="Link to this heading">#</a></h2>
+<p>These two models are pedagogically valuable precisely because they illustrate two contrasting philosophies of generative modeling.</p>
+<p>The VAE is likelihood-oriented, variational, and probabilistically explicit.</p>
+<p>The <strong>GAN</strong> is adversarial, game-theoretic, and focused on distributional realism rather than tractable density.</p>
+<p>Seeing both helps students understand that “generative model” is not a single recipe. It is a family of approaches for representing complex data distributions.</p>
+<p><strong>Relation to inverse problems.</strong></p>
+<p>Now we come to the point that matters most for the course. Why are these models useful in imaging inverse problems?</p>
+<p>The answer is that both VAEs and <strong>GAN</strong>s define low-dimensional models of plausible images. If the reconstruction is constrained to lie in the range of a decoder or generator, then the search space is drastically reduced.</p>
+<p>Suppose</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{x} = G_{\boldsymbol{\Theta}}(\boldsymbol{z}).
+\]</div>
+<p>Then instead of solving for <span class="math notranslate nohighlight">\(\boldsymbol{x} \in \mathbb{R}^n\)</span>, one may solve for <span class="math notranslate nohighlight">\(\boldsymbol{z} \in \mathbb{R}^k\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\boldsymbol{z}}
+=
+\operatorname*{arg\,min}_{\boldsymbol{z}}
+\|KG_{\boldsymbol{\Theta}}(\boldsymbol{z})-\boldsymbol{y}^\delta\|^2+\lambda\|\boldsymbol{z}\|^2.
+\]</div>
+<p>The recovered image is then</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\boldsymbol{x}}=G_{\boldsymbol{\Theta}}(\widehat{\boldsymbol{z}}).
+\]</div>
+<p>This is powerful because <span class="math notranslate nohighlight">\(k \ll n\)</span>. However, it also introduces a bias: the true image must be well approximated by the range of the generator.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>This chapter should leave the following clear roadmap:</p>
+<ul class="simple">
+<li><p>generative modeling aims to learn the image distribution, not only an input-output map;</p></li>
+<li><p>VAEs build a probabilistic latent-variable model through the <strong>ELBO</strong>;</p></li>
+<li><p><strong>GAN</strong>s learn realism through adversarial distribution matching;</p></li>
+<li><p>VAEs are principled and stable but often smooth;</p></li>
+<li><p><strong>GAN</strong>s are sharp and expressive but harder to train and analyze;</p></li>
+<li><p>both are useful in inverse problems because they provide learned low-dimensional priors over images.</p></li>
+</ul>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Explain the role of the KL term in the VAE objective.</p></li>
+<li><p>Why can a VAE be sampled from more naturally than a plain <strong>autoencoder</strong>?</p></li>
+<li><p>What is <strong>mode collapse</strong> in a <strong>GAN</strong>, and why is it problematic?</p></li>
+<li><p>Discuss why latent generative models can be useful as priors for inverse problems.</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>To deepen this material, students should compare the philosophical difference between VAEs and <strong>GAN</strong>s as much as the technical difference. VAEs are tied to approximate likelihood-based inference, while <strong>GAN</strong>s are tied to adversarial distribution matching. Keeping that contrast in mind is very helpful when these models are later used as priors for inverse problems.</p>
+<p>A good study question is the following: when does one care more about a tractable probabilistic interpretation, and when does one care more about sample realism?</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./generative"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../noise/the-inverse-crime.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Noise, Model Mismatch, and the Inverse Crime</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="diffusion-models.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Diffusion Models</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-modeling-and-autoencoding">Latent Variable Modeling and Autoencoding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-autoencoders-as-probabilistic-generative-models">Variational Autoencoders as Probabilistic Generative Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adversarial-learning-and-gans">Adversarial Learning and <strong>GAN</strong>s</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-and-relevance-for-inverse-problems">Comparison and Relevance for Inverse Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Computational Imaging (CI) &#8212; Computational Imaging</title>
+    <title>Computational Imaging &#8212; Computational Imaging</title>
   
   
   
@@ -32,9 +32,10 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4344bd9a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -60,9 +61,10 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <link rel="icon" href="_static/logo.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="From Machine Learning to Neural Networks" href="intro/from-ml-to-nn.html" />
+    <link rel="next" title="From Supervised Learning to Neural Networks" href="intro/from-ml-to-nn.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -174,30 +176,30 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
-                    Computational Imaging (CI)
-                </a>
-            </li>
-        </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="intro/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro/a-brief-overview-pytorch.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/processing-images-with-nn.html">Processing images with Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="diffusion/introduction-to-diffusion-models.html">Diffusion Models for Image Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generative/flow-matching.html">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
     </div>
@@ -383,7 +385,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Computational Imaging (CI)</h1>
+    <h1>Computational Imaging</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -393,9 +395,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topics">Topics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tutor-of-the-course">Tutor of the Course</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#office-hour">Office hour</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-roadmap-and-main-questions">Teaching Roadmap and Main Questions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-guiding-principle">Structure and Guiding Principle</a></li>
 </ul>
             </nav>
         </div>
@@ -407,25 +408,111 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="computational-imaging-ci">
-<h1>Computational Imaging (CI)<a class="headerlink" href="#computational-imaging-ci" title="Link to this heading">#</a></h1>
-<p>What follows are the teaching materials for the course Computational Imaging (CI, in the following), Module 2, for the Academic Year 2024-2025, held by professor Davide Evangelista.</p>
-<section id="topics">
-<h2>Topics<a class="headerlink" href="#topics" title="Link to this heading">#</a></h2>
-<p>This module is divided into 3 parts. In the first part, we will discuss how to transiction between classical methods for image reconstructions (such as those seen in the first part of this course) to neural network-based methods. To this aim, we will briefly introduce <code class="docutils literal notranslate"><span class="pre">pytorch</span></code>, arguably the most used Python library to work with neural networks. Then, we will present <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, a small library specifically designed for this course, whose aim is to help designing more advanced neural network models with few lines of code, specifically thought for application to image reconstruction. The course assume that you have a good familiarity with Python, together with a partial understanding of Linear Algebra tools such as <code class="docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.
-Having a basic knowledge on neural networks (e.g. having followed the Deep Learning course held by Andrea Asperti) is helpful, but not required.</p>
-<p>In the second part of the course, we will introduce present and analyze in great details the most common neural network architecture for image processing, such as the Convolutional Neural Network (CNN), the UNet, and the Vision Transformer (ViT). Also, application to various inverse problems is presented, such as Image Deblurring and Computed Tomography (CT). In particular, based on examples in CT, we will discuss the topic of image pre-processing, also presented some recent literature results.</p>
-<p>In the last part, we will introduce the field of hybrid methods, whose aim is to join together the mathematical explainability and reliability of classical methods with the rapidity and accuracy of neural network-based models, to obtain state-of-the-art results. Here, we will briefly present algorithms such as Algorithm Unrolling, Plug-and-Play, and the more recent field of Diffusion-based Image Reconstruction. Note that the aim of this last part is not to analyze in detail how these methods work, but just give an overview of the range of possibilities so that each student will be able to autonomously read and understand the most recent papers.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="computational-imaging">
+<h1>Computational Imaging<a class="headerlink" href="#computational-imaging" title="Link to this heading">#</a></h1>
+<p>These notes collect the material for Module 2 of the course <em>Computational Imaging</em> for the academic year 2025-26. Module 1, taught by Professor Elena Loli Piccolomini, focused on the mathematical formulation of inverse problems, classical regularization techniques, and optimization-based reconstruction. Module 2 continues from that foundation and asks what changes when the reconstruction operator is no longer hand-designed, but learned from data through neural and generative models.</p>
+<p>The guiding philosophy of the module is that modern imaging sits at the intersection of mathematics, computation, and modeling. A neural network is not just a piece of software. It is a parameterized nonlinear map. A generative model is not just a black box that creates images. It is an implicit or explicit probabilistic prior. A training pipeline is not just a collection of scripts. It is a concrete way of encoding assumptions on the distribution of images, the acquisition model, and the perturbations affecting the data.</p>
+<p>For this reason, the notes will not present machine learning as a disconnected topic. The goal is to integrate it into the language of inverse problems as naturally as possible.</p>
+<section id="teaching-roadmap-and-main-questions">
+<h2>Teaching Roadmap and Main Questions<a class="headerlink" href="#teaching-roadmap-and-main-questions" title="Link to this heading">#</a></h2>
+<p>The whole module can be organized around a few central questions, and these questions define the internal logic of the lectures.</p>
+<p>The first question is how to reinterpret image reconstruction as a <strong>supervised learning</strong> problem. If we observe pairs of measurements and clean images, can we learn a map that approximates the inverse operator directly?</p>
+<p>The second question is architectural. Once we decide to learn a reconstruction map, how should we choose the model class? Why are <strong>convolution</strong>s natural for images? Why are <strong>UNet</strong>s so successful? When do transformers become useful?</p>
+<p>The third question concerns realism. What happens if the training data are generated with an overly simplified forward model? Why is noise modeling not optional? What is the <strong>inverse crime</strong>, and why can it produce very strong but potentially misleading numerical results?</p>
+<p>The fourth question is probabilistic. A single point estimate is often not enough in ill-posed imaging problems. Can generative models describe the distribution of plausible images, and can this learned prior be incorporated into the reconstruction process?</p>
+<p>These are the questions that organize the teaching roadmap of the course.</p>
+<p>The same roadmap also clarifies the intended learning goals. By the end of Module 2, the student should be able to:</p>
+<ul class="simple">
+<li><p>formulate <strong>end-to-end reconstruction</strong> as <strong>empirical risk</strong> minimization over parameterized inverse maps;</p></li>
+<li><p>explain why nonlinear models are needed beyond <strong>linear estimator</strong>s;</p></li>
+<li><p>discuss the mathematical role of <strong>convolution</strong>s, <strong>receptive field</strong>s, skip connections, multiscale processing, and self-attention;</p></li>
+<li><p>compare CNNs, <strong>UNet</strong>s, residual variants, and <strong>Vision Transformer</strong>s from the viewpoint of computational imaging;</p></li>
+<li><p>explain self-supervised training strategies when clean targets are unavailable;</p></li>
+<li><p>define the <strong>inverse crime</strong> and discuss the impact of <strong>model mismatch</strong> and realistic noise;</p></li>
+<li><p>derive and interpret the main ideas behind VAEs, <strong>GAN</strong>s, diffusion models, and <strong>flow matching</strong> models;</p></li>
+<li><p>explain how generative models can be used as learned priors, latent parameterizations, denoisers, or posterior samplers in inverse problems.</p></li>
+</ul>
+<p>Since the module is relatively compact in time but broad in scope, it is useful to keep a clear lecture structure in mind. One possible organization over 16 hours is:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Lecture block</p></th>
+<th class="head"><p>Main topic</p></th>
+<th class="head text-right"><p>Suggested time</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>From <strong>supervised learning</strong> to neural networks for inverse problems</p></td>
+<td class="text-right"><p>2 h</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><strong>PyTorch</strong> viewpoint and computational implementation choices</p></td>
+<td class="text-right"><p>1 h</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>End-to-end reconstruction and loss design</p></td>
+<td class="text-right"><p>2 h</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>CNN, <strong>UNet</strong>, residual <strong>UNet</strong>, and ViT architectures</p></td>
+<td class="text-right"><p>3 h</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Self-<strong>supervised learning</strong> in inverse problems</p></td>
+<td class="text-right"><p>2 h</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Noise modeling and the <strong>inverse crime</strong></p></td>
+<td class="text-right"><p>2 h</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>VAEs and <strong>GAN</strong>s</p></td>
+<td class="text-right"><p>2 h</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Diffusion, <strong>flow matching</strong>, and generative inverse problems</p></td>
+<td class="text-right"><p>2 h</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This should not be interpreted rigidly. Some topics, especially diffusion models and the <strong>inverse crime</strong>, can naturally expand if discussion is lively. The point of the table is simply to show that the module has an internal progression rather than being a collection of isolated techniques.</p>
 </section>
-<section id="tutor-of-the-course">
-<h2>Tutor of the Course<a class="headerlink" href="#tutor-of-the-course" title="Link to this heading">#</a></h2>
-<p>For this course a tutor is available. In case you need any assistance, please refer to Fabio Merizzi (<code class="docutils literal notranslate"><span class="pre">fabio.merizzi&#64;unibo.it</span></code>).</p>
+<section id="structure-and-guiding-principle">
+<h2>Structure and Guiding Principle<a class="headerlink" href="#structure-and-guiding-principle" title="Link to this heading">#</a></h2>
+<p>The material is organized into four conceptual blocks.</p>
+<p>The first block concerns neural networks for image reconstruction. We begin from the <strong>supervised learning</strong> formulation</p>
+<div class="math notranslate nohighlight">
+\[
+(\boldsymbol{y}^\delta,\boldsymbol{x}^\dagger)\sim\mathbb{P},
+\qquad
+\boldsymbol{y}^\delta=\mathcal{A}(\boldsymbol{x}^\dagger)+\boldsymbol{e},
+\]</div>
+<p>and study how a neural network</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}:\mathbb{R}^m\to\mathbb{R}^n
+\]</div>
+<p>can be trained to approximate an inverse map from measurements to images. This first block develops the transition from generic machine learning concepts to image-specific architectures.</p>
+<p>The second block examines the data-generation process critically. A reconstructor is only as good as the assumptions encoded in the training and testing pipeline. This part introduces realistic noise modeling, discretization mismatch, and the notion of <strong>inverse crime</strong>.</p>
+<p>The third block moves from discriminative reconstruction maps to generative modeling. The central goal is to understand how to represent a high-dimensional image distribution using <strong>latent variable</strong>s, adversarial learning, stochastic denoising, or deterministic transport.</p>
+<p>The fourth block returns to the inverse problem</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K \boldsymbol{x}^\dagger + \boldsymbol{e}
+\]</div>
+<p>and ask how the learned prior encoded by a generative model can be combined with the forward operator and the likelihood. This leads naturally to <strong>Bayesian formulation</strong>s, latent optimization, <strong>plug-and-play</strong> priors, <strong>posterior sampling</strong>, and conditional generative reconstruction.</p>
+<p>Throughout the notes, one principle will appear again and again:</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In computational imaging, a method should never be judged only by how good a few reconstructions look. It should also be judged by the assumptions built into the forward model, the realism of the noise, the stability of the reconstruction map, and the physical plausibility of the evaluation protocol.</p>
+</div>
+<p>This principle is especially important in the age of deep learning, where visually impressive outputs can hide severe modeling flaws. The goal of these notes is therefore not to present neural networks and generative models as automatic replacements for inverse-problem theory, but as new mathematical tools that must be analyzed, interpreted, and used with care.</p>
 </section>
-<section id="office-hour">
-<h2>Office hour<a class="headerlink" href="#office-hour" title="Link to this heading">#</a></h2>
-<p>The office hour is Wednesday morning, from 9a.m. to 12p.m., via Microsoft Teams or in my office, at Ex Veneta, close to the Zanolini train station.</p>
-<p>Either cases, it is <strong>mandatory</strong> to set an appointment by e-mail, via the address <code class="docutils literal notranslate"><span class="pre">davide.evangelista5&#64;unibo.it</span></code>.</p>
-</section>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -469,7 +556,7 @@ Having a basic knowledge on neural networks (e.g. having followed the Deep Learn
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">From Machine Learning to Neural Networks</p>
+        <p class="prev-next-title">From Supervised Learning to Neural Networks</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -489,9 +576,8 @@ Having a basic knowledge on neural networks (e.g. having followed the Deep Learn
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topics">Topics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tutor-of-the-course">Tutor of the Course</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#office-hour">Office hour</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-roadmap-and-main-questions">Teaching Roadmap and Main Questions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-guiding-principle">Structure and Guiding Principle</a></li>
 </ul>
   </nav></div>
 

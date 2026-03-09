@@ -32,9 +32,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -60,10 +61,9 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/processing-images-with-nn';</script>
+    <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Deep dive into IPPy" href="deep-dive-into-IPPy.html" />
-    <link rel="prev" title="A brief overview of PyTorch" href="../intro/a-brief-overview-pytorch.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -126,6 +126,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -173,30 +175,30 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
-        <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1">
-                <a class="reference internal" href="../intro.html">
-                    Computational Imaging (CI)
-                </a>
-            </li>
-        </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A brief overview of PyTorch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">End-to-End Neural Networks</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing images with Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deep-dive-into-IPPy.html">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Image Reconstruction methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Diffusion Models</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../diffusion/generative-models.html">Introduction to Generative Models for Image Synthesis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../diffusion/introduction-to-diffusion-models.html">Diffusion Models for Image Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
     </div>
@@ -432,7 +434,7 @@ This discussion will include the concept of <strong>Convolutional Neural Network
 y^\delta = Kx_{true} + e,
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> represents the <strong>acquisition operator</strong>, <span class="math notranslate nohighlight">\(x_{true} \in \mathbb{R}^n\)</span> is the <strong>true datum</strong> we want to reconstruct (here represented in <em>vectorized</em> form), <span class="math notranslate nohighlight">\(e \in \mathbb{R}^m\)</span> is the <strong>measurement noise</strong>, which satisfies <span class="math notranslate nohighlight">\(|| e ||_2 \leq \delta\)</span>, and <span class="math notranslate nohighlight">\(y^\delta \in \mathbb{R}^m\)</span> is the <strong>acquired datum</strong>.</p>
-<p>The task of image reconstruction is to approximate <span class="math notranslate nohighlight">\(x_{true}\)</span> (denoted as <span class="math notranslate nohighlight">\(x^*\)</span> in the following), starting from <span class="math notranslate nohighlight">\(y^\delta\)</span> and, possibly, some information about the noise—e.g., <span class="math notranslate nohighlight">\(e\)</span> could be Gaussian noise with zero mean and a given standard deviation <span class="math notranslate nohighlight">\(\sigma&gt;0\)</span>.</p>
+<p>The task of image reconstruction is to approximate <span class="math notranslate nohighlight">\(x_{true}\)</span> (denoted as <span class="math notranslate nohighlight">\(x^*\)</span> in the following), starting from <span class="math notranslate nohighlight">\(y^\delta\)</span> and, possibly, some information about the noise - e.g., <span class="math notranslate nohighlight">\(e\)</span> could be Gaussian noise with zero mean and a given standard deviation <span class="math notranslate nohighlight">\(\sigma&gt;0\)</span>.</p>
 <p>For simplicity, in the first part of this course, <span class="math notranslate nohighlight">\(x_{true}\)</span> was usually represented as a matrix of shape <span class="math notranslate nohighlight">\(n_x \times n_y\)</span>, where <span class="math notranslate nohighlight">\(n_x\)</span> and <span class="math notranslate nohighlight">\(n_y\)</span> denote the number of pixels per row and column, respectively. Clearly, this implies that <span class="math notranslate nohighlight">\((n_x, n_y)\)</span> satisfies <span class="math notranslate nohighlight">\(n_x \cdot n_y = n\)</span>. Similarly, the acquired measurement data <span class="math notranslate nohighlight">\(y^\delta\)</span> is also treated as an image, with shape <span class="math notranslate nohighlight">\(m_x \times m_y\)</span> such that <span class="math notranslate nohighlight">\(m_x \cdot m_y = m\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -458,7 +460,7 @@ y^\delta = Kx_{true} + e,
 <h3>End-to-End vs. Hybrid Approaches<a class="headerlink" href="#end-to-end-vs-hybrid-approaches" title="Link to this heading">#</a></h3>
 <p>A key distinction when using neural networks for image reconstruction is between the <strong>end-to-end</strong> approach and the <strong>hybrid</strong> approach.</p>
 <ul class="simple">
-<li><p>An <strong>end-to-end</strong> neural network is a model <span class="math notranslate nohighlight">\(f_\Theta\)</span> trained to take the corrupted datum <span class="math notranslate nohighlight">\(y^\delta\)</span> as input and <strong>directly</strong> compute the reconstruction, i.e., <span class="math notranslate nohighlight">\(x^* = f_\Theta(y^\delta)\)</span>, in a single forward pass. This approach is significantly faster than, for example, a regularized variational method. Moreover, due to the power and flexibility of neural networks, the visual quality of the reconstructed image is often superior. However, such methods are known to suffer from severe instabilities—for instance, the quality of the solution may degrade unexpectedly when <span class="math notranslate nohighlight">\(y^\delta\)</span> is corrupted with additional noise. This makes them unreliable for applications such as medical imaging, where consistency between the solution and the measured data is crucial.</p></li>
+<li><p>An <strong>end-to-end</strong> neural network is a model <span class="math notranslate nohighlight">\(f_\Theta\)</span> trained to take the corrupted datum <span class="math notranslate nohighlight">\(y^\delta\)</span> as input and <strong>directly</strong> compute the reconstruction, i.e., <span class="math notranslate nohighlight">\(x^* = f_\Theta(y^\delta)\)</span>, in a single forward pass. This approach is significantly faster than, for example, a regularized variational method. Moreover, due to the power and flexibility of neural networks, the visual quality of the reconstructed image is often superior. However, such methods are known to suffer from severe instabilities - for instance, the quality of the solution may degrade unexpectedly when <span class="math notranslate nohighlight">\(y^\delta\)</span> is corrupted with additional noise. This makes them unreliable for applications such as medical imaging, where consistency between the solution and the measured data is crucial.</p></li>
 </ul>
 <a class="reference internal image-reference" href="../_images/end-to-end.png"><img alt="../_images/end-to-end.png" class="align-center" src="../_images/end-to-end.png" style="width: 600px;" /></a>
 <ul class="simple">
@@ -539,21 +541,6 @@ $<span class="math notranslate nohighlight">\(
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span><span class="sd">     Assuming the input x is a Pytorch tensor with shape (N, c, n_x, n_y), it normalizes it</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span><span class="sd">     with min-max normalization and returns a tensor with the same shape, in the range [0, 1].</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span><span class="sd">     &quot;&quot;&quot;</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="data-type">
@@ -565,18 +552,6 @@ Classically, images are converted into <code class="docutils literal notranslate
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert a tensor x to float32</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Convert a tensor x to float32</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;torch&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -693,13 +668,14 @@ Classically, images are converted into <code class="docutils literal notranslate
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;torchvision&#39;
 </pre></div>
 </div>
 </div>
@@ -727,13 +703,15 @@ Classically, images are converted into <code class="docutils literal notranslate
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># Define dataset and dataloader (only train for now)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Get a sample batch</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torch&#39;
+<span class="ne">NameError</span>: name &#39;MayoDataset&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -774,24 +752,6 @@ Classically, images are converted into <code class="docutils literal notranslate
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../intro/a-brief-overview-pytorch.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">A brief overview of PyTorch</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="deep-dive-into-IPPy.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

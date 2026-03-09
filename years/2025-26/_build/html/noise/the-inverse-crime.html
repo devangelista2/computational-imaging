@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Noise, Model Mismatch, and the Inverse Crime &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'noise/the-inverse-crime';</script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Variational Autoencoders and GANs" href="../generative/vaes-and-gans.html" />
+    <link rel="prev" title="Self-Supervised Training for Inverse Problems" href="../end-to-end/self-supervised-training.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Noise, Model Mismatch, and the Inverse Crime</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fnoise/the-inverse-crime.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/noise/the-inverse-crime.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Noise, Model Mismatch, and the Inverse Crime</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discretization-modeling-and-the-inverse-crime">Discretization, Modeling, and the Inverse Crime</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#noise-models-spectral-effects-and-evaluation-risks">Noise Models, Spectral Effects, and Evaluation Risks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="noise-model-mismatch-and-the-inverse-crime">
+<h1>Noise, Model Mismatch, and the Inverse Crime<a class="headerlink" href="#noise-model-mismatch-and-the-inverse-crime" title="Link to this heading">#</a></h1>
+<section id="discretization-modeling-and-the-inverse-crime">
+<h2>Discretization, Modeling, and the Inverse Crime<a class="headerlink" href="#discretization-modeling-and-the-inverse-crime" title="Link to this heading">#</a></h2>
+<p>At this point in the course, students have seen that neural networks can learn reconstruction maps and that self-supervised strategies can use the forward operator directly inside the loss. This naturally raises a crucial question: how trustworthy are the data used for training and evaluation?</p>
+<p>This is where the notion of the <strong>inverse crime</strong> enters, in the sense emphasized in the statistical inverse-problems literature <span id="id1">[<a class="reference internal" href="../references.html#id2" title="Jari Kaipio and Erkki Somersalo. Statistical and Computational Inverse Problems. Springer, 2005.">10</a>]</span>. It is one of the most important conceptual warnings in computational imaging. A method can appear extremely successful and still be tested in a mathematically unrealistic setting. If one does not explain this carefully, students may come away with the false impression that visually compelling reconstructions on synthetic data automatically imply physical reliability.</p>
+<p>The purpose of this chapter is therefore twofold. First, we want to define precisely what the <strong>inverse crime</strong> is. Second, we want to understand why noise and <strong>model mismatch</strong> are not unpleasant implementation details, but central components of the inverse problem itself.</p>
+<p><strong>The continuous world and the discrete world.</strong></p>
+<p>The physical acquisition process takes place in a continuous world. Let <span class="math notranslate nohighlight">\(\mathcal{X}\)</span> be a function space describing the unknown object and let</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{A} : \mathcal{X} \to \mathcal{Y}
+\]</div>
+<p>be the true forward map. The actual measurements are then modeled as</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = \mathcal{A}(\boldsymbol{x}^\dagger) + \boldsymbol{e}_{\mathrm{phys}},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> is the true object and <span class="math notranslate nohighlight">\(\boldsymbol{e}_{\mathrm{phys}}\)</span> is the perturbation introduced by the acquisition device.</p>
+<p>When we solve the problem on a computer, we cannot work directly with the infinite-dimensional object <span class="math notranslate nohighlight">\(\mathcal{A}\)</span>. We discretize both the image and the forward map and obtain a matrix model</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta \approx K \boldsymbol{x} + \boldsymbol{e}.
+\]</div>
+<p>This passage from <span class="math notranslate nohighlight">\(\mathcal{A}\)</span> to <span class="math notranslate nohighlight">\(K\)</span> is unavoidable, but it is never exact. Discretization introduces approximation errors, interpolation effects, quadrature errors, geometric mismatch, and possible calibration inaccuracies.</p>
+<p>This distinction between physical model and computational model is fundamental. A reconstruction algorithm never sees the true forward operator. It only sees its discrete surrogate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;CT_acquisition.png&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">1100</span><span class="p">,</span> <span class="mi">660</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ebe74c35266cd079bc0308d20844ca7692567498b36bf9477b5984aa4cd762d6.png" src="../_images/ebe74c35266cd079bc0308d20844ca7692567498b36bf9477b5984aa4cd762d6.png" />
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A numerical model is never the physical system itself. Even when the formula looks similar, discretization, interpolation, detector geometry, and calibration conventions already change the effective forward operator seen by the algorithm.</p>
+</div>
+<p><strong>Definition of the inverse crime.</strong></p>
+<p>The <strong>inverse crime</strong> occurs when synthetic data are generated using exactly the same discrete model that will later be used by the reconstruction algorithm. In the simplest case, one creates test data by choosing an image <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> and setting</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}_{\mathrm{syn}} = K \boldsymbol{x}^\dagger.
+\]</div>
+<p>Then one reconstructs using the same operator <span class="math notranslate nohighlight">\(K\)</span>.</p>
+<p>At first sight this may seem perfectly reasonable. After all, if the goal is to test an inverse algorithm, why not test it on data generated by the model for which it was designed? The answer is that such a test is often too favorable. It removes the discrepancy between simulation and inversion that is inevitably present in real applications.</p>
+<p>The crime becomes even worse when the synthetic measurements are noiseless or contain unrealistically simple perturbations. In that situation the inverse problem is made artificially benign, and the resulting performance estimates can be highly misleading.</p>
+<p><strong>Error decomposition.</strong></p>
+<p>To make the issue precise, suppose that data are generated by a richer simulation model <span class="math notranslate nohighlight">\(K_{\mathrm{sim}}\)</span> acting on a finer representation of the object:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K_{\mathrm{sim}}\boldsymbol{x}^\dagger_{\mathrm{sim}} + \boldsymbol{e}.
+\]</div>
+<p>If reconstruction is then performed with a coarser model <span class="math notranslate nohighlight">\(K\)</span>, we may rewrite the measurement as</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta
+=
+K \boldsymbol{x}^\dagger
++
+\underbrace{(K_{\mathrm{sim}}\boldsymbol{x}^\dagger_{\mathrm{sim}} - K \boldsymbol{x}^\dagger)}_{\boldsymbol{e}_{\mathrm{model}}}
++
+\boldsymbol{e}.
+\]</div>
+<p>The term <span class="math notranslate nohighlight">\(\boldsymbol{e}_{\mathrm{model}}\)</span> is the model discrepancy. It accounts for everything that the inversion model fails to capture about the actual measurement process.</p>
+<p>Now observe what happens if we generate the data with the same <span class="math notranslate nohighlight">\(K\)</span> used for inversion. By construction,</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{e}_{\mathrm{model}} = 0.
+\]</div>
+<p>In other words, one has removed one of the main sources of difficulty in the problem before the evaluation has even started.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">blur_kernel</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>
+<span class="n">A_sim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">shift</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">blur_kernel</span><span class="p">,</span> <span class="n">start</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">A_sim</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+
+<span class="n">noise</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">y_exact</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x_true</span> <span class="o">+</span> <span class="n">noise</span>
+<span class="n">y_mismatch</span> <span class="o">=</span> <span class="n">A_sim</span> <span class="o">@</span> <span class="n">x_true</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="n">x_rec_exact</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">y_exact</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_rec_mismatch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">y_mismatch</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">err_exact</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">x_rec_exact</span> <span class="o">-</span> <span class="n">x_true</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">err_mismatch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">x_rec_mismatch</span> <span class="o">-</span> <span class="n">x_true</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Reconstruction error with no model mismatch: </span><span class="si">{</span><span class="n">err_exact</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Reconstruction error with model mismatch: </span><span class="si">{</span><span class="n">err_mismatch</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The second experiment is still simple, but it is already less favorable.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Reconstruction error with no model mismatch: 0.0191
+Reconstruction error with model mismatch: 0.0189
+The second experiment is still simple, but it is already less favorable.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="noise-models-spectral-effects-and-evaluation-risks">
+<h2>Noise Models, Spectral Effects, and Evaluation Risks<a class="headerlink" href="#noise-models-spectral-effects-and-evaluation-risks" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Students often think of <strong>noise</strong> and <strong>model mismatch</strong> as two separate nuisances. In practice, they interact strongly: a reconstruction method that is fragile with respect to one is often fragile with respect to the other as well.</p>
+</div>
+<p>In classical inverse problems, the <strong>inverse crime</strong> is already problematic because it gives an overly optimistic picture of reconstruction stability. In deep learning, the danger is even greater because the network can quietly absorb all the artificial simplifications present in the training pipeline.</p>
+<p>If training and test data are generated with the same simplified operator, the same discretization, the same boundary conventions, and the same simplified noise model, then the network may learn a reconstruction rule that works extremely well inside that synthetic universe while being very fragile outside it.</p>
+<p>This is one of the reasons why deep learning papers in imaging must be read critically. Excellent numerical results are meaningful only if the data-generation protocol is realistic enough to challenge the model.</p>
+<p><strong>The role of noise.</strong></p>
+<p>The next point to explain carefully is that noise is not an annoying add-on. It is part of the inverse problem. The network is not trained to invert only the forward operator <span class="math notranslate nohighlight">\(K\)</span>, but to invert <span class="math notranslate nohighlight">\(K\)</span> in the presence of perturbations.</p>
+<p>Suppose that one trains with the objective</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}\big[\|f_{\boldsymbol{\Theta}}(K\boldsymbol{x}+\boldsymbol{e})-\boldsymbol{x}\|^2\big].
+\]</div>
+<p>The distribution of <span class="math notranslate nohighlight">\(\boldsymbol{e}\)</span> enters the training problem directly. Changing the noise model changes the optimization objective, and therefore changes the map that the network learns.</p>
+<p>If one trains only on noiseless data, the learned reconstructor is encouraged to invert unstable directions of the forward model as aggressively as possible. But these are exactly the directions along which real measurements are most sensitive to perturbation.</p>
+<p><strong>Singular value interpretation.</strong></p>
+<p>Assume for simplicity that the operator admits an SVD</p>
+<div class="math notranslate nohighlight">
+\[
+K = U \Sigma V^T,
+\qquad
+\Sigma = \operatorname{diag}(\sigma_1,\dots,\sigma_r).
+\]</div>
+<p>In ill-posed problems, some <strong>singular value</strong>s are very small. Formal inversion amplifies the corresponding components by factors of order <span class="math notranslate nohighlight">\(1/\sigma_i\)</span>. Hence a small perturbation in the data may generate a large perturbation in the reconstruction.</p>
+<p>This is the classical reason regularization is needed. Deep learning does not abolish this fact. If a network is trained on overly clean data, it may learn an unstable inverse map that behaves extremely well in synthetic experiments and very poorly on realistic measurements.</p>
+<p>Thus, injecting realistic noise during training is not merely a way to make the task harder. It is a way to teach the network which directions in measurement space should be treated cautiously.</p>
+<p><strong>Gaussian and <strong>Poisson noise</strong>.</strong></p>
+<p>Two canonical models should be discussed explicitly.</p>
+<p><strong>Additive <strong>Gaussian noise</strong>.</strong></p>
+<p>Here one assumes</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{e} \sim \mathcal{N}(0,\sigma^2 I),
+\qquad
+\boldsymbol{y}^\delta = K \boldsymbol{x}^\dagger + \boldsymbol{e}.
+\]</div>
+<p>This model is analytically convenient and often appropriate after certain preprocessing steps.</p>
+<p><strong>Poisson noise.</strong></p>
+<p>In photon-limited imaging, the measurements satisfy</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}_j \sim \operatorname{Poisson}((K\boldsymbol{x}^\dagger)_j).
+\]</div>
+<p>Now the variance is signal-dependent. This changes the appropriate likelihood model and therefore changes the correct data-fidelity term. Treating such measurements as if they were corrupted by simple additive white <strong>Gaussian noise</strong> may be a severe modeling error.</p>
+<p>This is a useful observation because it shows that the choice of noise model is mathematically tied to the likelihood. Once again, the statistical assumptions are part of the inverse problem itself.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">signal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">5000</span><span class="p">,),</span> <span class="mf">12.0</span><span class="p">)</span>
+<span class="n">gaussian</span> <span class="o">=</span> <span class="n">signal</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+<span class="n">poisson</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gaussian sample mean and variance:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">gaussian</span><span class="o">.</span><span class="n">mean</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">gaussian</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Poisson sample mean and variance:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">mean</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">poisson</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;For Poisson data, mean and variance are of comparable size.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gaussian sample mean and variance:
+11.984770774841309 3.9322004318237305
+Poisson sample mean and variance:
+12.030200004577637 11.990885734558105
+For Poisson data, mean and variance are of comparable size.
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>The inverse crime in practice.</strong></p>
+<p>The <strong>inverse crime</strong> can occur in many concrete forms:</p>
+<ul class="simple">
+<li><p>generating data with the same discrete operator used at reconstruction time;</p></li>
+<li><p>using exactly the same geometry, detector calibration, and boundary conventions in simulation and inversion;</p></li>
+<li><p>training and testing on synthetic samples created with the same simplistic random pipeline;</p></li>
+<li><p>ignoring structured or signal-dependent noise and replacing it by easy Gaussian perturbations;</p></li>
+<li><p>evaluating only on samples drawn from the same narrow distribution as the training images.</p></li>
+</ul>
+<p>A good lecture should make clear that the crime is not a single technical mistake. It is a general attitude: evaluating a method in conditions that are unrealistically favorable to the reconstruction model.</p>
+<p><strong>How to avoid the crime.</strong></p>
+<p>There is no universal recipe, but a number of practical principles are widely useful.</p>
+<ol class="arabic simple">
+<li><p>Simulate with a model richer than the inversion model.</p></li>
+<li><p>Use finer grids during data generation, then downsample.</p></li>
+<li><p>Include realistic detector effects, blur, interpolation, and calibration errors when possible.</p></li>
+<li><p>Use a physically plausible noise model.</p></li>
+<li><p>Separate training, validation, and testing pipelines carefully.</p></li>
+<li><p>Evaluate robustness under small but meaningful operator mismatch.</p></li>
+</ol>
+<p>These points are good not only for research. They are good scientific hygiene in general.</p>
+<p><strong>Consequences for teaching and evaluation.</strong></p>
+<p>Students should be encouraged to ask the following questions whenever they see reconstruction results:</p>
+<ul class="simple">
+<li><p>how were the data generated;</p></li>
+<li><p>is the forward operator used for simulation the same as the one used for inversion;</p></li>
+<li><p>what noise model was assumed;</p></li>
+<li><p>are the test images truly out of sample;</p></li>
+<li><p>does the method remain stable under modest perturbations of the acquisition model.</p></li>
+</ul>
+<p>If these questions are not answered, high PSNR and visually appealing outputs should not be accepted uncritically.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>This chapter should leave a strong and clear message:</p>
+<ul class="simple">
+<li><p>the true forward model and the discrete inversion model are not the same object;</p></li>
+<li><p>the <strong>inverse crime</strong> consists in testing under unrealistically compatible modeling assumptions;</p></li>
+<li><p>model discrepancy is part of the real problem;</p></li>
+<li><p>noise affects both the difficulty of inversion and the network learned during training;</p></li>
+<li><p>trustworthy computational imaging requires mismatch-aware simulation, training, and evaluation.</p></li>
+</ul>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Define the <strong>inverse crime</strong> in your own words and explain why it leads to overly optimistic conclusions.</p></li>
+<li><p>Give one example of model discrepancy in an imaging system.</p></li>
+<li><p>Compare additive <strong>Gaussian noise</strong> and <strong>Poisson noise</strong> from the viewpoint of the likelihood model.</p></li>
+<li><p>Explain why a network trained only on noiseless data may behave unstably in practice.</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>This chapter should be revisited repeatedly during the course, because almost every modern reconstruction method can be made to look better than it really is through unrealistic simulation choices. A productive reading strategy is to take any numerical experiment and ask which parts of the pipeline are shared between simulation and inversion, which perturbations are modeled, and which are silently ignored.</p>
+<p>For students interested in the broader theory, this topic connects naturally with model discrepancy, uncertainty quantification, and robust inverse problems.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./noise"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../end-to-end/self-supervised-training.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Self-Supervised Training for Inverse Problems</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../generative/vaes-and-gans.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Variational Autoencoders and <strong>GAN</strong>s</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discretization-modeling-and-the-inverse-crime">Discretization, Modeling, and the Inverse Crime</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#noise-models-spectral-effects-and-evaluation-risks">Noise Models, Spectral Effects, and Evaluation Risks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

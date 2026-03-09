@@ -1,0 +1,817 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Flow Matching Models &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generative/flow-matching';</script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Generative Models for Inverse Problems" href="../inverse-problems/generative-inverse-problems.html" />
+    <link rel="prev" title="Diffusion Models" href="diffusion-models.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Flow Matching Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fgenerative/flow-matching.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generative/flow-matching.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Flow Matching Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-paths-and-learned-transport">Probability Paths and Learned Transport</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-with-diffusion-and-relevance-for-imaging">Comparison With Diffusion and Relevance for Imaging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-formulations-for-inverse-problems">Conditional Formulations for Inverse Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flow-matching-models">
+<h1>Flow Matching Models<a class="headerlink" href="#flow-matching-models" title="Link to this heading">#</a></h1>
+<section id="probability-paths-and-learned-transport">
+<h2>Probability Paths and Learned Transport<a class="headerlink" href="#probability-paths-and-learned-transport" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From a teaching viewpoint, <strong>flow matching</strong> is valuable because it isolates the idea of learning a <strong>transport field</strong> without forcing students to begin from a stochastic reverse process.</p>
+</div>
+<p>Once students understand diffusion models, there is a natural next question: is stochastic denoising the only way to transport a simple distribution into a complex image distribution? Flow matching answers this question in the negative <span id="id1">[<a class="reference internal" href="../references.html#id15" title="Yaron Lipman, Ricky T Q Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le. Flow matching for generative modeling. International Conference on Learning Representations, 2023.">13</a>]</span>.</p>
+<p>The main conceptual shift is the following. Diffusion models generate by reversing a noising process. Flow matching models instead learn a deterministic time-dependent vector field that transports samples from a simple base distribution to the data distribution.</p>
+<p>This is important pedagogically because it shows that modern generative modeling is not tied to a single probabilistic mechanism. One can learn density structure either through stochastic score dynamics or through deterministic transport.</p>
+<p><strong>Probability paths.</strong></p>
+<p>Let <span class="math notranslate nohighlight">\(\boldsymbol{x}_0 \sim p_0\)</span> be sampled from a simple base law, usually Gaussian, and let <span class="math notranslate nohighlight">\(\boldsymbol{x}_1 \sim p_{\mathrm{data}}\)</span> be a target image. The first step is to define an interpolation path between them:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{x}_t = \phi_t(\boldsymbol{x}_0,\boldsymbol{x}_1),
+\qquad
+t \in [0,1].
+\]</div>
+<p>A particularly simple choice is linear interpolation:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{x}_t = (1-t)\boldsymbol{x}_0 + t \boldsymbol{x}_1.
+\]</div>
+<p>This path should be interpreted as a family of intermediate random variables that gradually moves from noise to data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">x_t</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">x1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;t=</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> -&gt; </span><span class="si">{</span><span class="n">x_t</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>t=0.0 -&gt; [-1.0, 0.5]
+t=0.2 -&gt; [-0.4000000059604645, 0.7000000476837158]
+t=0.4 -&gt; [0.19999998807907104, 0.9000000357627869]
+t=0.6 -&gt; [0.8000000715255737, 1.100000023841858]
+t=0.8 -&gt; [1.4000000953674316, 1.3000000715255737]
+t=1.0 -&gt; [2.0, 1.5]
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Velocity fields.</strong></p>
+<p>If the interpolation path is differentiable in time, it has an associated velocity</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{u}_t(\boldsymbol{x}_0,\boldsymbol{x}_1)=\frac{d}{dt}\phi_t(\boldsymbol{x}_0,\boldsymbol{x}_1).
+\]</div>
+<p>For the linear path one gets</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{u}_t(\boldsymbol{x}_0,\boldsymbol{x}_1)=\boldsymbol{x}_1-\boldsymbol{x}_0.
+\]</div>
+<p>The learning problem is then: can we train a neural network to predict the correct velocity at each intermediate point of the path?</p>
+<p><strong>The flow matching objective.</strong></p>
+<p>One introduces a neural vector field</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{v}_{\boldsymbol{\Theta}}(\boldsymbol{x},t)
+\]</div>
+<p>and trains it by minimizing</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}_{\mathrm{FM}}(\boldsymbol{\Theta})
+=
+\mathbb{E}_{\boldsymbol{x}_0,\boldsymbol{x}_1,t}
+\left[
+\|\boldsymbol{v}_{\boldsymbol{\Theta}}(\boldsymbol{x}_t,t)-\boldsymbol{u}_t(\boldsymbol{x}_0,\boldsymbol{x}_1)\|_2^2
+\right].
+\]</div>
+<p>The meaning of this loss is very direct. At every time <span class="math notranslate nohighlight">\(t\)</span>, the model is asked to reproduce the velocity that should move the sample along the chosen path from noise toward data.</p>
+<p>Once training is complete, the learned vector field defines the ODE</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{d}{dt}\boldsymbol{x}_t = \boldsymbol{v}_{\boldsymbol{\Theta}}(\boldsymbol{x}_t,t),
+\qquad
+\boldsymbol{x}_0 \sim p_0.
+\]</div>
+<p>Solving this ODE transports the base distribution into the data distribution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny learned vector field for linear transport in 2D.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">xt</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">x1</span>
+    <span class="n">target_velocity</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">pred_velocity</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">xt</span><span class="p">,</span> <span class="n">t</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_velocity</span> <span class="o">-</span> <span class="n">target_velocity</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">299</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Step </span><span class="si">{</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1"> | velocity loss = </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">test_xt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
+    <span class="n">test_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">]])</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">test_xt</span><span class="p">,</span> <span class="n">test_t</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Predicted velocity near the middle of the path:&#39;</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 001 | velocity loss = 3.626394
+Step 050 | velocity loss = 0.021693
+Step 150 | velocity loss = 0.002953
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 300 | velocity loss = 0.000763
+Predicted velocity near the middle of the path: tensor([[ 2.0481, -1.0079]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>This example is intentionally simple: the target transport is just a translation in the plane. Precisely because the target is simple, students can focus on the role of the vector field itself rather than on architectural complications.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">])</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">target</span> <span class="o">-</span> <span class="n">state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">state</span> <span class="o">+</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">velocity</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Step </span><span class="si">{</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">: state = </span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This is the Euler discretization of a simple transport field toward the target point.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 1: state = [0.6000000238418579, -0.4000000059604645]
+Step 2: state = [1.0800000429153442, -0.7200000286102295]
+Step 3: state = [1.4639999866485596, -0.9760000705718994]
+Step 4: state = [1.7711999416351318, -1.1808000802993774]
+Step 5: state = [2.0169599056243896, -1.3446400165557861]
+This is the Euler discretization of a simple transport field toward the target point.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="comparison-with-diffusion-and-relevance-for-imaging">
+<h2>Comparison With Diffusion and Relevance for Imaging<a class="headerlink" href="#comparison-with-diffusion-and-relevance-for-imaging" title="Link to this heading">#</a></h2>
+<p>The comparison with diffusion is very instructive.</p>
+<p>Diffusion models learn how to denoise a sample corrupted by a stochastic process. Flow matching models learn how to move a sample deterministically through a <strong>velocity field</strong>.</p>
+<p>Diffusion emphasizes score estimation and reverse-time stochastic dynamics.</p>
+<p>Flow matching emphasizes transport and ordinary differential equations.</p>
+<p>The two viewpoints are related, but they give different algorithmic and conceptual advantages.</p>
+<p><strong>Why flow matching is attractive.</strong></p>
+<p>One major attraction is speed. Because the learned dynamics can be integrated with relatively few ODE solver steps, sampling can be significantly faster than in many diffusion pipelines.</p>
+<p>Another attraction is flexibility. The model does not need to be tied to a particular noising schedule in the same way as diffusion. Instead, one chooses a <strong>probability path</strong> and learns the associated transport field.</p>
+<p>This means that <strong>flow matching</strong> is often presented as a promising route toward faster high-quality generative modeling.</p>
+<p><strong>The importance of the chosen path.</strong></p>
+<p>At this stage, students should be warned that the path <span class="math notranslate nohighlight">\(\phi_t\)</span> is not arbitrary in practice. Different choices of interpolation yield different target vector fields and therefore different learning difficulties.</p>
+<p>A poor path may force the model to learn unnecessarily complicated transport dynamics. A good path can make the flow smoother and easier to approximate.</p>
+<p>This is another instance of a recurring course principle: the design of the training objective already contains substantial modeling assumptions.</p>
+</section>
+<section id="conditional-formulations-for-inverse-problems">
+<h2>Conditional Formulations for Inverse Problems<a class="headerlink" href="#conditional-formulations-for-inverse-problems" title="Link to this heading">#</a></h2>
+<p>To adapt the model to inverse problems, one conditions the vector field on the measured datum:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{v}_{\boldsymbol{\Theta}}(\boldsymbol{x},t,\boldsymbol{y}^\delta).
+\]</div>
+<p>During training, one uses pairs <span class="math notranslate nohighlight">\((\boldsymbol{x}^\dagger,\boldsymbol{y}^\delta)\)</span> satisfying</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K \boldsymbol{x}^\dagger + \boldsymbol{e}.
+\]</div>
+<p>The conditional objective becomes</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}_{\mathrm{CFM}}(\boldsymbol{\Theta})
+=
+\mathbb{E}_{\boldsymbol{x}_0,\boldsymbol{x}^\dagger,\boldsymbol{y}^\delta,t}
+\left[
+\|\boldsymbol{v}_{\boldsymbol{\Theta}}(\boldsymbol{x}_t,t,\boldsymbol{y}^\delta)-\boldsymbol{u}_t(\boldsymbol{x}_0,\boldsymbol{x}^\dagger)\|_2^2
+\right].
+\]</div>
+<p>At inference time, for a fixed measurement <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one integrates the learned conditional ODE from a sample of the base distribution. The result is a reconstruction distributed according to the learned conditional image law.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny conditional transport example where the condition shifts the target.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">y</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">shift</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">xt</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">x1</span>
+    <span class="n">target_velocity</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span>
+    <span class="n">pred_velocity</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">xt</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred_velocity</span> <span class="o">-</span> <span class="n">target_velocity</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">299</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Step </span><span class="si">{</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1"> | conditional velocity loss = </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 001 | conditional velocity loss = 0.588843
+Step 050 | conditional velocity loss = 0.001639
+Step 150 | conditional velocity loss = 0.000491
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 300 | conditional velocity loss = 0.000177
+</pre></div>
+</div>
+</div>
+</div>
+<p>The measurement variable here is only a scalar placeholder, but the logic is the same as in a real conditional inverse problem: the transport field depends not only on the current state and time, but also on the observed datum that defines the target posterior.</p>
+<p><strong>Why this is interesting in imaging.</strong></p>
+<p>This conditional viewpoint is powerful for at least three reasons.</p>
+<p>First, it allows uncertainty-aware reconstruction. One may sample multiple plausible outputs for the same measurement and thereby explore posterior variability.</p>
+<p>Second, it can be computationally attractive because deterministic transport may require fewer steps than iterative reverse diffusion.</p>
+<p>Third, it integrates naturally with the conditioning information coming from the acquisition process, making it a promising framework for modern learned inverse solvers.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>The conceptual roadmap of this chapter is:</p>
+<ul class="simple">
+<li><p><strong>flow matching</strong> learns deterministic transport rather than reverse denoising;</p></li>
+<li><p>the model is trained to predict the <strong>velocity field</strong> along a chosen <strong>probability path</strong>;</p></li>
+<li><p>ODE integration transforms a simple base law into the data distribution;</p></li>
+<li><p>conditional <strong>flow matching</strong> adapts this idea to inverse problems by conditioning on the measurements;</p></li>
+<li><p>the main appeal of the method is the possibility of faster posterior-like sampling compared with diffusion approaches.</p></li>
+</ul>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Explain the difference between learning a score field and learning a <strong>velocity field</strong>.</p></li>
+<li><p>Why does the choice of interpolation path matter in <strong>flow matching</strong>?</p></li>
+<li><p>In a conditional inverse-problem setting, what role does the measurement play in the vector field (v_{\boldsymbol{\Theta}}(\boldsymbol{x},t,\boldsymbol{y}^\delta))?</p></li>
+<li><p>Challenge exercise: compare <strong>flow matching</strong> with diffusion as posterior models for inverse problems. Which tradeoff would you expect in terms of speed, flexibility, and modeling difficulty?</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>Flow matching is easier to understand after diffusion rather than before it, because it can be seen as an alternative answer to the same generative question: how do we transport a simple base law into a complex data law? Students interested in current research should keep an eye on how deterministic transport ideas are being adapted to conditional and posterior-sampling settings in imaging.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./generative"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="diffusion-models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Diffusion Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../inverse-problems/generative-inverse-problems.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Generative Models for Inverse Problems</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-paths-and-learned-transport">Probability Paths and Learned Transport</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-with-diffusion-and-relevance-for-imaging">Comparison With Diffusion and Relevance for Imaging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-formulations-for-inverse-problems">Conditional Formulations for Inverse Problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
