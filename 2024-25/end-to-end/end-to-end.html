@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -596,28 +596,29 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/computational-imaging/computational-imaging/years/2024-25/end-to-end/../IPPy/operators.py:16: UserWarning: CuPy not found. GPU acceleration for ASTRA via CuPy will be disabled.
+  warnings.warn(
+/home/runner/work/computational-imaging/computational-imaging/years/2024-25/end-to-end/../IPPy/operators.py:27: UserWarning: ASTRA toolbox not found. CTProjector will not work.
+  warnings.warn(&quot;ASTRA toolbox not found. CTProjector will not work.&quot;)
+</pre></div>
+</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1">#-----------------</span>
-<span class="ne">----&gt; </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span><span class="p">,</span> <span class="n">metrics</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">64</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="c1"># Load test data   </span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">64</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="c1"># Check whether it is a standardized tensor</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of x_true: </span><span class="si">{</span><span class="n">x_true</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Range of x_true: </span><span class="si">{</span><span class="n">x_true</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="w"> </span><span class="n">x_true</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="nn">Cell In[2], line 43,</span> in <span class="ni">MayoDataset.__getitem__</span><span class="nt">(self, idx)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="c1"># Load the idx&#39;s image from fname_list</span>
+<span class="ne">---&gt; </span><span class="mi">43</span>     <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span>      <span class="c1"># To load the image as grey-scale</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
 
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+<span class="ne">IndexError</span>: list index out of range
 </pre></div>
 </div>
 </div>
@@ -655,14 +656,14 @@ The result of a padded convolution is shown in the image below.</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="k">return</span> <span class="n">hook</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># Register the hook</span>
-<span class="ne">---&gt; </span><span class="mi">10</span> <span class="n">model</span><span class="o">.</span><span class="n">conv1</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">get_activation</span><span class="p">(</span><span class="s1">&#39;conv1&#39;</span><span class="p">))</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">13</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">model</span><span class="o">.</span><span class="n">conv1</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">get_activation</span><span class="p">(</span><span class="s1">&#39;conv1&#39;</span><span class="p">))</span>
 <span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1"># Process image</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">x_rec</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+<span class="ne">---&gt; </span><span class="mi">13</span> <span class="n">x_rec</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="c1"># Get the conv1 activation</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">conv1_output</span> <span class="o">=</span> <span class="n">activation</span><span class="p">[</span><span class="s1">&#39;conv1&#39;</span><span class="p">]</span>  <span class="c1"># Shape: [1, 64, 256, 256]</span>
 
-<span class="ne">NameError</span>: name &#39;model&#39; is not defined
+<span class="ne">NameError</span>: name &#39;y_delta&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -678,14 +679,7 @@ The result of a padded convolution is shown in the image below.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Get number of parameters</span>
-<span class="nn">----&gt; 2 num_params = sum(p.numel() for p</span> in <span class="ni">model.parameters</span><span class="nt">() if p.requires_grad)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total trainable parameters: </span><span class="si">{</span><span class="n">num_params</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;model&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total trainable parameters: 38145
 </pre></div>
 </div>
 </div>
@@ -778,30 +772,9 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Load images</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
-
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
-</pre></div>
-</div>
+<img alt="../_images/bd5eb554b3125d7f115e0e37b7d1d372af2cf37aef165bff71d7aa7c95181cb9.png" src="../_images/bd5eb554b3125d7f115e0e37b7d1d372af2cf37aef165bff71d7aa7c95181cb9.png" />
+<img alt="../_images/a6761b311d53b1fef57e076a6aeb0e4a057d56de8160bd82c4ffd20cc30bf510.png" src="../_images/a6761b311d53b1fef57e076a6aeb0e4a057d56de8160bd82c4ffd20cc30bf510.png" />
+<img alt="../_images/4a164f8d7b61d4c35c6747d9f158347aaf0990b32e9021afb7c8407769397fb5.png" src="../_images/4a164f8d7b61d4c35c6747d9f158347aaf0990b32e9021afb7c8407769397fb5.png" />
 </div>
 </div>
 <p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed before, where the network is trained to learn <strong>not</strong> the reconstructed image, but rather the <strong>residual</strong>, which is then converted to the actual image by just adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back to the output with the aim of learning the residual is usually called <strong>residual connection</strong> or <strong>skip connection</strong>. This architectures are named <strong>Residual Convolutional Neural Netowork (ResCNN)</strong>.</p>
@@ -943,27 +916,22 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1">#-----------------</span>
-<span class="ne">----&gt; </span><span class="mi">9</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span><span class="p">,</span> <span class="n">metrics</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">64</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="c1"># Load test data   </span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">64</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="c1"># Check whether it is a standardized tensor</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of x_true: </span><span class="si">{</span><span class="n">x_true</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Range of x_true: </span><span class="si">{</span><span class="n">x_true</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="w"> </span><span class="n">x_true</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="nn">Cell In[7], line 43,</span> in <span class="ni">MayoDataset.__getitem__</span><span class="nt">(self, idx)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="c1"># Load the idx&#39;s image from fname_list</span>
+<span class="ne">---&gt; </span><span class="mi">43</span>     <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span>      <span class="c1"># To load the image as grey-scale</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
 
-<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">computational</span><span class="o">-</span><span class="n">imaging</span><span class="o">/</span><span class="n">years</span><span class="o">/</span><span class="mi">2024</span><span class="o">-</span><span class="mi">25</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span><span class="o">/../</span><span class="n">IPPy</span><span class="o">/</span><span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+<span class="ne">IndexError</span>: list index out of range
 </pre></div>
 </div>
 </div>
