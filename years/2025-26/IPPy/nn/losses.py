@@ -34,7 +34,7 @@ class FourierLoss(nn.Module):
 class PerceptualLoss(nn.Module):
     def __init__(self):
         super().__init__()
-        vgg = models.vgg16(pretrained=True).features[
+        vgg = models.vgg16(weights=models.VGG16_Weights.DEFAULT).features[
             :16
         ]  # Use early layers for texture
         for param in vgg.parameters():

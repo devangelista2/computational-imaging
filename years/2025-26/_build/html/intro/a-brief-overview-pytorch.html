@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -61,10 +61,11 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro/a-brief-overview-pytorch';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="End-to-End Reconstruction and Imaging Architectures" href="../end-to-end/end-to-end.html" />
+    <link rel="next" title="References" href="../references.html" />
     <link rel="prev" title="From Supervised Learning to Neural Networks" href="from-ml-to-nn.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -175,26 +176,14 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="environment-setup.html">Environment Setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -416,25 +405,60 @@ document.write(`
 <h2>Computational Representation and Differentiation<a class="headerlink" href="#computational-representation-and-differentiation" title="Link to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In these notes, <strong>PyTorch</strong> is not presented as a software tutorial for its own sake. It is introduced as a concrete language for implementing <strong>parameterized maps</strong>, <strong>computational graphs</strong>, and <strong>gradient-based optimization</strong> in imaging.</p>
+<p>In these notes, <strong>PyTorch</strong> <span id="id1">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span> is not presented as a software tutorial for its own sake. It is introduced as a concrete language for implementing <strong>parameterized maps</strong>, <strong>computational graphs</strong>, and <strong>gradient-based optimization</strong> in imaging.</p>
 </div>
 <p>Even in a mathematically oriented course, it is helpful to include one short chapter that translates abstract objects into the language of an implementation framework. Otherwise students may understand the equations and still fail to recognize them when they appear in code.</p>
 <p>The goal here is not to teach <strong>PyTorch</strong> as a software package in full generality. The goal is to explain how the mathematical ingredients already introduced in the course are represented computationally.</p>
 <p><strong>Tensors as discrete objects.</strong></p>
 <p>In <strong>PyTorch</strong>, the basic object is the tensor. From a mathematical viewpoint, a tensor is simply a multidimensional array, but in practice it carries additional information:</p>
 <ul class="simple">
-<li><p>shape, which tells us the dimensions;</p></li>
-<li><p>data type, which determines numerical precision;</p></li>
-<li><p>device, which tells us whether the tensor lives on CPU or GPU;</p></li>
-<li><p>gradient tracking, which tells us whether derivatives with respect to that tensor must be recorded.</p></li>
+<li><p><strong>shape</strong>, which tells us the dimensions;</p></li>
+<li><p><strong>data type</strong>, which determines numerical precision;</p></li>
+<li><p><strong>device</strong>, which tells us whether the tensor lives on CPU or GPU;</p></li>
+<li><p><strong>gradient tracking</strong>, which tells us whether derivatives with respect to that tensor must be recorded.</p></li>
 </ul>
-<p>For instance, a grayscale image of size <span class="math notranslate nohighlight">\(H \times W\)</span> is represented as a tensor in <span class="math notranslate nohighlight">\(\mathbb{R}^{H \times W}\)</span>, while a <strong>batch</strong> of <span class="math notranslate nohighlight">\(B\)</span> grayscale images is usually stored in the format</p>
+<p>A grayscale image of size <span class="math notranslate nohighlight">\(H \times W\)</span> is represented as a tensor of shape <span class="math notranslate nohighlight">\((H, W)\)</span>, but in a training pipeline it is almost always embedded in the standard format</p>
 <div class="math notranslate nohighlight">
 \[
-(B,C,H,W),
+(B,\;C,\;H,\;W),
 \]</div>
-<p>with <span class="math notranslate nohighlight">\(C=1\)</span>.</p>
-<p>This is worth explaining explicitly because shape errors are among the most common mistakes students make when moving from formulas to code.</p>
+<p>where <span class="math notranslate nohighlight">\(B\)</span> is the batch size and <span class="math notranslate nohighlight">\(C\)</span> is the number of channels. For a single grayscale image we have <span class="math notranslate nohighlight">\(B=1\)</span>, <span class="math notranslate nohighlight">\(C=1\)</span>; for a batch of <span class="math notranslate nohighlight">\(B\)</span> RGB images, <span class="math notranslate nohighlight">\(C=3\)</span>. In inverse problems, <span class="math notranslate nohighlight">\(C\)</span> can carry physical meaning: different MRI receiver coils, independent spectral bands in multispectral imaging, or the real and imaginary parts of a complex-valued field. Understanding this convention is not a PyTorch technicality — it is part of understanding how the data entering the network relate to the underlying physics.</p>
+<p>Shape errors are among the most common mistakes when moving from equations to code. An operator that expects input of shape <span class="math notranslate nohighlight">\((B,1,H,W)\)</span> and receives <span class="math notranslate nohighlight">\((B,H,W)\)</span> will either fail silently or broadcast in an unintended way. Getting shapes right is the first step in getting the mathematics right.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local course asset example: load and normalize one Mayo-style image.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;Mayo.png&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">))</span>
+<span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook-ready tensor shape:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dtype:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;intensity range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Notebook-ready tensor shape: torch.Size([1, 1, 256, 256])
+dtype: torch.float32
+intensity range: 0.0 0.8627451062202454
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local course asset example: load and normalize one Mayo-style image.</span>
@@ -506,15 +530,17 @@ tensor([[ 0.,  1.,  2.,  3.],
 <li><p>activation functions implement pointwise nonlinear maps;</p></li>
 <li><p>normalization layers modify the statistics of intermediate features.</p></li>
 </ul>
-<p>This should be emphasized pedagogically: <strong>PyTorch</strong> modules are not arbitrary software components. They are the computational realization of the mathematical operators appearing in the model.</p>
+<p>This correspondence between modules and mathematical operators should be taken literally. A <code class="docutils literal notranslate"><span class="pre">Conv2d(1,</span> <span class="pre">32,</span> <span class="pre">kernel_size=3)</span></code> layer is not just “a convolution” in a generic sense. It defines 32 learned filters of size <span class="math notranslate nohighlight">\(3\times3\)</span>, each a miniature discrete operator that detects a specific local pattern in the input. Stacking these layers builds a hierarchy of learned operators, from simple edge detectors to complex, task-specific feature extractors.</p>
+<p>This viewpoint extends to physics-based operators. In this course the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> library wraps operators such as the CT projector or the image gradient as <strong>PyTorch</strong> modules, so that they can be composed with learned layers inside the same computational graph. A reconstruction network that starts with a physics-based backprojection step, followed by several learned convolutional layers, is simply a composition of modules — some with fixed, physics-derived weights, others with learned weights. Gradients flow through both without distinction.</p>
 <p><strong>Computational graphs and <strong>automatic differentiation</strong>.</strong></p>
-<p>Suppose a scalar loss <span class="math notranslate nohighlight">\(L(\boldsymbol{\Theta})\)</span> is produced by a sequence of tensor operations. <strong>PyTorch</strong> records the <strong>computational graph</strong> and can compute</p>
+<p>Suppose a scalar loss <span class="math notranslate nohighlight">\(L(\boldsymbol{\Theta})\)</span> is produced by a sequence of tensor operations. <strong>PyTorch</strong> records the <strong>computational graph</strong> — a directed acyclic graph whose nodes are operations and whose edges carry the intermediate tensors — and can compute</p>
 <div class="math notranslate nohighlight">
 \[
 \frac{\partial L}{\partial \boldsymbol{\Theta}}
 \]</div>
-<p>through <strong>automatic differentiation</strong>. This is exactly what is needed for gradient-based training.</p>
-<p>From a mathematical point of view, this is simply repeated application of the chain rule. The importance of <strong>PyTorch</strong> is that it automates this process efficiently even when the network contains millions of parameters.</p>
+<p>through <strong>automatic differentiation</strong> by traversing this graph in reverse.</p>
+<p>From a mathematical point of view, this is simply the chain rule applied systematically. The importance of <strong>PyTorch</strong> is that it automates this process efficiently even when the network contains millions of parameters, and even when the computational graph mixes learned layers with arbitrary tensor operations.</p>
+<p>For physics-based operators whose backward pass is not automatically derived — such as a CT projector implemented via a dedicated numerical library — <strong>PyTorch</strong> provides a mechanism to register a custom backward function. This is how <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> implements the adjoint of the projector: the forward pass calls the projection code, and the registered backward pass calls its adjoint. From the rest of the computational graph, this operator is indistinguishable from a standard learned layer.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -551,14 +577,15 @@ d loss / d w: 30.0
 =
 \frac{1}{N}\sum_{i=1}^N \ell(f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta),\boldsymbol{x}_i^\dagger),
 \]</div>
-<p>then at one iteration we often replace it by the <strong>batch</strong> approximation</p>
+<p>then at one iteration we replace it by the <strong>batch</strong> approximation</p>
 <div class="math notranslate nohighlight">
 \[
 \widehat{\mathcal{R}}_B(\boldsymbol{\Theta})
 =
 \frac{1}{B}\sum_{i=1}^B \ell(f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta),\boldsymbol{x}_i^\dagger).
 \]</div>
-<p>This means that mini<strong>batch</strong> training is not just a coding trick. It changes the numerical optimization procedure by replacing the full gradient with a stochastic estimator.</p>
+<p>The minibatch gradient <span class="math notranslate nohighlight">\(\nabla \widehat{\mathcal{R}}_B(\boldsymbol{\Theta})\)</span> is an unbiased estimator of the full-dataset gradient: its expectation over random batch draws equals <span class="math notranslate nohighlight">\(\nabla \widehat{\mathcal{R}}_N(\boldsymbol{\Theta})\)</span>. This statistical fact justifies using small batches without introducing systematic bias in the optimization direction.</p>
+<p>In medical and scientific imaging, batch sizes tend to be small — typically 4 to 16 — because individual images are large and GPU memory is finite. The noise introduced by random batch sampling is not purely a nuisance: it acts as an implicit regularizer, helping the optimizer avoid sharp minima that tend to generalize poorly. Minibatch training is therefore not just a memory-saving device. It is a stochastic optimization procedure with statistical consequences for both convergence speed and the quality of the solution found.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -590,7 +617,7 @@ Each image is processed independently, but in parallel along the batch dimension
 =
 \boldsymbol{\Theta}_k-\eta \nabla \widehat{\mathcal{R}}_B(\boldsymbol{\Theta}_k).
 \]</div>
-<p>Adam modifies this rule by rescaling and averaging gradients. It is useful for students to see that <strong>optimizer</strong> choice belongs to numerical optimization, not to model design.</p>
+<p>Adam <span id="id2">[<a class="reference internal" href="../references.html#id25" title="Diederik P Kingma and Jimmy Ba. Adam: a method for stochastic optimization. International Conference on Learning Representations, 2015.">9</a>]</span> modifies this rule by rescaling and averaging gradients. It is useful for students to see that <strong>optimizer</strong> choice belongs to numerical optimization, not to model design.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -618,11 +645,11 @@ Each image is processed independently, but in parallel along the batch dimension
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 1.5214890241622925
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 0.4503172039985657
 Weights before the update:
-tensor([[-0.0159, -0.0658]])
+tensor([[ 0.4790, -0.2795]])
 Weights after one SGD step:
-tensor([[ 0.1490, -0.2481]])
+tensor([[ 0.5088, -0.3789]])
 </pre></div>
 </div>
 </div>
@@ -630,14 +657,12 @@ tensor([[ 0.1490, -0.2481]])
 </section>
 <section id="why-this-computational-viewpoint-matters-for-imaging">
 <h2>Why This Computational Viewpoint Matters for Imaging<a class="headerlink" href="#why-this-computational-viewpoint-matters-for-imaging" title="Link to this heading">#</a></h2>
-<p>In computational imaging, implementation details can affect the mathematical model more than one might expect. For example:</p>
-<ul class="simple">
-<li><p>padding conventions change the effective discrete <strong>convolution</strong>;</p></li>
-<li><p>finite precision affects numerical stability;</p></li>
-<li><p>normalization changes the scale of intermediate representations;</p></li>
-<li><p>data loading and augmentation modify the empirical distribution seen during training.</p></li>
-</ul>
-<p>Therefore, one should never think of code as a neutral container for the mathematics. The computational realization influences the model that is actually trained.</p>
+<p>In computational imaging, implementation details can affect the mathematical model more than one might expect. Four examples are especially relevant.</p>
+<p><strong>Padding conventions</strong> change the effective discrete <strong>convolution</strong>. A network using zero-padding treats the image boundary as if it were surrounded by zeros, which introduces an artificial edge at every border. Circular padding assumes periodicity, and reflective padding assumes a mirror symmetry. In tomographic reconstruction, where the image boundary has direct physical meaning, the choice of padding implicitly encodes a hypothesis about the object outside the field of view.</p>
+<p><strong>Finite precision</strong> affects numerical stability. Standard single-precision <code class="docutils literal notranslate"><span class="pre">float32</span></code> arithmetic can accumulate rounding errors across many layers. In ill-conditioned inverse problems — where small perturbations in the input can amplify enormously — this is not negligible, and the difference between <code class="docutils literal notranslate"><span class="pre">float32</span></code> and <code class="docutils literal notranslate"><span class="pre">float64</span></code> may be visible in the reconstructed image.</p>
+<p><strong>Normalization</strong> changes the scale and statistical properties of intermediate representations. Batch normalization normalizes using statistics computed across the current mini<strong>batch</strong>, which couples items that are processed together and introduces a dependency on batch composition. Layer normalization operates on each sample independently, making it better suited to settings where batch size is very small — which is common in imaging.</p>
+<p><strong>Data augmentation</strong> modifies the empirical distribution seen during training. A network trained on images that have been randomly flipped horizontally will implicitly learn a reconstruction rule that is invariant to left-right reflection. Whether this symmetry is physically appropriate depends entirely on the imaging geometry. Augmentation is not just a regularization trick; it is an implicit encoding of prior knowledge about the problem.</p>
+<p>The computational realization of a model is therefore never neutral. Understanding <strong>PyTorch</strong>’s conventions is the most reliable way to ensure that what is implemented corresponds to what is intended mathematically.</p>
 </section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
@@ -650,7 +675,7 @@ tensor([[ 0.1490, -0.2481]])
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. When studying independently, students should focus less on memorizing <strong>PyTorch</strong> syntax and more on recognizing how tensors, modules, losses, and <strong>optimizer</strong>s correspond to the mathematical objects introduced in the course.</p>
+<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. When studying independently, focus less on memorizing <strong>PyTorch</strong> syntax and more on recognizing how tensors, modules, losses, and <strong>optimizer</strong>s correspond to the mathematical objects introduced in the course.</p>
 </section>
 </section>
 
@@ -694,11 +719,11 @@ tensor([[ 0.1490, -0.2481]])
       </div>
     </a>
     <a class="right-next"
-       href="../end-to-end/end-to-end.html"
+       href="../references.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">End-to-End Reconstruction and Imaging Architectures</p>
+        <p class="prev-next-title">References</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

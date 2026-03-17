@@ -6,26 +6,21 @@ import torch.nn.functional as F
 
 import warnings  # To warn if falling back to CPU
 
-# Try importing CuPy
+# Try importing CuPy (silently — warnings only surface when CTProjector is used)
 try:
     import cupy
 
     CUPY_AVAILABLE = True
 except ImportError:
     CUPY_AVAILABLE = False
-    warnings.warn(
-        "CuPy not found. GPU acceleration for ASTRA via CuPy will be disabled."
-    )
 
-# Try importing ASTRA
+# Try importing ASTRA (silently — warnings only surface when CTProjector is used)
 try:
     import astra
 
     ASTRA_AVAILABLE = True
 except ImportError:
     ASTRA_AVAILABLE = False
-    warnings.warn("ASTRA toolbox not found. CTProjector will not work.")
-    # You might want to raise an error or handle this more gracefully
 
 
 class OperatorFunction(torch.autograd.Function):
@@ -132,7 +127,12 @@ class CTProjector(Operator):
 
         if not ASTRA_AVAILABLE:
             raise ImportError(
-                "ASTRA toolbox is required for CTProjector but not found."
+                "ASTRA toolbox is required for CTProjector but not found. "
+                "Install it via conda: conda install -c astra-toolbox astra-toolbox"
+            )
+        if not CUPY_AVAILABLE:
+            warnings.warn(
+                "CuPy not found. GPU acceleration for ASTRA via CuPy will be disabled."
             )
 
         # Input setup
@@ -683,30 +683,21 @@ class Gradient(Operator):
 
     def _matvec(self, x: torch.Tensor) -> torch.Tensor:
         N, c, nx, ny = x.shape
-        D_h = torch.diff(x, n=1, dim=2, prepend=torch.zeros((N, c, 1, ny)))
-        D_v = torch.diff(x, n=1, dim=3, prepend=torch.zeros((N, c, nx, 1)))
+        D_h = torch.diff(x, n=1, dim=2, prepend=torch.zeros((N, c, 1, ny), device=x.device, dtype=x.dtype))
+        D_v = torch.diff(x, n=1, dim=3, prepend=torch.zeros((N, c, nx, 1), device=x.device, dtype=x.dtype))
 
         return torch.cat((D_h, D_v), dim=1)
 
     def _adjoint(self, y: torch.Tensor) -> torch.Tensor:
-        N, c, nx, ny = y.shape
+        # y has shape (N, 2, nx, ny): channel 0 = horizontal diffs, channel 1 = vertical diffs.
+        # The adjoint of forward-difference-with-zero-prepend is the negative divergence:
+        #   D_h^T z[i] = z[i] - z[i+1]  (with z[nx] = 0)
+        #   D_v^T z[j] = z[j] - z[j+1]  (with z[ny] = 0)
+        N, _, nx, ny = y.shape
+        y_h = y[:, 0:1, :, :]
+        y_v = y[:, 1:2, :, :]
 
-        D_h = y[0, 0, :, :]
-        D_v = y[0, 1, :, :]
-
-        D_h_T = (
-            torch.flipud(
-                torch.diff(torch.flipud(D_h), n=1, dim=0, prepend=torch.zeros((1, ny)))
-            )
-            .unsqueeze(0)
-            .unsqueeze(1)
-        )
-        D_v_T = (
-            torch.fliplr(
-                torch.diff(torch.fliplr(D_v), n=1, dim=1, prepend=torch.zeros((nx, 1)))
-            )
-            .unsqueeze(0)
-            .unsqueeze(1)
-        )
+        D_h_T = -torch.diff(y_h, n=1, dim=2, append=torch.zeros((N, 1, 1, ny), device=y.device, dtype=y.dtype))
+        D_v_T = -torch.diff(y_v, n=1, dim=3, append=torch.zeros((N, 1, nx, 1), device=y.device, dtype=y.dtype))
 
         return D_h_T + D_v_T

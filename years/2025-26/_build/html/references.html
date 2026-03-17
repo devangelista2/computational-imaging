@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4344bd9a" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -59,10 +59,11 @@
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'references';</script>
+    <script src="_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="_static/logo.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Generative Models for Inverse Problems" href="inverse-problems/generative-inverse-problems.html" />
+    <link rel="prev" title="A Brief PyTorch Viewpoint" href="intro/a-brief-overview-pytorch.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -172,26 +173,14 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro/environment-setup.html">Environment Setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro/a-brief-overview-pytorch.html">A Brief PyTorch Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="generative/vaes-and-gans.html">Variational Autoencoders and GANs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generative/flow-matching.html">Flow Matching Models</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="current nav bd-sidenav">
@@ -402,13 +391,13 @@ document.write(`
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <p>Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. <em>International Conference on Machine Learning</em>, pages 524–533, 2019.</p>
 </div>
-<div class="citation" id="id16" role="doc-biblioentry">
+<div class="citation" id="id19" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<p>Ashish Bora, Ajil Jalal, Eric Price, and Alexandros G Dimakis. Compressed sensing using generative models. <em>International Conference on Machine Learning</em>, pages 537–546, 2017.</p>
+<p>Christopher M Bishop. <em>Pattern Recognition and Machine Learning</em>. Springer, 2006.</p>
 </div>
-<div class="citation" id="id18" role="doc-biblioentry">
+<div class="citation" id="id20" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
-<p>Hyungjin Chung, Jeongsol Kim, Michael T McCann, Scott Klasky, and Jong Chul Ye. Diffusion posterior sampling for general noisy inverse problems. <em>International Conference on Learning Representations</em>, 2023.</p>
+<p>George Cybenko. Approximation by superpositions of a sigmoidal function. <em>Mathematics of Control, Signals and Systems</em>, 2(4):303–314, 1989.</p>
 </div>
 <div class="citation" id="id7" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
@@ -418,45 +407,45 @@ document.write(`
 <span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
 <p>Ian Goodfellow, Yoshua Bengio, and Aaron Courville. <em>Deep Learning</em>. MIT Press, 2016.</p>
 </div>
-<div class="citation" id="id12" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
-<p>Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. <em>Advances in Neural Information Processing Systems</em>, 2014.</p>
-</div>
 <div class="citation" id="id5" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
 <p>Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. <em>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition</em>, pages 770–778, 2016.</p>
 </div>
 <div class="citation" id="id10" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
 <p>Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. <em>IEEE Transactions on Computational Imaging</em>, 6:1320–1335, 2020.</p>
 </div>
-<div class="citation" id="id13" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
-<p>Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. <em>Advances in Neural Information Processing Systems</em>, 33:6840–6851, 2020.</p>
-</div>
 <div class="citation" id="id2" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
 <p>Jari Kaipio and Erkki Somersalo. <em>Statistical and Computational Inverse Problems</em>. Springer, 2005.</p>
 </div>
-<div class="citation" id="id11" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
-<p>Diederik P Kingma and Max Welling. Auto-encoding variational bayes. <em>International Conference on Learning Representations</em>, 2014.</p>
+<div class="citation" id="id25" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></span>
+<p>Diederik P Kingma and Jimmy Ba. Adam: a method for stochastic optimization. <em>International Conference on Learning Representations</em>, 2015.</p>
 </div>
 <div class="citation" id="id4" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
 <p>Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. <em>Proceedings of the IEEE</em>, 86(11):2278–2324, 1998.</p>
 </div>
-<div class="citation" id="id15" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></span>
-<p>Yaron Lipman, Ricky T Q Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le. Flow matching for generative modeling. <em>International Conference on Learning Representations</em>, 2023.</p>
+<div class="citation" id="id22" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></span>
+<p>Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. <em>IEEE Journal on Selected Areas in Information Theory</em>, 1(1):39–56, 2020.</p>
+</div>
+<div class="citation" id="id23" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></span>
+<p>Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. <em>Advances in Neural Information Processing Systems</em>, 2019.</p>
 </div>
 <div class="citation" id="id6" role="doc-biblioentry">
-<span class="label"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></span>
 <p>Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. <em>Medical Image Computing and Computer-Assisted Intervention</em>, pages 234–241, 2015.</p>
 </div>
-<div class="citation" id="id14" role="doc-biblioentry">
+<div class="citation" id="id21" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></span>
+<p>David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. <em>Nature</em>, 323:533–536, 1986.</p>
+</div>
+<div class="citation" id="id24" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></span>
-<p>Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. Score-based generative modeling through stochastic differential equations. <em>International Conference on Learning Representations</em>, 2021.</p>
+<p>Eli Stevens, Luca Antiga, and Thomas Viehmann. <em>Deep Learning with PyTorch</em>. Manning Publications, 2020.</p>
 </div>
 <div class="citation" id="id8" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span>16<span class="fn-bracket">]</span></span>
@@ -497,12 +486,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="inverse-problems/generative-inverse-problems.html"
+       href="intro/a-brief-overview-pytorch.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Generative Models for Inverse Problems</p>
+        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
       </div>
     </a>
 </div>

@@ -4,23 +4,26 @@
 format: jb-book
 root: intro
 parts:
+  - caption: Getting Started
+    chapters:
+      - file: intro/environment-setup
   - caption: Neural Networks for Imaging
     chapters:
       - file: intro/from-ml-to-nn
       - file: intro/a-brief-overview-pytorch
-      - file: end-to-end/end-to-end
-      - file: end-to-end/self-supervised-training
-  - caption: Noise, Data, and Evaluation
-    chapters:
-      - file: noise/the-inverse-crime
-  - caption: Generative Models
-    chapters:
-      - file: generative/vaes-and-gans
-      - file: generative/diffusion-models
-      - file: generative/flow-matching
-  - caption: Generative Priors for Inverse Problems
-    chapters:
-      - file: inverse-problems/generative-inverse-problems
+#      - file: end-to-end/end-to-end
+#      - file: end-to-end/self-supervised-training
+#  - caption: Noise, Data, and Evaluation
+#    chapters:
+#      - file: noise/the-inverse-crime
+#  - caption: Generative Models
+#    chapters:
+#      - file: generative/vaes-and-gans
+#      - file: generative/diffusion-models
+#      - file: generative/flow-matching
+#  - caption: Generative Priors for Inverse Problems
+#    chapters:
+#      - file: inverse-problems/generative-inverse-problems
   - caption: References
     chapters:
       - file: references

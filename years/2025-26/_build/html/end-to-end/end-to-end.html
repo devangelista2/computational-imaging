@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -61,11 +61,10 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/end-to-end';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Self-Supervised Training for Inverse Problems" href="self-supervised-training.html" />
-    <link rel="prev" title="A Brief PyTorch Viewpoint" href="../intro/a-brief-overview-pytorch.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -128,6 +127,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -175,26 +176,14 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
-<ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/environment-setup.html">Environment Setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -491,7 +480,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta)\approx \boldsymbol{x}_i^\dagger
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3e62aa8f9428b874e6e5e50f4676c9dafc5d03c135ba0b31efe686f2b209f510.png" src="../_images/3e62aa8f9428b874e6e5e50f4676c9dafc5d03c135ba0b31efe686f2b209f510.png" />
+<img alt="../_images/739d33cef57e5df09cc5e446fe72b19779c3b78f719aff5dce795867ff87cffe.png" src="../_images/739d33cef57e5df09cc5e446fe72b19779c3b78f719aff5dce795867ff87cffe.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Left: clean image. Right: simulated measurement used by an end-to-end reconstructor.
 </pre></div>
 </div>
@@ -525,7 +514,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta)\approx \boldsymbol{x}_i^\dagger
 <section id="cnn-and-unet-design-principles-for-imaging">
 <h2>CNN and <strong>UNet</strong> Design Principles for Imaging<a class="headerlink" href="#cnn-and-unet-design-principles-for-imaging" title="Link to this heading">#</a></h2>
 <p>A fully connected network treats an image as an unstructured vector. This is mathematically legitimate but computationally and statistically wasteful. Images possess a spatial organization that should be exploited.</p>
-<p>The key observation is simple: when interpreting an image, individual pixels are rarely meaningful in isolation. Classical <strong>convolution</strong>al architectures made this principle explicit already in early deep vision models such as <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">12</a>]</span>. What matters are local patterns such as edges, corners, textures, boundaries, and repeated motifs. These structures are spatially organized. Therefore, the architecture should process data locally before building more global information.</p>
+<p>The key observation is simple: when interpreting an image, individual pixels are rarely meaningful in isolation. Classical <strong>convolution</strong>al architectures made this principle explicit already in early deep vision models such as <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>. What matters are local patterns such as edges, corners, textures, boundaries, and repeated motifs. These structures are spatially organized. Therefore, the architecture should process data locally before building more global information.</p>
 <p>This is exactly what <strong>convolution</strong> achieves. Given an input image <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> and a kernel <span class="math notranslate nohighlight">\(K\)</span>, the discrete <strong>convolution</strong> is</p>
 <div class="math notranslate nohighlight">
 \[
@@ -745,7 +734,7 @@ Tiny CNN RMSE on held-out patches: 0.032031
 <p>A simple CNN processes images at a fixed resolution. This can be limiting because inverse problems often involve information at several scales simultaneously. Fine edges matter, but so do coarse geometric structures and global context.</p>
 <p>For example, when reconstructing a CT slice, a small local patch may be insufficient to decide whether a faint pattern is an anatomical boundary or an artifact induced by undersampling. The answer may depend on the wider image context. This motivates encoder-decoder architectures.</p>
 <p><strong>UNet: encoder, decoder, and skip connections.</strong></p>
-<p>The <strong>UNet</strong> is the canonical multiscale architecture for imaging <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">14</a>]</span>. Its structure can be described in three stages.</p>
+<p>The <strong>UNet</strong> is the canonical multiscale architecture for imaging <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>. Its structure can be described in three stages.</p>
 <p>First, the encoder progressively reduces spatial resolution while increasing the number of channels. This enlarges the effective <strong>receptive field</strong> and produces coarser, more abstract features.</p>
 <p>Second, at the bottleneck the representation is highly compressed but rich in global context.</p>
 <p>Third, the decoder upsamples the features back to the original resolution and combines them with earlier encoder features through skip connections.</p>
@@ -883,7 +872,7 @@ TinyUNet output shape: torch.Size([1, 1, 32, 32])
 <p><strong>Common UNet variants.</strong></p>
 <p>Once the classical <strong>UNet</strong> is understood, variants become much easier to motivate.</p>
 <p><strong>Residual UNet.</strong></p>
-<p>Replace standard <strong>convolution</strong>al blocks by residual blocks, in the spirit of residual learning architectures such as <span id="id3">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">7</a>]</span>:</p>
+<p>Replace standard <strong>convolution</strong>al blocks by residual blocks, in the spirit of residual learning architectures such as <span id="id3">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">6</a>]</span>:</p>
 <div class="math notranslate nohighlight">
 \[
 \boldsymbol{h}_{k+1}=\boldsymbol{h}_k+F_k(\boldsymbol{h}_k).
@@ -1153,24 +1142,6 @@ smoothed output
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../intro/a-brief-overview-pytorch.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="self-supervised-training.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Self-Supervised Training for Inverse Problems</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

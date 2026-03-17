@@ -3,9 +3,7 @@ import torch
 import torch.nn as nn
 
 # Import the Operator base class and potentially specific operators if needed for type hinting
-from operators import (
-    Operator,
-)  # Assuming operators.py is in the same directory orPYTHONPATH
+from ..operators import Operator
 
 
 class CNNBlock(nn.Module):

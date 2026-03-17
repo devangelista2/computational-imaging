@@ -68,15 +68,36 @@ def save_image(x: torch.Tensor, save_path: str) -> None:
     x.save(save_path)
 
 
-def gaussian_noise(y: torch.Tensor, noise_level: str) -> torch.Tensor:
+def gaussian_noise(y: torch.Tensor, noise_level: float) -> torch.Tensor:
     r"""
-    Returns a data-dependent sample of gaussian noise "e", with norm equal ||e|| = noise_level * || y ||.
+    Returns a data-dependent sample of Gaussian noise "e", with norm equal to
+    ``||e|| = noise_level * ||y||``.
 
-    :param torch.Tensor y: The corrupted data y = Kx.
-    :param str noise_level: The noise level.
+    :param torch.Tensor y: The clean measurements y = Kx.
+    :param float noise_level: Relative noise level (e.g. 0.01 for 1%).
     """
     e = torch.randn_like(y, device=y.device)
     return e / torch.norm(e) * torch.norm(y) * noise_level
+
+
+def poisson_noise(y: torch.Tensor, peak: float = 100.0) -> torch.Tensor:
+    r"""
+    Returns a Poisson-corrupted version of y.
+
+    The tensor y is scaled so that its maximum equals ``peak`` (interpreted as
+    the expected photon count at the brightest pixel), then Poisson noise is
+    sampled and the result is rescaled back to the original range.
+
+    :param torch.Tensor y: The clean measurements y = Kx (non-negative).
+    :param float peak: Expected photon count at maximum intensity. Higher values
+                       give less noise. Default: 100.
+    """
+    y_max = y.max()
+    if y_max <= 0:
+        return y.clone()
+    y_scaled = y / y_max * peak
+    noisy = torch.poisson(y_scaled.clamp(min=0))
+    return noisy / peak * y_max
 
 
 def show(

@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=39bf318f" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -61,6 +61,7 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/deep-dive-into-IPPy';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -175,26 +176,18 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/environment-setup.html">Environment Setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief PyTorch Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and GANs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
     </div>
@@ -537,9 +530,9 @@ document.write(`
 <span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="k">def</span><span class="w"> </span><span class="nf">_matvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
@@ -702,9 +695,9 @@ document.write(`
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
@@ -819,9 +812,9 @@ f(x) = || Kx - y^\delta ||_2^2,
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">solver</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">ChambollePockTpVUnconstrained</span><span class="p">(</span><span class="n">K</span><span class="p">)</span> <span class="c1"># -&gt; takes as input the operator</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
@@ -875,9 +868,9 @@ f(x) = || Kx - y^\delta ||_2^2,
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
@@ -1004,9 +997,9 @@ f(x) = || Kx - y^\delta ||_2^2,
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
 
 <span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>

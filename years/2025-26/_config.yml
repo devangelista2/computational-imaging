@@ -21,6 +21,9 @@ latex:
 bibtex_bibfiles:
   - biblio.bib
 
+exclude_patterns:
+  - private/**
+
 # Information about where the book exists on the web
 repository:
   url: https://github.com/executablebooks/jupyter-book  # Online location of your book
@@ -36,3 +39,8 @@ html:
     - _static/custom.css
   home_page_in_navbar: false
   favicon: logo.png
+
+sphinx:
+  config:
+    html_js_files:
+      - custom.js

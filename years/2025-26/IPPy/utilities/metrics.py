@@ -58,8 +58,8 @@ def SSIM(x_pred: torch.Tensor, x_true: torch.Tensor) -> float:
     Compute the SSIM between two input tensors x_pred and x_true. Both are assumed to be in the range [0, 1].
     """
     return ssim(
-        x_pred[0, 0].detach().numpy(),
-        x_true[0, 0].detach().numpy(),
+        x_pred[0, 0].detach().cpu().numpy(),
+        x_true[0, 0].detach().cpu().numpy(),
         data_range=1,
     )
 
@@ -75,6 +75,7 @@ def PSNR(x_pred: torch.Tensor, x_true: torch.Tensor) -> float:
     return -20 * math.log10(math.sqrt(mse))
 
 
+@average_on_batch
 def RMSE(x_pred: torch.Tensor, x_true: torch.Tensor) -> float:
     r"""
     Compute the Root Mean Squared Error (RMSE) between the two input tensors x_pred and x_true.

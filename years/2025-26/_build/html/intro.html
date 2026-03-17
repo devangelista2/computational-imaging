@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4344bd9a" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -61,10 +61,11 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script src="_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="_static/logo.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="From Supervised Learning to Neural Networks" href="intro/from-ml-to-nn.html" />
+    <link rel="next" title="Environment Setup" href="intro/environment-setup.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,26 +177,14 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="intro/environment-setup.html">Environment Setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generative/flow-matching.html">Flow Matching Models</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -397,6 +386,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-roadmap-and-main-questions">Teaching Roadmap and Main Questions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-guiding-principle">Structure and Guiding Principle</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-these-notes">How to Use These Notes</a></li>
 </ul>
             </nav>
         </div>
@@ -432,50 +422,6 @@ document.write(`
 <li><p>derive and interpret the main ideas behind VAEs, <strong>GAN</strong>s, diffusion models, and <strong>flow matching</strong> models;</p></li>
 <li><p>explain how generative models can be used as learned priors, latent parameterizations, denoisers, or posterior samplers in inverse problems.</p></li>
 </ul>
-<p>Since the module is relatively compact in time but broad in scope, it is useful to keep a clear lecture structure in mind. One possible organization over 16 hours is:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Lecture block</p></th>
-<th class="head"><p>Main topic</p></th>
-<th class="head text-right"><p>Suggested time</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>From <strong>supervised learning</strong> to neural networks for inverse problems</p></td>
-<td class="text-right"><p>2 h</p></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p><strong>PyTorch</strong> viewpoint and computational implementation choices</p></td>
-<td class="text-right"><p>1 h</p></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>End-to-end reconstruction and loss design</p></td>
-<td class="text-right"><p>2 h</p></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>CNN, <strong>UNet</strong>, residual <strong>UNet</strong>, and ViT architectures</p></td>
-<td class="text-right"><p>3 h</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>Self-<strong>supervised learning</strong> in inverse problems</p></td>
-<td class="text-right"><p>2 h</p></td>
-</tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>Noise modeling and the <strong>inverse crime</strong></p></td>
-<td class="text-right"><p>2 h</p></td>
-</tr>
-<tr class="row-even"><td><p>7</p></td>
-<td><p>VAEs and <strong>GAN</strong>s</p></td>
-<td class="text-right"><p>2 h</p></td>
-</tr>
-<tr class="row-odd"><td><p>8</p></td>
-<td><p>Diffusion, <strong>flow matching</strong>, and generative inverse problems</p></td>
-<td class="text-right"><p>2 h</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p>This should not be interpreted rigidly. Some topics, especially diffusion models and the <strong>inverse crime</strong>, can naturally expand if discussion is lively. The point of the table is simply to show that the module has an internal progression rather than being a collection of isolated techniques.</p>
 </section>
 <section id="structure-and-guiding-principle">
@@ -509,10 +455,10 @@ f_{\boldsymbol{\Theta}}:\mathbb{R}^m\to\mathbb{R}^n
 </div>
 <p>This principle is especially important in the age of deep learning, where visually impressive outputs can hide severe modeling flaws. The goal of these notes is therefore not to present neural networks and generative models as automatic replacements for inverse-problem theory, but as new mathematical tools that must be analyzed, interpreted, and used with care.</p>
 </section>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
+<section id="how-to-use-these-notes">
+<h2>How to Use These Notes<a class="headerlink" href="#how-to-use-these-notes" title="Link to this heading">#</a></h2>
+<p>The notes are designed to be read alongside executable Jupyter notebooks. Each major topic comes with a companion notebook where the ideas are implemented and tested. Before working through the material, make sure your Python environment is correctly configured. The <a class="reference internal" href="intro/environment-setup.html"><span class="doc std std-doc">environment setup</span></a> page describes how to do this using <code class="docutils literal notranslate"><span class="pre">uv</span></code>, including how to install Python itself on a machine where it is not yet present.</p>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -552,11 +498,11 @@ f_{\boldsymbol{\Theta}}:\mathbb{R}^m\to\mathbb{R}^n
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="intro/from-ml-to-nn.html"
+       href="intro/environment-setup.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">From Supervised Learning to Neural Networks</p>
+        <p class="prev-next-title">Environment Setup</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -578,6 +524,7 @@ f_{\boldsymbol{\Theta}}:\mathbb{R}^m\to\mathbb{R}^n
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-roadmap-and-main-questions">Teaching Roadmap and Main Questions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-guiding-principle">Structure and Guiding Principle</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-these-notes">How to Use These Notes</a></li>
 </ul>
   </nav></div>
 

@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -61,11 +61,10 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/self-supervised-training';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Noise, Model Mismatch, and the Inverse Crime" href="../noise/the-inverse-crime.html" />
-    <link rel="prev" title="End-to-End Reconstruction and Imaging Architectures" href="end-to-end.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -128,6 +127,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -175,26 +176,14 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
-<ul class="current nav bd-sidenav">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/environment-setup.html">Environment Setup</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Self-Supervised Training for Inverse Problems</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Variational Autoencoders and <strong>GAN</strong>s</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/flow-matching.html">Flow Matching Models</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -539,9 +528,7 @@ But they are equally data-consistent: True
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 01 | data loss = 0.146653 | image RMSE = 0.398066
 Step 10 | data loss = 0.030320 | image RMSE = 0.184844
 Step 30 | data loss = 0.030320 | image RMSE = 0.184844
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 60 | data loss = 0.030320 | image RMSE = 0.184844
+Step 60 | data loss = 0.030320 | image RMSE = 0.184844
 </pre></div>
 </div>
 </div>
@@ -560,7 +547,7 @@ Step 30 | data loss = 0.030320 | image RMSE = 0.184844
 \min_{\boldsymbol{\Theta}}
 \|K_2 f_{\boldsymbol{\Theta}}(\boldsymbol{y}_1^\delta)-\boldsymbol{y}_2^\delta\|^2.
 \]</div>
-<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id10" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">8</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id9" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">1</a>]</span>.</p>
+<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id10" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">7</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id9" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">1</a>]</span>.</p>
 <p>The success of this idea depends on several assumptions that should be stated explicitly:</p>
 <ul class="simple">
 <li><p>the measurement can be split in a physically meaningful way;</p></li>
@@ -701,24 +688,6 @@ f_{\boldsymbol{\Theta}}(S\boldsymbol{y}^\delta)\approx T f_{\boldsymbol{\Theta}}
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="end-to-end.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">End-to-End Reconstruction and Imaging Architectures</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../noise/the-inverse-crime.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Noise, Model Mismatch, and the Inverse Crime</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               

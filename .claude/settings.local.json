@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(done)",
+      "Bash(python3 -m json.tool)",
+      "Bash(grep -E \"\\\\.css$\")",
+      "Bash(python -c \":*)",
+      "Bash(python _patch_from_ml.py)"
+    ]
+  }
+}
