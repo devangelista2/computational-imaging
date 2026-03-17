@@ -30,9 +30,9 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
@@ -51,7 +51,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -489,8 +489,10 @@ G_{\boldsymbol{\Theta}} : \mathbb{R}^k \to \mathbb{R}^n,
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | reconstruction loss = 0.059913
 Epoch 020 | reconstruction loss = 0.022438
-Epoch 100 | reconstruction loss = 0.002200
-Epoch 200 | reconstruction loss = 0.000236
+Epoch 100 | reconstruction loss = 0.002201
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 200 | reconstruction loss = 0.000237
 </pre></div>
 </div>
 </div>
@@ -569,10 +571,10 @@ p_{\boldsymbol{\Theta}}(\boldsymbol{x})=\int p_{\boldsymbol{\Theta}}(\boldsymbol
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | recon = 0.064360 | KL = 0.031250
+Epoch 025 | recon = 0.052795 | KL = 0.002086
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 025 | recon = 0.052795 | KL = 0.002086
-Epoch 100 | recon = 0.050103 | KL = 0.011786
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 100 | recon = 0.050103 | KL = 0.011786
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 250 | recon = 0.044030 | KL = 0.081561
@@ -626,7 +628,7 @@ q_\phi(\boldsymbol{z}| \boldsymbol{x}),
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Toy reconstruction term: 0.8500000238418579
-Toy KL term: 0.2282220721244812
+Toy KL term: 0.22822201251983643
 Toy ELBO: -1.0782220363616943
 </pre></div>
 </div>
@@ -764,7 +766,9 @@ tensor([ 0.6404, -1.1008])
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 001 | D loss = 1.4222 | G loss = 0.6463 | fake mean = 0.1051
 Step 050 | D loss = 1.2525 | G loss = 1.2192 | fake mean = 2.9288
-Step 100 | D loss = 1.3479 | G loss = 0.6396 | fake mean = 1.4250
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 100 | D loss = 1.3479 | G loss = 0.6396 | fake mean = 1.4250
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 200 | D loss = 1.2644 | G loss = 1.2425 | fake mean = 2.3706

@@ -31,19 +31,6 @@ The same roadmap also clarifies the intended learning goals. By the end of Modul
 - derive and interpret the main ideas behind VAEs, **GAN**s, diffusion models, and **flow matching** models;
 - explain how generative models can be used as learned priors, latent parameterizations, denoisers, or posterior samplers in inverse problems.
 
-Since the module is relatively compact in time but broad in scope, it is useful to keep a clear lecture structure in mind. One possible organization over 16 hours is:
-
-| Lecture block | Main topic | Suggested time |
-|---|---|---:|
-| 1 | From **supervised learning** to neural networks for inverse problems | 2 h |
-| 2 | **PyTorch** viewpoint and computational implementation choices | 1 h |
-| 3 | End-to-end reconstruction and loss design | 2 h |
-| 4 | CNN, **UNet**, residual **UNet**, and ViT architectures | 3 h |
-| 5 | Self-**supervised learning** in inverse problems | 2 h |
-| 6 | Noise modeling and the **inverse crime** | 2 h |
-| 7 | VAEs and **GAN**s | 2 h |
-| 8 | Diffusion, **flow matching**, and generative inverse problems | 2 h |
-
 This should not be interpreted rigidly. Some topics, especially diffusion models and the **inverse crime**, can naturally expand if discussion is lively. The point of the table is simply to show that the module has an internal progression rather than being a collection of isolated techniques.
 
 ## Structure and Guiding Principle
@@ -85,3 +72,7 @@ In computational imaging, a method should never be judged only by how good a few
 ```
 
 This principle is especially important in the age of deep learning, where visually impressive outputs can hide severe modeling flaws. The goal of these notes is therefore not to present neural networks and generative models as automatic replacements for inverse-problem theory, but as new mathematical tools that must be analyzed, interpreted, and used with care.
+
+## How to Use These Notes
+
+The notes are designed to be read alongside executable Jupyter notebooks. Each major topic comes with a companion notebook where the ideas are implemented and tested. Before working through the material, make sure your Python environment is correctly configured. The [environment setup](intro/environment-setup) page describes how to do this using `uv`, including how to install Python itself on a machine where it is not yet present.

@@ -1,72 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Computational Imaging — Course Stylesheet
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Web Fonts ───────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+
+/* ── Design Tokens ───────────────────────────────────────────────── */
 :root {
-  --ci-paper: #f3efe6;
-  --ci-paper-strong: #ebe2d3;
-  --ci-surface: rgba(250, 247, 241, 0.92);
-  --ci-surface-soft: rgba(247, 242, 234, 0.88);
-  --ci-ink: #1f2430;
-  --ci-muted: #5d6472;
-  --ci-accent: #8e3a22;
-  --ci-accent-soft: rgba(142, 58, 34, 0.10);
-  --ci-line: rgba(31, 36, 48, 0.10);
-  --ci-shadow: 0 18px 40px rgba(31, 36, 48, 0.08);
+  /* Warm ivory page — the blue accent pops cleanly against this */
+  --ci-paper:         #f6f4ef;
+  --ci-surface:       rgba(253, 252, 249, 0.97);
+  --ci-surface-soft:  rgba(248, 247, 243, 0.93);
+  --ci-ink:           #141920;
+  --ci-muted:         #52606e;
+  --ci-muted-light:   #93a0ad;
+
+  /* Deep sapphire — the signature academic blue */
+  --ci-accent:        #1c3f7a;
+  --ci-accent-hover:  #14305f;
+  --ci-accent-soft:   rgba(28, 63, 122, 0.09);
+  --ci-accent-softer: rgba(28, 63, 122, 0.05);
+
+  /* Admonition palette */
+  --ci-note-ink:    #1d4ed8;
+  --ci-note-bg:     rgba(37,  99, 235, 0.07);
+  --ci-note-border: rgba(37,  99, 235, 0.28);
+  --ci-tip-ink:     #166534;
+  --ci-tip-bg:      rgba(22, 163,  74, 0.07);
+  --ci-tip-border:  rgba(22, 163,  74, 0.26);
+  --ci-warn-ink:    #92400e;
+  --ci-warn-bg:     rgba(180,  83,   9, 0.07);
+  --ci-warn-border: rgba(180,  83,   9, 0.24);
+  --ci-imp-ink:     #881337;
+  --ci-imp-bg:      rgba(136,  19,  55, 0.07);
+  --ci-imp-border:  rgba(136,  19,  55, 0.22);
+
+  /* Structure */
+  --ci-line:        rgba(20, 25, 32, 0.09);
+  --ci-line-strong: rgba(20, 25, 32, 0.17);
+  --ci-shadow-sm:   0 2px 8px rgba(20, 25, 32, 0.06);
+  --ci-shadow:      0 10px 36px rgba(20, 25, 32, 0.09);
+  --ci-shadow-lg:   0 24px 60px rgba(20, 25, 32, 0.13);
+  --ci-r:           20px;
+  --ci-r-sm:        12px;
+  --ci-r-xs:        7px;
+
+  /* Typography stacks */
+  --font-serif:   'Source Serif 4', 'Palatino Linotype', Georgia, serif;
+  --font-display: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+  --font-ui:      'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+  /* ── Override PyData Sphinx theme primary color ────────────────── */
+  --pst-color-primary:      var(--ci-accent);
+  --pst-color-primary-text: #fff;
+  --pst-color-link:         var(--ci-accent);
+  --pst-color-link-hover:   var(--ci-accent-hover);
 }
 
-html {
-  scroll-behavior: smooth;
+/* ── Base ────────────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+::selection {
+  background: rgba(28, 63, 122, 0.14);
+  color: var(--ci-accent);
 }
 
 body {
   color: var(--ci-ink);
+  /* Cool-blue whisper in the top-left corner; warm ivory fills the rest */
   background:
-    radial-gradient(circle at top left, rgba(142, 58, 34, 0.07), transparent 30%),
-    radial-gradient(circle at top right, rgba(84, 104, 92, 0.06), transparent 24%),
-    linear-gradient(180deg, #f8f4ed 0%, var(--ci-paper) 100%);
+    radial-gradient(ellipse 55% 45% at 0% 0%,
+      rgba(28, 63, 122, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 30% at 100% 5%,
+      rgba(60, 100, 180, 0.04) 0%, transparent 55%),
+    linear-gradient(172deg, #faf9f6 0%, var(--ci-paper) 100%);
+  background-attachment: fixed;
 }
 
-.bd-container .bd-content .bd-article-container {
-  max-width: 56rem;
-}
+/* ── Layout ──────────────────────────────────────────────────────── */
+.bd-page-width                              { max-width: 98rem; }
+.bd-container .bd-content .bd-article-container { max-width: 58rem; }
+.bd-main .bd-content .bd-article-container      { padding-top: 2rem; }
 
-.bd-main .bd-content .bd-article-container {
-  padding-top: 2rem;
-}
-
-.bd-sidebar-primary,
-.bd-sidebar-secondary {
-  background: var(--ci-surface-soft);
-  backdrop-filter: blur(10px);
-}
-
-.bd-sidebar-primary {
-  border-right: 1px solid var(--ci-line);
-}
-
-.bd-sidebar-secondary {
-  border-left: 1px solid var(--ci-line);
-}
-
+/* ── Topbar ──────────────────────────────────────────────────────── */
 .bd-header {
-  background: var(--ci-surface);
-  backdrop-filter: blur(14px);
+  background: rgba(252, 251, 248, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--ci-line);
+  box-shadow: 0 1px 12px rgba(20, 25, 32, 0.07);
 }
 
 .bd-header .navbar-brand,
 .bd-header .navbar-nav li a {
-  color: var(--ci-ink);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  transition: color 0.18s;
 }
 
-.bd-page-width {
-  max-width: 96rem;
+/* ── Sidebars ────────────────────────────────────────────────────── */
+.bd-sidebar-primary,
+.bd-sidebar-secondary {
+  background: var(--ci-surface-soft);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
+.bd-sidebar-primary  { border-right: 1px solid var(--ci-line); }
+.bd-sidebar-secondary { border-left:  1px solid var(--ci-line); }
+
+/* ── Article card ────────────────────────────────────────────────── */
 .bd-article-container {
   background: var(--ci-surface);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 24px;
-  box-shadow: var(--ci-shadow);
-  padding: 2rem 2.5rem 3rem;
-  margin-bottom: 2rem;
+  border: 1px solid rgba(240, 237, 230, 0.9);
+  border-radius: var(--ci-r);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    var(--ci-shadow);
+  padding: 2.25rem 2.75rem 3.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .bd-header-article,
@@ -81,166 +136,483 @@ body {
 }
 
 .bd-header-article {
-  margin: -0.25rem -0.25rem 1rem;
-  padding: 0 0.25rem 0.75rem;
+  margin: -0.25rem -0.25rem 1.25rem;
+  padding: 0 0.25rem 0.85rem;
   border-bottom: 1px solid var(--ci-line) !important;
 }
 
 .bd-header-article .btn {
-  background: rgba(255, 255, 255, 0.38);
-  border-color: rgba(31, 36, 48, 0.08);
+  background: rgba(255, 255, 255, 0.50);
+  border-color: var(--ci-line);
+  border-radius: var(--ci-r-xs);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  transition: background 0.18s, border-color 0.18s;
 }
 
-.bd-header-article .btn:hover,
-.bd-header-article .btn:focus {
-  background: rgba(255, 255, 255, 0.56);
-  border-color: rgba(31, 36, 48, 0.12);
-}
+.bd-header-article .btn:hover { background: rgba(255, 255, 255, 0.78); }
 
-.bd-article-container .bd-article-header,
-.bd-article-container .bd-breadcrumbs,
-.bd-article-container .breadcrumb,
-.bd-article-container .breadcrumb-nav,
-.bd-article-container .article-header-buttons {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.bd-article-container .bd-article-header {
-  border-bottom: 1px solid var(--ci-line);
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #18202c;
-  font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  font-weight: 700;
+/* ── Typography ──────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  /* Deep slate with a slight blue cast */
+  color: #0d1a2f;
   letter-spacing: -0.02em;
 }
 
 h1 {
-  font-size: clamp(2.2rem, 3vw, 3.2rem);
-  line-height: 1.05;
-  margin-bottom: 1.2rem;
+  font-size: clamp(2.1rem, 3vw, 3rem);
+  font-weight: 700;
+  line-height: 1.08;
+  margin-bottom: 1.3rem;
 }
 
 h2 {
-  font-size: clamp(1.55rem, 2vw, 2rem);
-  margin-top: 2.6rem;
-  padding-top: 0.35rem;
+  font-size: clamp(1.5rem, 2vw, 1.9rem);
+  font-weight: 700;
+  margin-top: 3rem;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--ci-line);
 }
 
-p,
-li {
-  color: var(--ci-ink);
-  font-family: "Source Serif 4", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  font-size: 1.04rem;
-  line-height: 1.75;
+h3 {
+  font-size: clamp(1.2rem, 1.5vw, 1.45rem);
+  font-weight: 600;
+  margin-top: 2rem;
 }
 
-.sidebar-primary-item,
-.sidebar-secondary-item,
-.navbar-nav,
-.toc-entry,
-.prev-next-area,
-.bd-breadcrumbs,
-.bd-footer {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
 }
+
+p, li {
+  font-family: var(--font-serif);
+  font-size: 1.035rem;
+  line-height: 1.82;
+  color: var(--ci-ink);
+}
+
+p + p { margin-top: 0.8em; }
 
 a {
   color: var(--ci-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.16s, border-color 0.16s;
 }
 
 a:hover {
-  color: #7b2f1a;
+  color: var(--ci-accent-hover);
+  border-bottom-color: rgba(28, 63, 122, 0.28);
 }
 
-.bd-content .toctree-wrapper p.caption {
-  color: var(--ci-muted);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.95rem;
-  letter-spacing: 0.06em;
+/* ── Sidebar navigation ──────────────────────────────────────────── */
+nav.bd-links p.caption {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  color: var(--ci-muted);
 }
 
-.sidebar-primary-item .nav-link,
-.toc-entry a {
-  border-radius: 12px;
+nav.bd-links li > a {
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  border-radius: var(--ci-r-xs);
+  transition: color 0.16s;
 }
 
-.sidebar-primary-item .nav-link:hover,
-.toc-entry a:hover {
-  background: var(--ci-accent-soft);
-}
-
-.sidebar-primary-item .current > .nav-link,
-.toc-entry a.current,
-.bd-toc .active {
-  background: linear-gradient(90deg, var(--ci-accent-soft), rgba(158, 61, 34, 0.04));
-  color: var(--ci-accent);
+/* Active item in left sidebar */
+nav.bd-links .current > a {
+  background-color: var(--ci-accent-softer) !important;
+  box-shadow: inset max(3px, .1875rem, .12em) 0 0 var(--ci-accent) !important;
+  color: var(--ci-accent) !important;
   font-weight: 600;
 }
 
-.admonition,
-div.admonition {
+nav.bd-links .current > a:focus-visible {
+  box-shadow:
+    inset max(3px, .1875rem, .12em) 0 0 var(--ci-accent),
+    0 0 0 .1875rem var(--ci-accent) !important;
+}
+
+/* Active item in right TOC */
+.toc-entry a.nav-link.active {
+  background-color: transparent !important;
+  box-shadow: inset max(3px, .1875rem, .12em) 0 0 var(--ci-accent) !important;
+  color: var(--ci-accent) !important;
+  font-weight: 600;
+}
+
+.toc-entry a.nav-link.active:focus-visible {
+  box-shadow:
+    inset max(3px, .1875rem, .12em) 0 0 var(--ci-accent),
+    0 0 0 .1875rem var(--ci-accent) !important;
+}
+
+.toc-entry a.nav-link { font-family: var(--font-ui); }
+
+/* ── Admonitions — recolor without touching icons ────────────────── */
+/* The PyData theme renders the icon via ::after (Font Awesome).
+   We only override border, background, and title colors here.       */
+
+/* note */
+.admonition.note, div.note {
+  border-color: var(--ci-note-border);
+  background-color: var(--ci-note-bg);
+}
+.admonition.note > .admonition-title,
+div.note > .admonition-title {
+  background-color: rgba(37, 99, 235, 0.10);
+  color: var(--ci-note-ink);
+}
+.admonition.note > .admonition-title::after,
+div.note > .admonition-title::after {
+  color: var(--ci-note-ink);
+}
+
+/* tip / hint */
+.admonition.tip, div.tip,
+.admonition.hint, div.hint {
+  border-color: var(--ci-tip-border);
+  background-color: var(--ci-tip-bg);
+}
+.admonition.tip > .admonition-title,
+div.tip > .admonition-title,
+.admonition.hint > .admonition-title,
+div.hint > .admonition-title {
+  background-color: rgba(22, 163, 74, 0.10);
+  color: var(--ci-tip-ink);
+}
+.admonition.tip > .admonition-title::after,
+div.tip > .admonition-title::after,
+.admonition.hint > .admonition-title::after,
+div.hint > .admonition-title::after {
+  color: var(--ci-tip-ink);
+}
+
+/* warning / caution / attention */
+.admonition.warning, div.warning,
+.admonition.caution, div.caution,
+.admonition.attention, div.attention {
+  border-color: var(--ci-warn-border);
+  background-color: var(--ci-warn-bg);
+}
+.admonition.warning > .admonition-title,
+div.warning > .admonition-title,
+.admonition.caution > .admonition-title,
+div.caution > .admonition-title,
+.admonition.attention > .admonition-title,
+div.attention > .admonition-title {
+  background-color: rgba(180, 83, 9, 0.10);
+  color: var(--ci-warn-ink);
+}
+.admonition.warning > .admonition-title::after,
+div.warning > .admonition-title::after,
+.admonition.caution > .admonition-title::after,
+div.caution > .admonition-title::after,
+.admonition.attention > .admonition-title::after,
+div.attention > .admonition-title::after {
+  color: var(--ci-warn-ink);
+}
+
+/* important */
+.admonition.important, div.important {
+  border-color: var(--ci-imp-border);
+  background-color: var(--ci-imp-bg);
+}
+.admonition.important > .admonition-title,
+div.important > .admonition-title {
+  background-color: rgba(136, 19, 55, 0.10);
+  color: var(--ci-imp-ink);
+}
+.admonition.important > .admonition-title::after,
+div.important > .admonition-title::after {
+  color: var(--ci-imp-ink);
+}
+
+/* Shared shape overrides */
+.admonition, div.admonition {
+  border-radius: var(--ci-r-sm);
+  border-left-width: 3px;
+  box-shadow: var(--ci-shadow-sm) !important;
+}
+
+.admonition p, div.admonition p {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+}
+
+/* ── Code ────────────────────────────────────────────────────────── */
+code, kbd, samp, tt {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  /* Warm parchment inline code — contrasts with the cool body */
+  background: rgba(100, 60, 20, 0.06);
+  border: 1px solid rgba(100, 60, 20, 0.10);
+  border-radius: 5px;
+  padding: 0.1em 0.38em;
+  color: var(--ci-accent);
+}
+
+div.highlight, pre {
+  font-family: var(--font-mono);
+  font-size: 0.865rem;
+  line-height: 1.65;
+  border: 1px solid rgba(20, 25, 32, 0.09);
+  border-radius: var(--ci-r-sm);
+}
+
+pre {
+  /* Warm cream code blocks — intentional contrast against the cool sidebars */
+  background: #f5f1e8;
+  padding: 1.1rem 1.3rem;
+}
+
+.copybtn {
+  border-radius: var(--ci-r-xs) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid var(--ci-line) !important;
+  transition: background 0.18s !important;
+}
+.copybtn:hover { background: rgba(255, 255, 255, 0.85) !important; }
+
+/* ── Jupyter notebook cells ──────────────────────────────────────── */
+.cell { margin: 1.2rem 0; }
+
+.cell_input {
+  position: relative;
+  border: 1px solid rgba(20, 25, 32, 0.09);
+  border-radius: var(--ci-r-sm);
+  background: #f5f1e8;
+}
+
+.cell_input .highlight {
+  border: none;
+  border-radius: var(--ci-r-sm);
+  background: transparent;
+  margin: 0;
+}
+
+.cell_input .highlight pre {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.95rem 1.1rem;
+}
+
+/* Subtle "In" label */
+.cell_input::before {
+  content: 'In';
+  position: absolute;
+  top: 0.55rem;
+  right: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--ci-muted-light);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+.cell_output {
   border: 1px solid var(--ci-line);
-  border-radius: 18px;
-  box-shadow: 0 8px 24px rgba(31, 36, 48, 0.04);
-  overflow: hidden;
-}
-
-.admonition .admonition-title,
-div.admonition > .admonition-title {
-  background: linear-gradient(90deg, var(--ci-accent-soft), rgba(255, 255, 255, 0.7));
-  color: #4f1f13;
-  font-weight: 700;
-}
-
-div.highlight,
-pre {
-  border: 1px solid rgba(31, 36, 48, 0.08);
-  border-radius: 16px;
-}
-
-pre {
-  background: #f8f5ef;
+  border-top: none;
+  border-radius: 0 0 var(--ci-r-sm) var(--ci-r-sm);
+  background: rgba(252, 251, 249, 0.75);
+  margin-top: -1px;
 }
 
 .cell_output pre {
-  background: #fbf8f2;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.85rem 1.1rem;
+  color: #2a3040;
+  font-size: 0.845rem;
 }
 
+.cell_output img {
+  border-radius: var(--ci-r-xs);
+  max-width: 100%;
+  display: block;
+  margin: 0.5rem auto;
+}
+
+/* ── Math — tame the scrollbar ───────────────────────────────────── */
+.math mjx-container {
+  padding-bottom: 0 !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 25, 32, 0.12) transparent;
+}
+
+.math mjx-container::-webkit-scrollbar       { height: 3px; }
+.math mjx-container::-webkit-scrollbar-track  { background: transparent; }
+.math mjx-container::-webkit-scrollbar-thumb  {
+  background: rgba(20, 25, 32, 0.15);
+  border-radius: 3px;
+}
+
+div.math.notranslate {
+  margin: 1.4rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────── */
 table {
-  border-radius: 14px;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--ci-r-sm);
   overflow: hidden;
+  border: 1px solid var(--ci-line);
+  box-shadow: var(--ci-shadow-sm);
+  margin: 1.5rem 0;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
 }
 
-table thead tr {
-  background: rgba(31, 36, 48, 0.05);
+table thead tr { background: rgba(28, 63, 122, 0.05); }
+
+table thead th {
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ci-muted);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--ci-line-strong);
 }
 
+table tbody tr:nth-child(even) { background: rgba(20, 25, 32, 0.022); }
+
+table tbody td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--ci-line);
+  vertical-align: top;
+}
+
+table tbody tr:last-child td { border-bottom: none; }
+
+/* ── Blockquotes ─────────────────────────────────────────────────── */
 blockquote {
-  border-left: 4px solid var(--ci-accent);
-  background: rgba(248, 244, 237, 0.95);
-  border-radius: 0 14px 14px 0;
-  padding: 0.6rem 1rem;
+  border-left: 3px solid var(--ci-accent);
+  background: rgba(28, 63, 122, 0.04);
+  border-radius: 0 var(--ci-r-sm) var(--ci-r-sm) 0;
+  padding: 0.75rem 1.2rem 0.75rem 1.3rem;
+  margin: 1.2rem 0;
 }
 
-.bd-footer-content {
+blockquote p {
+  font-style: italic;
+  color: var(--ci-muted);
+  margin: 0;
+}
+
+/* ── Prev / Next navigation ──────────────────────────────────────── */
+.prev-next-area a {
+  border: 1px solid var(--ci-line) !important;
+  border-radius: var(--ci-r-sm);
+  background: rgba(252, 251, 249, 0.88) !important;
+  box-shadow: var(--ci-shadow-sm);
+  transition: background 0.18s, box-shadow 0.18s, border-color 0.18s;
+  max-width: 48%;
+}
+
+.prev-next-area a:hover {
+  background: var(--ci-surface) !important;
+  border-color: rgba(28, 63, 122, 0.20) !important;
+  box-shadow: 0 4px 18px rgba(20, 25, 32, 0.10);
+}
+
+.prev-next-area a p.prev-next-subtitle {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: var(--ci-muted);
 }
 
+.prev-next-area a p.prev-next-title {
+  font-family: var(--font-ui);
+  font-size: 0.9rem !important;
+  font-weight: 500;
+  color: var(--ci-ink) !important;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────── */
+.bd-footer-content {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--ci-muted);
+  border-top: 1px solid var(--ci-line);
+}
+
+/* ── Citation tooltip ────────────────────────────────────────────── */
+#ci-cite-tooltip {
+  position: fixed;
+  z-index: 9999;
+  max-width: 360px;
+  background: var(--ci-surface);
+  border: 1px solid var(--ci-line-strong);
+  border-radius: var(--ci-r-sm);
+  box-shadow: var(--ci-shadow-lg);
+  padding: 0.8rem 1.05rem;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+#ci-cite-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#ci-cite-tooltip p {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--ci-ink);
+  margin: 0;
+}
+
+/* Citation links in text */
+span[id] > a.reference.internal,
+cite > a.reference.internal {
+  font-weight: 500;
+  border-bottom: 1px dashed rgba(28, 63, 122, 0.32);
+  padding: 0 0.05em;
+  cursor: help;
+  transition: background 0.14s;
+}
+
+span[id] > a.reference.internal:hover,
+cite > a.reference.internal:hover {
+  background: var(--ci-accent-soft);
+  border-radius: 3px;
+  border-bottom-color: transparent;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 991.98px) {
   .bd-article-container {
-    border-radius: 18px;
-    padding: 1.4rem 1.2rem 2rem;
+    border-radius: var(--ci-r-sm);
+    padding: 1.5rem 1.3rem 2.25rem;
   }
+}
+
+@media (max-width: 575.98px) {
+  .bd-article-container {
+    border-radius: 12px;
+    padding: 1.1rem 1rem 1.8rem;
+  }
+  h1 { font-size: 1.85rem; }
 }
