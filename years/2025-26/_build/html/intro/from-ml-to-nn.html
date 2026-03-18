@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>From Supervised Learning to Neural Networks &#8212; Computational Imaging</title>
   
@@ -29,46 +28,41 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/custom.js"></script>
-    <script src="../_static/custom.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro/from-ml-to-nn';</script>
-    <link rel="shortcut icon" href="../_static/logo.png"/>
+    <script src="../_static/custom.js?v=4cff807c"></script>
+    <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="A Brief PyTorch Viewpoint" href="a-brief-overview-pytorch.html" />
@@ -169,7 +163,18 @@ const thebe_selector_output = ".output, .cell_output"
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
@@ -179,6 +184,8 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">From Supervised Learning to Neural Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -212,9 +219,9 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -355,9 +362,9 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -399,9 +406,9 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="from-supervised-learning-to-neural-networks">
-<h1>From Supervised Learning to Neural Networks<a class="headerlink" href="#from-supervised-learning-to-neural-networks" title="Permalink to this heading">#</a></h1>
+<h1>From Supervised Learning to Neural Networks<a class="headerlink" href="#from-supervised-learning-to-neural-networks" title="Link to this heading">#</a></h1>
 <section id="why-this-chapter-comes-first">
-<h2>Why This Chapter Comes First<a class="headerlink" href="#why-this-chapter-comes-first" title="Permalink to this heading">#</a></h2>
+<h2>Why This Chapter Comes First<a class="headerlink" href="#why-this-chapter-comes-first" title="Link to this heading">#</a></h2>
 <p>Before discussing <strong>CNNs</strong> <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>, <strong>UNets</strong> <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>, <strong>transformers</strong> <span id="id3">[<a class="reference internal" href="../references.html#id7" title="Alexey Dosovitskiy and others. An image is worth 16x16 words: transformers for image recognition at scale. International Conference on Learning Representations, 2021.">4</a>]</span>, or <strong>generative models</strong>, it is important to fix the conceptual transition from classical inverse problems to learning-based reconstruction. If this transition is not made carefully, neural networks risk appearing as a completely separate subject, disconnected from the operator-theoretic and variational language of computational imaging. In reality, the connection is very direct.</p>
 <p>In Module 1, the basic object of study was the forward model</p>
 <div class="math notranslate nohighlight">
@@ -426,7 +433,7 @@ f_\Theta(\boldsymbol{y}^\delta) \mapsto \boldsymbol{x}^*,
 <a class="reference internal image-reference" href="../_images/hybrid.png"><img alt="../_images/hybrid.png" class="align-center" src="../_images/hybrid.png" style="width: 450px;" /></a>
 </section>
 <section id="basics-of-machine-learning">
-<h2>Basics of Machine Learning<a class="headerlink" href="#basics-of-machine-learning" title="Permalink to this heading">#</a></h2>
+<h2>Basics of Machine Learning<a class="headerlink" href="#basics-of-machine-learning" title="Link to this heading">#</a></h2>
 <p>Before diving into the mathematical machinery of deep learning, it is useful to set up the notation and intuitions that will be used throughout the course.</p>
 <p>A learning problem is defined by a dataset of <span class="math notranslate nohighlight">\(N\)</span> input-output pairs:</p>
 <div class="math notranslate nohighlight">
@@ -455,10 +462,10 @@ f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
 <p>This is a straight line in the <span class="math notranslate nohighlight">\((x, y)\)</span> plane. The code below plots two different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> and shows how dramatically the prediction can change.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
 
 <span class="n">theta1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
@@ -479,7 +486,7 @@ f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b7b76893ea2ab0235aadcd08c5b8ba82d4b995dbc4131cf3149ddc039e95a1ab.png" src="../_images/b7b76893ea2ab0235aadcd08c5b8ba82d4b995dbc4131cf3149ddc039e95a1ab.png" />
+<img alt="../_images/106387af66aa9261215da4fcb9d029c0b0417585ec7d607a7d35d21651712667.png" src="../_images/106387af66aa9261215da4fcb9d029c0b0417585ec7d607a7d35d21651712667.png" />
 </div>
 </div>
 <p>Think of <span class="math notranslate nohighlight">\(x\)</span> as the input and <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}(x)\)</span> as the model’s prediction. Notice how different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> lead to very different outputs. Now overlay the training data on the same plot.</p>
@@ -503,7 +510,7 @@ f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2481d497a45636a47d284eee2db5c6135e8aa227c3db019a1790c69b9b6e492c.png" src="../_images/2481d497a45636a47d284eee2db5c6135e8aa227c3db019a1790c69b9b6e492c.png" />
+<img alt="../_images/b118641cab82c529b529194f8e22a2ca1aa82126d7762b5327797252453d5ed2.png" src="../_images/b118641cab82c529b529194f8e22a2ca1aa82126d7762b5327797252453d5ed2.png" />
 </div>
 </div>
 <p><em>Which line fits the data better?</em> The first one, parameterised by <span class="math notranslate nohighlight">\(\boldsymbol{\Theta} = (1, 0.2)\)</span> and, as inspection of the data-generation code confirms, those are exactly the parameters used.</p>
@@ -521,8 +528,8 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x}) = W\boldsymbol{x} + \boldsymbol{b},
 <p>This model, parameterized by <span class="math notranslate nohighlight">\(\Theta = (W, \boldsymbol{b})\)</span>, comprises a total of <span class="math notranslate nohighlight">\(s(d+1)\)</span> parameters, i.e. <span class="math notranslate nohighlight">\(sd\)</span> parameters for <span class="math notranslate nohighlight">\(W\)</span> and <span class="math notranslate nohighlight">\(s\)</span> parameters for <span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span>. Linear models are easy to analyse and optimize, but their expressivity is fundamentally limited: they can only represent linear functions of the input. Other classical ML methods, such as polynomial regression, Support Vector Machines (SVM), Random Forests, or XGBoost, improve expressivity, but none of them are expressive enough for the complexity of image reconstruction tasks. The simplest way to see the limitation is to try to approximate <span class="math notranslate nohighlight">\(\sin(x)\)</span> with an affine model. The code below shows the failure directly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
@@ -558,7 +565,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x}) = W\boldsymbol{x} + \boldsymbol{b},
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/eab2eda22772200d3c388222ab0cb6e2181c3f163f1fefca53a2dbfed1f5e2d2.png" src="../_images/eab2eda22772200d3c388222ab0cb6e2181c3f163f1fefca53a2dbfed1f5e2d2.png" />
+<img alt="../_images/a05bd000257c2e9499245c2710478131b3154099f53546c6f8794d2f9c82b40a.png" src="../_images/a05bd000257c2e9499245c2710478131b3154099f53546c6f8794d2f9c82b40a.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best-fit affine MSE on sin(x): 0.4218
 </pre></div>
 </div>
@@ -566,7 +573,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x}) = W\boldsymbol{x} + \boldsymbol{b},
 </div>
 </section>
 <section id="from-linear-predictors-to-neural-networks">
-<h2>From Linear Predictors to Neural Networks<a class="headerlink" href="#from-linear-predictors-to-neural-networks" title="Permalink to this heading">#</a></h2>
+<h2>From Linear Predictors to Neural Networks<a class="headerlink" href="#from-linear-predictors-to-neural-networks" title="Link to this heading">#</a></h2>
 <p>A neural network is a specific type of Machine Learning model that has gained significant relevance in recent years due to several factors, including:</p>
 <ul class="simple">
 <li><p>The exponential increase in computational power, particularly with GPUs, which enable extreme <em>parallelization</em>.</p></li>
@@ -605,7 +612,7 @@ W_2W_1\boldsymbol{x}+W_2\boldsymbol{b}_1+\boldsymbol{b}_2,
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define ReLU</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="c1"># Define x</span>
@@ -626,7 +633,7 @@ W_2W_1\boldsymbol{x}+W_2\boldsymbol{b}_1+\boldsymbol{b}_2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/1739e16ab083491b61fb3ebdc88c76c3dafb76326b831edaa2cfe10d7de6380f.png" src="../_images/1739e16ab083491b61fb3ebdc88c76c3dafb76326b831edaa2cfe10d7de6380f.png" />
+<img alt="../_images/75bf902b4713c816abad0f41b234ca557ac77c7189d2e15d171ecf2d41e218d1.png" src="../_images/75bf902b4713c816abad0f41b234ca557ac77c7189d2e15d171ecf2d41e218d1.png" />
 </div>
 </div>
 <p>Re-define the model <span class="math notranslate nohighlight">\(f_\Theta\)</span> as above, but inserting <span class="math notranslate nohighlight">\(\rho(x)\)</span> between the two linear models <span class="math notranslate nohighlight">\(f_{\Theta^1}\)</span> and <span class="math notranslate nohighlight">\(f_{\Theta^2}\)</span>:</p>
@@ -656,8 +663,8 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=W_2\rho(W_1\boldsymbol{x}+\boldsymbol{b}
 <p>The role of the activation is deeper than simply introducing nonlinearity. It shapes the geometry of the function class. A ReLU network represents a piecewise affine map whose number of affine regions grows exponentially with depth, a concrete hint of why deep networks can approximate highly complex measurement-to-image relationships.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 
@@ -692,11 +699,11 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=W_2\rho(W_1\boldsymbol{x}+\boldsymbol{b}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/88a30bb329f1c9d9952a458706a05fd5784f76f8cb4fbf54492ae14f52d44788.png" src="../_images/88a30bb329f1c9d9952a458706a05fd5784f76f8cb4fbf54492ae14f52d44788.png" />
+<img alt="../_images/d3f60f4cef18f725590e840b444537da1304aaec53fbb90aed512df8d15e5947.png" src="../_images/d3f60f4cef18f725590e840b444537da1304aaec53fbb90aed512df8d15e5947.png" />
 </div>
 </div>
 <section id="notation">
-<h3>Notation<a class="headerlink" href="#notation" title="Permalink to this heading">#</a></h3>
+<h3>Notation<a class="headerlink" href="#notation" title="Link to this heading">#</a></h3>
 <a class="reference internal image-reference" href="../_images/NN.png"><img alt="../_images/NN.png" class="align-center" src="../_images/NN.png" style="width: 500px;" /></a>
 <p>The diagram above makes the architecture concrete. Any neural network can be represented as a layered graph in which each node is called a <strong>neuron</strong>. The layers are:</p>
 <ul class="simple">
@@ -755,7 +762,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
 </section>
 </section>
 <section id="optimization-backpropagation-and-generalization">
-<h2>Optimization, Backpropagation, and Generalization<a class="headerlink" href="#optimization-backpropagation-and-generalization" title="Permalink to this heading">#</a></h2>
+<h2>Optimization, Backpropagation, and Generalization<a class="headerlink" href="#optimization-backpropagation-and-generalization" title="Link to this heading">#</a></h2>
 <p><strong>Training</strong> a neural network means finding the parameters <span class="math notranslate nohighlight">\(\Theta\)</span> such that the model’s prediction <span class="math notranslate nohighlight">\(f_\Theta(\boldsymbol{x}^{(i)})\)</span> best approximates the true target <span class="math notranslate nohighlight">\(\boldsymbol{y}^{(i)}\)</span> over the training set. In practice, this requires solving the nonconvex optimization problem</p>
 <div class="math notranslate nohighlight">
 \[
@@ -784,7 +791,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
 <p>Another, crucial component of neural network training is how <span class="math notranslate nohighlight">\(\ell(f_\Theta(\boldsymbol{x}^{(i)}), y^{(i)})\)</span> is computed. In practice, this is usually done via <strong>backpropagation</strong> <span id="id6">[<a class="reference internal" href="../references.html#id21" title="David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">14</a>]</span>, which is simply an efficient implementation of the chain rule through the <strong>computational graph</strong>, which exploits the recursive architecture of neural network models defined above.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="n">layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">]])</span>
@@ -802,10 +809,10 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 0.9232054948806763
-Loss: 0.005897396244108677
-Gradient with respect to the weight: -0.3071780204772949
-Gradient with respect to the bias: -0.15358901023864746
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: -1.8298230171203613
+Loss: 8.007898330688477
+Gradient with respect to the weight: -11.319292068481445
+Gradient with respect to the bias: -5.659646034240723
 </pre></div>
 </div>
 </div>
@@ -833,14 +840,14 @@ Gradient with respect to the bias: -0.15358901023864746
 <p>Each of these is not a generic computational trick. It is a structured response to a specific property of images and of the inverse problems defined on them.</p>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Show explicitly that the composition of three linear maps is still linear. Proceeding by recursion, prove that the composition of every number of linear model is linear.</p></li>
 <li><p>Explain in your own words why the loss function changes the statistical estimator learned by the network.</p></li>
 </ol>
 </section>
 <section id="further-reading">
-<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h2>
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
 <p>For a comprehensive treatment of the supervised learning framework and the statistical foundations of neural network training, see <span id="id11">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">5</a>]</span> and <span id="id12">[<a class="reference internal" href="../references.html#id19" title="Christopher M Bishop. Pattern Recognition and Machine Learning. Springer, 2006.">2</a>]</span>. The theoretical and probabilistic foundations of inverse problems, including the role of noise, regularization, and prior information, are developed rigorously in <span id="id13">[<a class="reference internal" href="../references.html#id2" title="Jari Kaipio and Erkki Somersalo. Statistical and Computational Inverse Problems. Springer, 2005.">8</a>]</span>. The specific question of how deep learning techniques apply to imaging inverse problems, including the risk minimization perspective, generalization considerations, and connections to classical reconstruction theory, is surveyed in <span id="id14">[<a class="reference internal" href="../references.html#id22" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
 <p>The original backpropagation algorithm is due to <span id="id15">[<a class="reference internal" href="../references.html#id21" title="David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">14</a>]</span>; understanding this paper remains one of the best ways to internalize what automatic differentiation actually computes.</p>
 </section>
@@ -943,7 +950,7 @@ By Davide Evangelista
 
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>

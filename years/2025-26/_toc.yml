@@ -11,8 +11,8 @@ parts:
     chapters:
       - file: intro/from-ml-to-nn
       - file: intro/a-brief-overview-pytorch
-#      - file: end-to-end/end-to-end
-#      - file: end-to-end/self-supervised-training
+      - file: end-to-end/end-to-end
+      - file: end-to-end/self-supervised-training
 #  - caption: Noise, Data, and Evaluation
 #    chapters:
 #      - file: noise/the-inverse-crime
