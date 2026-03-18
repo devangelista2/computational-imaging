@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Cross-Domain End-to-End Reconstruction &#8212; Computational Imaging</title>
   
@@ -28,41 +29,46 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/custom.js"></script>
+    <script src="../_static/custom.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/crossdomain';</script>
-    <script src="../_static/custom.js?v=4cff807c"></script>
-    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -163,18 +169,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
@@ -217,9 +212,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -360,9 +355,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -398,19 +393,19 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="cross-domain-end-to-end-reconstruction">
-<h1>Cross-Domain End-to-End Reconstruction<a class="headerlink" href="#cross-domain-end-to-end-reconstruction" title="Link to this heading">#</a></h1>
+<h1>Cross-Domain End-to-End Reconstruction<a class="headerlink" href="#cross-domain-end-to-end-reconstruction" title="Permalink to this heading">#</a></h1>
 <p>Despite the impressive performance (in terms of both reconstruction quality and efficiency) often achieved by convolution-based neural networks, their direct application in practice can be limited by a crucial constraint: their inherent structure typically requires the input data and the output solution to have matching dimensions. They struggle to process data where the dimensionality of the input datum <span class="math notranslate nohighlight">\(y\)</span> differs significantly from the dimensionality of the desired solution <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>Consider, for example, the popular UNet architecture. Due to its symmetric encoding-decoding structure, the dimensionality of the model’s input remains unchanged at the output. This poses a challenge in applications such as Computed Tomography (CT) or Super-Resolution (SR), where the <strong>domain</strong> (and thus, often the dimensionality and structure) of the measured datum <span class="math notranslate nohighlight">\(y\)</span> is inherently different from the <strong>domain</strong> of the desired solution image <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <a class="reference internal image-reference" href="../_images/CNN-issue.png"><img alt="../_images/CNN-issue.png" class="align-center" src="../_images/CNN-issue.png" style="width: 800px;" /></a>
 <section id="resizing">
-<h2>Resizing?<a class="headerlink" href="#resizing" title="Link to this heading">#</a></h2>
+<h2>Resizing?<a class="headerlink" href="#resizing" title="Permalink to this heading">#</a></h2>
 <p>A seemingly straightforward solution to this limitation is to <strong>resize</strong> the input datum <span class="math notranslate nohighlight">\(y\)</span> so that its dimensions match the expected dimensions of the reconstruction <span class="math notranslate nohighlight">\(x\)</span>. This could be achieved using functions like <code class="docutils literal notranslate"><span class="pre">Resize()</span></code> from the <code class="docutils literal notranslate"><span class="pre">torchvision</span></code> package. While this modification allows a model like UNet to technically process the mapping from the resized <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(x\)</span>, this approach has generally been shown to be ineffective in practice for many inverse problems.</p>
 <p>Indeed, convolution-based end-to-end models suffer from another limitation stemming from their core properties of locality and translation invariance (as discussed in a previous chapter). When information pertaining to the solution <span class="math notranslate nohighlight">\(x\)</span> gets <strong>spread</strong> widely across the measurement <span class="math notranslate nohighlight">\(y\)</span> (for instance, when the value of a pixel in <span class="math notranslate nohighlight">\(x\)</span> influences many, potentially spatially distant, pixels in <span class="math notranslate nohighlight">\(y\)</span>), convolutional filters struggle to accurately reconstruct the solution. The local receptive field of convolutions cannot easily capture these non-local dependencies, even if the input and output shapes are forced to match via resizing.</p>
 <a class="reference internal image-reference" href="../_images/CT_acquisition.png"><img alt="../_images/CT_acquisition.png" class="align-center" src="../_images/CT_acquisition.png" style="width: 800px;" /></a>
 <p>Consider the Computed Tomography (CT) inverse problem as an example. Here, the ground truth image <span class="math notranslate nohighlight">\(x_{GT}\)</span> is processed by the CT forward projection operator <span class="math notranslate nohighlight">\(K\)</span> to obtain a measurement <span class="math notranslate nohighlight">\(y = Kx_{GT}\)</span> called a <strong>sinogram</strong>. Each pixel <span class="math notranslate nohighlight">\(y_{i, j}\)</span> in the sinogram represents the line integral of <span class="math notranslate nohighlight">\(x_{GT}\)</span> along a specific path (e.g., line <span class="math notranslate nohighlight">\(j\)</span> at projection angle <span class="math notranslate nohighlight">\(i\)</span>). Clearly, not only are the shapes of <span class="math notranslate nohighlight">\(x_{GT}\)</span> (a 2D or 3D spatial image) and <span class="math notranslate nohighlight">\(y\)</span> (a sinogram with dimensions like number of angles <span class="math notranslate nohighlight">\(\times\)</span> number of detector bins, e.g., <span class="math notranslate nohighlight">\((n_\alpha, n_d)\)</span>) generally different, but locality is also lost. Each point in the sinogram <span class="math notranslate nohighlight">\(y\)</span> depends on multiple, potentially distant, pixels in the original image <span class="math notranslate nohighlight">\(x_{GT}\)</span>. Consequently, a standard convolution-based model applied directly to the sinogram (even if resized) will likely be ineffective at reconstructing <span class="math notranslate nohighlight">\(x_{GT}\)</span>.</p>
 </section>
 <section id="pre-processing">
-<h2>Pre-processing<a class="headerlink" href="#pre-processing" title="Link to this heading">#</a></h2>
+<h2>Pre-processing<a class="headerlink" href="#pre-processing" title="Permalink to this heading">#</a></h2>
 <p>A classical and more robust solution to handle domain mismatch is to introduce a <strong>pre-processing</strong> step. The core idea is to apply an initial, often simple, reconstruction algorithm that maps the measurement <span class="math notranslate nohighlight">\(y\)</span> back into the <em>domain</em> of the solution <span class="math notranslate nohighlight">\(x\)</span>, producing a coarse or approximate reconstruction <span class="math notranslate nohighlight">\(\tilde{x}\)</span>. The quality of this initial reconstruction <span class="math notranslate nohighlight">\(\tilde{x}\)</span> is not the primary concern; its main purpose is to bridge the domain gap, providing an input that has the correct dimensionality and spatial structure for the subsequent neural network. The network then acts essentially as a <strong>post-processing</strong> or <strong>refinement</strong> layer, taking the coarse estimate <span class="math notranslate nohighlight">\(\tilde{x}\)</span> and producing the final, higher-quality reconstruction.</p>
 <p>To minimize computational overhead and avoid potential bottlenecks, this initial approximation step should ideally be very fast. A classic approach is to use the transposed forward operator <span class="math notranslate nohighlight">\(K^T\)</span> (often related to back-projection in problems like CT) as a simple mapping:</p>
 <div class="math notranslate nohighlight">
@@ -422,7 +417,7 @@ document.write(`
 <a class="reference internal image-reference" href="../_images/preprocessing.png"><img alt="../_images/preprocessing.png" class="align-center" src="../_images/preprocessing.png" style="width: 800px;" /></a>
 </section>
 <section id="a-full-pipeline-to-train-end-to-end-cross-domain-unet">
-<h2>A full pipeline to train end-to-end cross-domain UNet<a class="headerlink" href="#a-full-pipeline-to-train-end-to-end-cross-domain-unet" title="Link to this heading">#</a></h2>
+<h2>A full pipeline to train end-to-end cross-domain UNet<a class="headerlink" href="#a-full-pipeline-to-train-end-to-end-cross-domain-unet" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#-----------------</span>
@@ -642,7 +637,7 @@ By Davide Evangelista
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

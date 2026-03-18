@@ -2,6 +2,8 @@
 What follows are the teaching materials for the course Computational Imaging (CI, in the following), Module 2, for the Academic Year 2024-2025, held by professor Davide Evangelista.
 
 ## Topics
+
+
 This module is divided into 3 parts. In the first part, we will discuss how to transiction between classical methods for image reconstructions (such as those seen in the first part of this course) to neural network-based methods. To this aim, we will briefly introduce `pytorch`, arguably the most used Python library to work with neural networks. Then, we will present `IPPy`, a small library specifically designed for this course, whose aim is to help designing more advanced neural network models with few lines of code, specifically thought for application to image reconstruction. The course assume that you have a good familiarity with Python, together with a partial understanding of Linear Algebra tools such as `numpy` and `scipy`. 
 Having a basic knowledge on neural networks (e.g. having followed the Deep Learning course held by Andrea Asperti) is helpful, but not required.
 

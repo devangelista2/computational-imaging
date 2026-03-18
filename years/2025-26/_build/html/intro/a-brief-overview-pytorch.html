@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>A Brief PyTorch Viewpoint &#8212; Computational Imaging</title>
   
@@ -28,41 +29,46 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/custom.js"></script>
+    <script src="../_static/custom.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro/a-brief-overview-pytorch';</script>
-    <script src="../_static/custom.js?v=4cff807c"></script>
-    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="References" href="../references.html" />
@@ -163,18 +169,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
@@ -217,9 +212,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -360,9 +355,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -400,9 +395,9 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="a-brief-pytorch-viewpoint">
-<h1>A Brief <strong>PyTorch</strong> Viewpoint<a class="headerlink" href="#a-brief-pytorch-viewpoint" title="Link to this heading">#</a></h1>
+<h1>A Brief <strong>PyTorch</strong> Viewpoint<a class="headerlink" href="#a-brief-pytorch-viewpoint" title="Permalink to this heading">#</a></h1>
 <section id="computational-representation-and-differentiation">
-<h2>Computational Representation and Differentiation<a class="headerlink" href="#computational-representation-and-differentiation" title="Link to this heading">#</a></h2>
+<h2>Computational Representation and Differentiation<a class="headerlink" href="#computational-representation-and-differentiation" title="Permalink to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In these notes, <strong>PyTorch</strong> <span id="id1">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span> is not presented as a software tutorial for its own sake. It is introduced as a concrete language for implementing <strong>parameterized maps</strong>, <strong>computational graphs</strong>, and <strong>gradient-based optimization</strong> in imaging.</p>
@@ -493,7 +488,7 @@ dtype: torch.float32
 intensity range: 0.0 0.8627451062202454
 </pre></div>
 </div>
-<img alt="../_images/b7f8ae47f9fe0a6ea258cd9db4197fc2d0baf35de3db089461809e0922e14a05.png" src="../_images/b7f8ae47f9fe0a6ea258cd9db4197fc2d0baf35de3db089461809e0922e14a05.png" />
+<img alt="../_images/2082743ad76270c3eb26a24eb474c9dcae39a69f1cb0523d3da87cbdc63d63f9.png" src="../_images/2082743ad76270c3eb26a24eb474c9dcae39a69f1cb0523d3da87cbdc63d63f9.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -569,7 +564,7 @@ d loss / d w: 30.0
 </div>
 </section>
 <section id="training-mechanics-in-practice">
-<h2>Training Mechanics in Practice<a class="headerlink" href="#training-mechanics-in-practice" title="Link to this heading">#</a></h2>
+<h2>Training Mechanics in Practice<a class="headerlink" href="#training-mechanics-in-practice" title="Permalink to this heading">#</a></h2>
 <p>Training is usually performed on mini<strong>batch</strong>es rather than on the whole dataset. If the <strong>empirical risk</strong> is</p>
 <div class="math notranslate nohighlight">
 \[
@@ -615,7 +610,7 @@ Each image is processed independently, but in parallel along the batch dimension
 \[
 \boldsymbol{\Theta}_{k+1}
 =
-\boldsymbol{\Theta}_k-\eta \nabla \widehat{\mathcal{R}}_B(\boldsymbol{\Theta}_k).
+\boldsymbol{\Theta}_k-\eta \nabla L(\boldsymbol{\Theta}_k).
 \]</div>
 <p>Adam <span id="id2">[<a class="reference internal" href="../references.html#id25" title="Diederik P Kingma and Jimmy Ba. Adam: a method for stochastic optimization. International Conference on Learning Representations, 2015.">9</a>]</span> modifies this rule by rescaling and averaging gradients. It is useful for students to see that <strong>optimizer</strong> choice belongs to numerical optimization, not to model design.</p>
 <div class="cell docutils container">
@@ -645,18 +640,18 @@ Each image is processed independently, but in parallel along the batch dimension
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 0.4503172039985657
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 3.8786709308624268
 Weights before the update:
-tensor([[ 0.4790, -0.2795]])
+tensor([[-0.0005, -0.0134]])
 Weights after one SGD step:
-tensor([[ 0.5088, -0.3789]])
+tensor([[ 0.3044, -0.2470]])
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="why-this-computational-viewpoint-matters-for-imaging">
-<h2>Why This Computational Viewpoint Matters for Imaging<a class="headerlink" href="#why-this-computational-viewpoint-matters-for-imaging" title="Link to this heading">#</a></h2>
+<h2>Why This Computational Viewpoint Matters for Imaging<a class="headerlink" href="#why-this-computational-viewpoint-matters-for-imaging" title="Permalink to this heading">#</a></h2>
 <p>In computational imaging, implementation details can affect the mathematical model more than one might expect. Four examples are especially relevant.</p>
 <p><strong>Padding conventions</strong> change the effective discrete <strong>convolution</strong>. A network using zero-padding treats the image boundary as if it were surrounded by zeros, which introduces an artificial edge at every border. Circular padding assumes periodicity, and reflective padding assumes a mirror symmetry. In tomographic reconstruction, where the image boundary has direct physical meaning, the choice of padding implicitly encodes a hypothesis about the object outside the field of view.</p>
 <p><strong>Finite precision</strong> affects numerical stability. Standard single-precision <code class="docutils literal notranslate"><span class="pre">float32</span></code> arithmetic can accumulate rounding errors across many layers. In ill-conditioned inverse problems — where small perturbations in the input can amplify enormously — this is not negligible, and the difference between <code class="docutils literal notranslate"><span class="pre">float32</span></code> and <code class="docutils literal notranslate"><span class="pre">float64</span></code> may be visible in the reconstructed image.</p>
@@ -665,17 +660,17 @@ tensor([[ 0.5088, -0.3789]])
 <p>The computational realization of a model is therefore never neutral. Understanding <strong>PyTorch</strong>’s conventions is the most reliable way to ensure that what is implemented corresponds to what is intended mathematically.</p>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>Create a tensor of shape ((4,1,32,32)) and explain what each dimension means in an imaging pipeline.</p></li>
+<li><p>Create a tensor of shape <code class="docutils literal notranslate"><span class="pre">(4,1,32,32)</span></code> and explain what each dimension means in an imaging pipeline.</p></li>
 <li><p>Write a minimal <code class="docutils literal notranslate"><span class="pre">Linear</span></code> model and verify by hand one gradient that <strong>PyTorch</strong> computes automatically.</p></li>
-<li><p>Explain why mini<strong>batch</strong> optimization changes the numerical optimization problem even when the mathematical loss is unchanged.</p></li>
+<li><p>Explain why <strong>minibatch</strong> optimization changes the numerical optimization problem even when the mathematical loss is unchanged. In particular, explain why minibatch SGD lead to a stochastic optimization procedure.</p></li>
 <li><p>Give one example where a low-level implementation choice, such as padding or dtype, changes the actual model being trained.</p></li>
 </ol>
 </section>
 <section id="further-reading">
-<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. When studying independently, focus less on memorizing <strong>PyTorch</strong> syntax and more on recognizing how tensors, modules, losses, and <strong>optimizer</strong>s correspond to the mathematical objects introduced in the course.</p>
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h2>
+<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>.</p>
 </section>
 </section>
 
@@ -772,7 +767,7 @@ By Davide Evangelista
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

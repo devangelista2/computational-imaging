@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>End-to-End Reconstruction and Imaging Architectures &#8212; Computational Imaging</title>
   
@@ -28,41 +29,46 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/custom.js"></script>
+    <script src="../_static/custom.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/end-to-end';</script>
-    <script src="../_static/custom.js?v=4cff807c"></script>
-    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -163,18 +169,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
@@ -217,9 +212,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -360,9 +355,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -402,9 +397,9 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="end-to-end-reconstruction-and-imaging-architectures">
-<h1>End-to-End Reconstruction and Imaging Architectures<a class="headerlink" href="#end-to-end-reconstruction-and-imaging-architectures" title="Link to this heading">#</a></h1>
+<h1>End-to-End Reconstruction and Imaging Architectures<a class="headerlink" href="#end-to-end-reconstruction-and-imaging-architectures" title="Permalink to this heading">#</a></h1>
 <section id="the-end-to-end-reconstruction-viewpoint">
-<h2>The End-to-End Reconstruction Viewpoint<a class="headerlink" href="#the-end-to-end-reconstruction-viewpoint" title="Link to this heading">#</a></h2>
+<h2>The End-to-End Reconstruction Viewpoint<a class="headerlink" href="#the-end-to-end-reconstruction-viewpoint" title="Permalink to this heading">#</a></h2>
 <p>Once the <strong>supervised learning</strong> formulation is in place, the most immediate idea is to train a neural network that takes the measured datum as input and directly outputs the reconstructed image. This is what is usually called an end-to-end approach.</p>
 <p>Formally, one chooses a parameterized family of maps</p>
 <div class="math notranslate nohighlight">
@@ -480,7 +475,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta)\approx \boldsymbol{x}_i^\dagger
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/739d33cef57e5df09cc5e446fe72b19779c3b78f719aff5dce795867ff87cffe.png" src="../_images/739d33cef57e5df09cc5e446fe72b19779c3b78f719aff5dce795867ff87cffe.png" />
+<img alt="../_images/d71945d083ce8ef9d12e5ad97df4b4a34f22ef092d5e24ec0ba1fcdcd2d50d66.png" src="../_images/d71945d083ce8ef9d12e5ad97df4b4a34f22ef092d5e24ec0ba1fcdcd2d50d66.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Left: clean image. Right: simulated measurement used by an end-to-end reconstructor.
 </pre></div>
 </div>
@@ -512,7 +507,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta)\approx \boldsymbol{x}_i^\dagger
 <p>At this point it is pedagogically useful to insist that the loss is not chosen after the model. It is part of the model. It decides what notion of reconstruction quality the training procedure optimizes.</p>
 </section>
 <section id="cnn-and-unet-design-principles-for-imaging">
-<h2>CNN and <strong>UNet</strong> Design Principles for Imaging<a class="headerlink" href="#cnn-and-unet-design-principles-for-imaging" title="Link to this heading">#</a></h2>
+<h2>CNN and <strong>UNet</strong> Design Principles for Imaging<a class="headerlink" href="#cnn-and-unet-design-principles-for-imaging" title="Permalink to this heading">#</a></h2>
 <p>A fully connected network treats an image as an unstructured vector. This is mathematically legitimate but computationally and statistically wasteful. Images possess a spatial organization that should be exploited.</p>
 <p>The key observation is simple: when interpreting an image, individual pixels are rarely meaningful in isolation. Classical <strong>convolution</strong>al architectures made this principle explicit already in early deep vision models such as <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>. What matters are local patterns such as edges, corners, textures, boundaries, and repeated motifs. These structures are spatially organized. Therefore, the architecture should process data locally before building more global information.</p>
 <p>This is exactly what <strong>convolution</strong> achieves. Given an input image <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> and a kernel <span class="math notranslate nohighlight">\(K\)</span>, the discrete <strong>convolution</strong> is</p>
@@ -569,7 +564,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{y}_i^\delta)\approx \boldsymbol{x}_i^\dagger
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/c0598d4d0acf391569078730e2866377895c65cecee9f273d5da056d7ceb73d3.png" src="../_images/c0598d4d0acf391569078730e2866377895c65cecee9f273d5da056d7ceb73d3.png" />
+<img alt="../_images/62bf0d9a7744b458f655824a128a0807d79a6d5cae6bf44c337a583002b9f2da.png" src="../_images/62bf0d9a7744b458f655824a128a0807d79a6d5cae6bf44c337a583002b9f2da.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Left: synthetic image. Middle and right: horizontal and vertical edge responses.
 </pre></div>
 </div>
@@ -699,9 +694,7 @@ After 4 convolution layer(s): support size = 81, effective width = 9
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | train loss = 0.026165
 Epoch 020 | train loss = 0.002341
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 100 | train loss = 0.000601
+Epoch 100 | train loss = 0.000601
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 200 | train loss = 0.000299
@@ -804,8 +797,8 @@ D_\ell
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initial reconstruction loss: 0.028158318251371384
-Loss after 20 updates: 0.002630081493407488
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initial reconstruction loss: 0.028158314526081085
+Loss after 20 updates: 0.002630080794915557
 </pre></div>
 </div>
 </div>
@@ -884,7 +877,7 @@ TinyUNet output shape: torch.Size([1, 1, 32, 32])
 <p>Use denser feature reuse or multi-scale kernels inside each block. These choices aim to improve information flow and sensitivity to structures of varying sizes.</p>
 </section>
 <section id="beyond-cnns-cross-domain-methods-and-vision-transformers">
-<h2>Beyond CNNs: Cross-Domain Methods and <strong>Vision Transformer</strong>s<a class="headerlink" href="#beyond-cnns-cross-domain-methods-and-vision-transformers" title="Link to this heading">#</a></h2>
+<h2>Beyond CNNs: Cross-Domain Methods and <strong>Vision Transformer</strong>s<a class="headerlink" href="#beyond-cnns-cross-domain-methods-and-vision-transformers" title="Permalink to this heading">#</a></h2>
 <p>Up to this point one may imagine that the input to the network already looks like an image. This is not always true. In tomography, for example, the measurement is a sinogram. In MRI, it is often undersampled Fourier data. In such settings one must decide whether to:</p>
 <ul class="simple">
 <li><p>map the measurement directly to image space with a cross-domain network;</p></li>
@@ -931,7 +924,7 @@ TinyUNet output shape: torch.Size([1, 1, 32, 32])
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/0d4a375c0a381de622ae3518f4de48bc79ca89dd868aef5f54e5a808dc4e8a7b.png" src="../_images/0d4a375c0a381de622ae3518f4de48bc79ca89dd868aef5f54e5a808dc4e8a7b.png" />
+<img alt="../_images/0a0f4c4f78f8b5e2706d59dba1185e2b6e10eb7706ec5b8b723fc20a20c83b8a.png" src="../_images/0a0f4c4f78f8b5e2706d59dba1185e2b6e10eb7706ec5b8b723fc20a20c83b8a.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Original image, row-sum data, and column-sum data. This illustrates why some inverse problems are cross-domain.
 </pre></div>
 </div>
@@ -1005,7 +998,7 @@ Output token shape: torch.Size([4, 6])
 <p>This also explains the popularity of hybrid architectures that combine <strong>convolution</strong>al encoders with attention blocks.</p>
 </section>
 <section id="output-constraints-data-consistency-and-limits-of-pure-end-to-end-learning">
-<h2>Output Constraints, Data Consistency, and Limits of Pure End-to-End Learning<a class="headerlink" href="#output-constraints-data-consistency-and-limits-of-pure-end-to-end-learning" title="Link to this heading">#</a></h2>
+<h2>Output Constraints, Data Consistency, and Limits of Pure End-to-End Learning<a class="headerlink" href="#output-constraints-data-consistency-and-limits-of-pure-end-to-end-learning" title="Permalink to this heading">#</a></h2>
 <p>Another topic that deserves explicit treatment is the final activation function. If the output image is known to lie in a certain intensity range, should the network enforce this through its last layer?</p>
 <p>There is no universal answer. A linear output layer is flexible and easy to optimize. A sigmoid enforces a <span class="math notranslate nohighlight">\((0,1)\)</span> range but may introduce saturation. A ReLU enforces nonnegativity but can create dead regions. The correct choice depends on the preprocessing pipeline, the physical meaning of the image intensities, and the stability of training.</p>
 <p>This is a good example of a general teaching principle: every architectural choice should be justified in terms of the inverse problem, not adopted by habit.</p>
@@ -1084,7 +1077,7 @@ smoothed output
 <p>This miniature counterexample explains why visual quality alone is not enough. Two outputs can be equally consistent with the data, but not equally close to the desired image. Pure end-to-end training does not guarantee that this distinction is handled in a physically meaningful way.</p>
 </section>
 <section id="summary">
-<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
 <p>This chapter should leave a clear pedagogical progression:</p>
 <ul class="simple">
 <li><p><strong>end-to-end reconstruction</strong> learns the inverse map directly;</p></li>
@@ -1097,7 +1090,7 @@ smoothed output
 </ul>
 </section>
 <section id="exercises">
-<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Explain why parameter sharing is one of the central advantages of <strong>convolution</strong>al layers.</p></li>
 <li><p>Compare a CNN and a <strong>UNet</strong> from the viewpoint of <strong>receptive field</strong> and spatial precision.</p></li>
@@ -1106,7 +1099,7 @@ smoothed output
 </ol>
 </section>
 <section id="further-reading">
-<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this heading">#</a></h2>
 <p>A useful way to deepen this chapter is to compare architectures not only by visual outputs, but by the inductive bias they impose. When revising, students should ask which parts of an architecture encode locality, which encode multiscale reasoning, and which promote long-range interaction. This makes it much easier to understand why CNNs, <strong>UNet</strong>s, and transformers succeed or fail on different imaging tasks.</p>
 <p>A second useful direction is to compare these end-to-end models with the unrolled and <strong>plug-and-play</strong> methods discussed later in the course, where the forward model remains visible inside the reconstruction algorithm.</p>
 </section>
@@ -1189,7 +1182,7 @@ By Davide Evangelista
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

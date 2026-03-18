@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Deep dive into IPPy &#8212; Computational Imaging</title>
   
@@ -28,41 +29,46 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/custom.js"></script>
+    <script src="../_static/custom.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/deep-dive-into-IPPy';</script>
-    <script src="../_static/custom.js?v=4cff807c"></script>
-    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="shortcut icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -163,18 +169,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
@@ -217,9 +212,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -360,9 +355,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -407,7 +402,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="deep-dive-into-ippy">
-<h1>Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code><a class="headerlink" href="#deep-dive-into-ippy" title="Link to this heading">#</a></h1>
+<h1>Deep dive into <code class="docutils literal notranslate"><span class="pre">IPPy</span></code><a class="headerlink" href="#deep-dive-into-ippy" title="Permalink to this heading">#</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is a simple library, developed by me specifically for this course (and to support me during my experiments for papers). It includes multiple modules:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nn</span></code>: contains functions to easy define complex neural network models, such as UNet, ViT, and others, with a flexible design.</p></li>
@@ -417,7 +412,7 @@ document.write(`
 <p>The code for <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> can be simply dowloaded from my Github page at: <a class="github reference external" href="https://github.com/devangelista2/IPPy">devangelista2/IPPy</a>.</p>
 <a class="reference internal image-reference" href="../_images/IPPy-structure.png"><img alt="../_images/IPPy-structure.png" class="align-center" src="../_images/IPPy-structure.png" style="width: 600px;" /></a>
 <section id="introduction-and-requirements">
-<h2>Introduction and requirements<a class="headerlink" href="#introduction-and-requirements" title="Link to this heading">#</a></h2>
+<h2>Introduction and requirements<a class="headerlink" href="#introduction-and-requirements" title="Permalink to this heading">#</a></h2>
 <p>IPPy is built upon a few commonly used libraries for tensor manipulation, linear algebra, Computed Tomography, neural networks and visualization. Here is a list of the libraries you need to install to make IPPy run smoothly:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span></code></p></li>
@@ -442,7 +437,7 @@ document.write(`
 </div>
 <p>The only exception is <code class="docutils literal notranslate"><span class="pre">astra-toolbox</span></code>, whose installation instruction can be found in its official documentation website, at: <a class="reference external" href="https://astra-toolbox.com">https://astra-toolbox.com</a>.</p>
 <section id="standard-tensors">
-<h3>Standard tensors<a class="headerlink" href="#standard-tensors" title="Link to this heading">#</a></h3>
+<h3>Standard tensors<a class="headerlink" href="#standard-tensors" title="Permalink to this heading">#</a></h3>
 <p>As already remarked, all the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> functions are thought to work with Pytorch tensors. In particular, with what is called a <strong>standardized pytorch tensor</strong>, that is a tensor with the following properties:</p>
 <ul class="simple">
 <li><p>Its shape is <code class="docutils literal notranslate"><span class="pre">(N,</span> <span class="pre">c,</span> <span class="pre">n_x,</span> <span class="pre">n_y)</span></code>, where <code class="docutils literal notranslate"><span class="pre">c</span></code> is either equal to 1 or 3.</p></li>
@@ -454,7 +449,7 @@ document.write(`
 </section>
 </section>
 <section id="the-operators-module">
-<h2>The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module<a class="headerlink" href="#the-operators-module" title="Link to this heading">#</a></h2>
+<h2>The <code class="docutils literal notranslate"><span class="pre">operators</span></code> module<a class="headerlink" href="#the-operators-module" title="Permalink to this heading">#</a></h2>
 <p>An <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operator is a Python class that simulates the application of a corruption matrix <span class="math notranslate nohighlight">\(K\)</span> to an input tensor <span class="math notranslate nohighlight">\(x\)</span>. The basic <code class="docutils literal notranslate"><span class="pre">Operator</span></code> class is defined as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -490,7 +485,7 @@ document.write(`
 <p>As you can easily imagine, the <code class="docutils literal notranslate"><span class="pre">_matvec</span></code> method describes how the operator should corrupt the input tensor, i.e. how to compute the forward <span class="math notranslate nohighlight">\(K(x)\)</span>. Similarly, the <code class="docutils literal notranslate"><span class="pre">_adjoint</span></code> method represents the application of the transposed of the operator, i.e. <span class="math notranslate nohighlight">\(K^T(y)\)</span>.</p>
 <p>Note that, thanks to the support of the <code class="docutils literal notranslate"><span class="pre">OperatorFunction</span></code>, each operator needs to be defined only on a tensor of shape <code class="docutils literal notranslate"><span class="pre">(c,</span> <span class="pre">n_x,</span> <span class="pre">n_y)</span></code>, and it will automatically handle the parallelization over the batch dimension <code class="docutils literal notranslate"><span class="pre">N</span></code> of the input tensor.</p>
 <section id="example-the-negative-operator">
-<h3>Example: the Negative operator<a class="headerlink" href="#example-the-negative-operator" title="Link to this heading">#</a></h3>
+<h3>Example: the Negative operator<a class="headerlink" href="#example-the-negative-operator" title="Permalink to this heading">#</a></h3>
 <p>As an example, let’s build a <strong>negative</strong> operator, i.e. an operator that reverse the colors of the input image, based on the <code class="docutils literal notranslate"><span class="pre">Operator</span></code> class in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>. We will consider an image from Mayo’s dataset from the previous notebook as an example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -516,32 +511,6 @@ document.write(`
 <span class="sd">        The adjoint of the negative operator is again x = 1 - y.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">y</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1">#-----------------</span>
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="k">class</span><span class="w"> </span><span class="nc">NegativeOperator</span><span class="p">(</span><span class="n">operators</span><span class="o">.</span><span class="n">Operator</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="k">def</span><span class="w"> </span><span class="nf">_matvec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
 </pre></div>
 </div>
 </div>
@@ -619,22 +588,29 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">47</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span> <span class="c1"># Get sample image</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">47</span> <span class="n">x</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">49</span> <span class="c1"># Define corruption operator</span>
+<span class="g g-Whitespace">     </span><span class="mi">50</span> <span class="n">K</span> <span class="o">=</span> <span class="n">NegativeOperator</span><span class="p">()</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;torchvision&#39;
+<span class="nn">Cell In[3], line 26,</span> in <span class="ni">MayoDataset.__getitem__</span><span class="nt">(self, idx)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="c1"># Load the idx&#39;s image from fname_list</span>
+<span class="ne">---&gt; </span><span class="mi">26</span>     <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>      <span class="c1"># To load the image as grey-scale</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+<span class="ne">IndexError</span>: list index out of range
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="built-in-operators">
-<h3>Built-in operators<a class="headerlink" href="#built-in-operators" title="Link to this heading">#</a></h3>
+<h3>Built-in operators<a class="headerlink" href="#built-in-operators" title="Permalink to this heading">#</a></h3>
 <p>Clearly, <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> implements a few built-in operators commonly used in literature. At this moment, it has built-in support for:</p>
 <ul class="simple">
 <li><p><strong>Computed Tomography</strong> operator: implementing the forward and backward acquisition of a general Computed Tomography projector,</p></li>
@@ -688,25 +664,25 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
+<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Get sample image from MayoDataset</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># Define MotionBlur operator (with a 45° angle)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span><span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> 
+<span class="g g-Whitespace">      </span><span class="mi">8</span>                        <span class="n">kernel_type</span><span class="o">=</span><span class="s2">&quot;motion&quot;</span><span class="p">,</span> 
+<span class="g g-Whitespace">      </span><span class="mi">9</span>                        <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> 
+<span class="g g-Whitespace">     </span><span class="mi">10</span>                        <span class="n">motion_angle</span><span class="o">=</span><span class="mi">45</span><span class="p">,)</span>
 
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
+<span class="nn">Cell In[3], line 26,</span> in <span class="ni">MayoDataset.__getitem__</span><span class="nt">(self, idx)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="c1"># Load the idx&#39;s image from fname_list</span>
+<span class="ne">---&gt; </span><span class="mi">26</span>     <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>      <span class="c1"># To load the image as grey-scale</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
 
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+<span class="ne">IndexError</span>: list index out of range
 </pre></div>
 </div>
 </div>
@@ -714,7 +690,7 @@ document.write(`
 <p>Feel free to test different operators to see how they work.</p>
 </section>
 <section id="backpropagate-through-ippy-operators">
-<h3>Backpropagate through <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators<a class="headerlink" href="#backpropagate-through-ippy-operators" title="Link to this heading">#</a></h3>
+<h3>Backpropagate through <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators<a class="headerlink" href="#backpropagate-through-ippy-operators" title="Permalink to this heading">#</a></h3>
 <p>A great feature of <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operators is that they allow backpropagating through them by the usual Pytorch backpropagation. For example, consider the following objective function:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -749,14 +725,21 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Define x_true and track its gradient</span>
 <span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">x_true</span><span class="o">.</span><span class="n">requires_grad_</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># Compute y_delta with no gradient tracking</span>
 
-<span class="ne">NameError</span>: name &#39;test_data&#39; is not defined
+<span class="nn">Cell In[3], line 26,</span> in <span class="ni">MayoDataset.__getitem__</span><span class="nt">(self, idx)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="c1"># Load the idx&#39;s image from fname_list</span>
+<span class="ne">---&gt; </span><span class="mi">26</span>     <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>      <span class="c1"># To load the image as grey-scale</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+<span class="ne">IndexError</span>: list index out of range
 </pre></div>
 </div>
 </div>
@@ -765,7 +748,7 @@ f(x) = || Kx - y^\delta ||_2^2,
 </section>
 </section>
 <section id="the-solvers-module">
-<h2>The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module<a class="headerlink" href="#the-solvers-module" title="Link to this heading">#</a></h2>
+<h2>The <code class="docutils literal notranslate"><span class="pre">solvers</span></code> module<a class="headerlink" href="#the-solvers-module" title="Permalink to this heading">#</a></h2>
 <p>In <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> one can also find a few built-in solvers for regularized least-squares problem, mainly with the aim of comparing the results of neural network predictions with the classical algorithm discussed in the first module of this course.</p>
 <p>As classical solvers are beyond the scope of this course, we will only report here an example on how to use an <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> solver on the data defined above.</p>
 <div class="cell docutils container">
@@ -805,32 +788,26 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span><span class="p">,</span> <span class="n">metrics</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">solvers</span><span class="p">,</span> <span class="n">metrics</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Define the solver (e.g. ChambollePock)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">solver</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">ChambollePockTpVUnconstrained</span><span class="p">(</span><span class="n">K</span><span class="p">)</span> <span class="c1"># -&gt; takes as input the operator</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">solver</span> <span class="o">=</span> <span class="n">solvers</span><span class="o">.</span><span class="n">ChambollePockTpVUnconstrained</span><span class="p">(</span><span class="n">K</span><span class="p">)</span> <span class="c1"># -&gt; takes as input the operator</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># Compute solution</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">x_rec</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="n">y_delta</span><span class="p">,</span> 
+<span class="g g-Whitespace">      </span><span class="mi">8</span>                <span class="n">lmbda</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> 
+<span class="g g-Whitespace">      </span><span class="mi">9</span>                <span class="n">x_true</span><span class="o">=</span><span class="n">x_true</span><span class="p">,</span> 
+<span class="g g-Whitespace">     </span><span class="mi">10</span>                <span class="n">starting_point</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_true</span><span class="p">),</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,)</span>
 
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
+<span class="ne">NameError</span>: name &#39;K&#39; is not defined
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="the-nn-module">
-<h2>The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module<a class="headerlink" href="#the-nn-module" title="Link to this heading">#</a></h2>
+<h2>The <code class="docutils literal notranslate"><span class="pre">nn</span></code> module<a class="headerlink" href="#the-nn-module" title="Permalink to this heading">#</a></h2>
 <p>We are finally ready to jump into the main topic of this course, i.e. neural networks and their use for end-to-end image reconstruction. In the remainder of this chapter, we will discuss how to implement a neural network for processing and reconstructing images with <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, with the aim of recovering the motion-blurred image from the previous example.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -859,30 +836,6 @@ f(x) = || Kx - y^\delta ||_2^2,
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Set device</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <p>Now we can define the data (train and test) to train our model on it.</p>
 <div class="cell docutils container">
@@ -898,14 +851,30 @@ f(x) = || Kx - y^\delta ||_2^2,
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Generate train and test data</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../data/Mayo/test&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">test_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;MayoDataset&#39; is not defined
+<span class="nn">File ~/miniconda3/envs/nn/lib/python3.12/site-packages/torch/utils/data/dataloader.py:388,</span> in <span class="ni">DataLoader.__init__</span><span class="nt">(self, dataset, batch_size, shuffle, sampler, batch_sampler, num_workers, collate_fn, pin_memory, drop_last, timeout, worker_init_fn, multiprocessing_context, generator, prefetch_factor, persistent_workers, pin_memory_device, in_order)</span>
+<span class="g g-Whitespace">    </span><span class="mi">386</span> <span class="k">else</span><span class="p">:</span>  <span class="c1"># map-style</span>
+<span class="g g-Whitespace">    </span><span class="mi">387</span>     <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">388</span>         <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+<span class="g g-Whitespace">    </span><span class="mi">389</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">390</span>         <span class="n">sampler</span> <span class="o">=</span> <span class="n">SequentialSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+
+<span class="nn">File ~/miniconda3/envs/nn/lib/python3.12/site-packages/torch/utils/data/sampler.py:162,</span> in <span class="ni">RandomSampler.__init__</span><span class="nt">(self, data_source, replacement, num_samples, generator)</span>
+<span class="g g-Whitespace">    </span><span class="mi">157</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">158</span>         <span class="sa">f</span><span class="s2">&quot;replacement should be a boolean value, but got replacement=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replacement</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">159</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">161</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">162</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">163</span>         <span class="sa">f</span><span class="s2">&quot;num_samples should be a positive integer value, but got num_samples=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">164</span>     <span class="p">)</span>
+
+<span class="ne">ValueError</span>: num_samples should be a positive integer value, but got num_samples=0
 </pre></div>
 </div>
 </div>
@@ -963,20 +932,6 @@ f(x) = || Kx - y^\delta ||_2^2,
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">n_epochs</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># Cycle over the epochs</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">loss_total</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,))</span>
-
-<span class="ne">NameError</span>: name &#39;model&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>After the model is trained, it’s recommended to save the final state so that we can re-use it without waiting for the training to finish. This is done by the <code class="docutils literal notranslate"><span class="pre">trainer</span></code> module of <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, which saves both the final state of the model and a <code class="docutils literal notranslate"><span class="pre">json</span></code> file containing the specification of model architecture, so that you can re-load it afterwards.</p>
 <div class="cell docutils container">
@@ -988,47 +943,12 @@ f(x) = || Kx - y^\delta ||_2^2,
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">IPPy.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">trainer</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Save model state</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">trainer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">solvers</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">data</span>
-
-<span class="n">File</span> <span class="o">~</span>\<span class="n">computational</span><span class="o">-</span><span class="n">imaging</span>\<span class="n">years</span>\<span class="mi">2025</span><span class="o">-</span><span class="mi">26</span>\<span class="n">end</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">end</span>\<span class="o">..</span>\<span class="n">IPPy</span>\<span class="n">solvers</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;numba&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <p>Loading the model is straightforward. Just provide the <code class="docutils literal notranslate"><span class="pre">trainer</span></code> with the correct path and it will handle everything:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Load model</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="o">=</span><span class="s2">&quot;../weights/UNet&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;trainer&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1171,7 +1091,7 @@ By Davide Evangelista
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>
