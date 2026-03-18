@@ -601,7 +601,7 @@ Each image is processed independently, but in parallel along the batch dimension
 \[
 \boldsymbol{\Theta}_{k+1}
 =
-\boldsymbol{\Theta}_k-\eta \nabla \widehat{\mathcal{R}}_B(\boldsymbol{\Theta}_k).
+\boldsymbol{\Theta}_k-\eta \nabla L(\boldsymbol{\Theta}_k).
 \]</div>
 <p>Adam <span id="id2">[<a class="reference internal" href="../references.html#id25" title="Diederik P Kingma and Jimmy Ba. Adam: a method for stochastic optimization. International Conference on Learning Representations, 2015.">9</a>]</span> modifies this rule by rescaling and averaging gradients. It is useful for students to see that <strong>optimizer</strong> choice belongs to numerical optimization, not to model design.</p>
 <div class="cell docutils container">
@@ -631,11 +631,11 @@ Each image is processed independently, but in parallel along the batch dimension
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 0.6780983805656433
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 0.5852112770080566
 Weights before the update:
-tensor([[ 0.3531, -0.2424]])
+tensor([[ 0.4480, -0.1870]])
 Weights after one SGD step:
-tensor([[ 0.4468, -0.3709]])
+tensor([[ 0.5096, -0.3072]])
 </pre></div>
 </div>
 </div>
@@ -653,15 +653,15 @@ tensor([[ 0.4468, -0.3709]])
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>Create a tensor of shape ((4,1,32,32)) and explain what each dimension means in an imaging pipeline.</p></li>
+<li><p>Create a tensor of shape <code class="docutils literal notranslate"><span class="pre">(4,1,32,32)</span></code> and explain what each dimension means in an imaging pipeline.</p></li>
 <li><p>Write a minimal <code class="docutils literal notranslate"><span class="pre">Linear</span></code> model and verify by hand one gradient that <strong>PyTorch</strong> computes automatically.</p></li>
-<li><p>Explain why mini<strong>batch</strong> optimization changes the numerical optimization problem even when the mathematical loss is unchanged.</p></li>
+<li><p>Explain why <strong>minibatch</strong> optimization changes the numerical optimization problem even when the mathematical loss is unchanged. In particular, explain why minibatch SGD lead to a stochastic optimization procedure.</p></li>
 <li><p>Give one example where a low-level implementation choice, such as padding or dtype, changes the actual model being trained.</p></li>
 </ol>
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. When studying independently, focus less on memorizing <strong>PyTorch</strong> syntax and more on recognizing how tensors, modules, losses, and <strong>optimizer</strong>s correspond to the mathematical objects introduced in the course.</p>
+<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>.</p>
 </section>
 </section>
 

@@ -371,8 +371,8 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-roadmap-and-main-questions">Teaching Roadmap and Main Questions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-guiding-principle">Structure and Guiding Principle</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-these-notes">How to Use These Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#office-hour">Office hour</a></li>
 </ul>
             </nav>
         </div>
@@ -393,57 +393,31 @@
 <h2>Teaching Roadmap and Main Questions<a class="headerlink" href="#teaching-roadmap-and-main-questions" title="Link to this heading">#</a></h2>
 <p>The whole module can be organized around a few central questions, and these questions define the internal logic of the lectures.</p>
 <p>The first question is how to reinterpret image reconstruction as a <strong>supervised learning</strong> problem. If we observe pairs of measurements and clean images, can we learn a map that approximates the inverse operator directly?</p>
-<p>The second question is architectural. Once we decide to learn a reconstruction map, how should we choose the model class? Why are <strong>convolution</strong>s natural for images? Why are <strong>UNet</strong>s so successful? When do transformers become useful?</p>
+<p>The second question is architectural. Once we decide to learn a reconstruction map, how should we choose the model class? Why are <strong>convolutions</strong> natural for images? Why are <strong>UNets</strong> so successful? When do transformers become useful?</p>
 <p>The third question concerns realism. What happens if the training data are generated with an overly simplified forward model? Why is noise modeling not optional? What is the <strong>inverse crime</strong>, and why can it produce very strong but potentially misleading numerical results?</p>
 <p>The fourth question is probabilistic. A single point estimate is often not enough in ill-posed imaging problems. Can generative models describe the distribution of plausible images, and can this learned prior be incorporated into the reconstruction process?</p>
 <p>These are the questions that organize the teaching roadmap of the course.</p>
 <p>The same roadmap also clarifies the intended learning goals. By the end of Module 2, the student should be able to:</p>
 <ul class="simple">
 <li><p>formulate <strong>end-to-end reconstruction</strong> as <strong>empirical risk</strong> minimization over parameterized inverse maps;</p></li>
-<li><p>explain why nonlinear models are needed beyond <strong>linear estimator</strong>s;</p></li>
-<li><p>discuss the mathematical role of <strong>convolution</strong>s, <strong>receptive field</strong>s, skip connections, multiscale processing, and self-attention;</p></li>
-<li><p>compare CNNs, <strong>UNet</strong>s, residual variants, and <strong>Vision Transformer</strong>s from the viewpoint of computational imaging;</p></li>
+<li><p>explain why nonlinear models are needed beyond <strong>linear estimators</strong>;</p></li>
+<li><p>discuss the mathematical role of <strong>convolutions</strong>, <strong>receptive fields</strong>, skip connections, multiscale processing, and self-attention;</p></li>
+<li><p>compare <strong>CNNs</strong>, <strong>UNets</strong>, residual variants, and <strong>Vision Transformers (ViT)</strong> from the viewpoint of computational imaging;</p></li>
 <li><p>explain self-supervised training strategies when clean targets are unavailable;</p></li>
 <li><p>define the <strong>inverse crime</strong> and discuss the impact of <strong>model mismatch</strong> and realistic noise;</p></li>
-<li><p>derive and interpret the main ideas behind VAEs, <strong>GAN</strong>s, diffusion models, and <strong>flow matching</strong> models;</p></li>
+<li><p>derive and interpret the main ideas behind VAEs, <strong>GANs</strong>, diffusion models, and <strong>flow matching</strong> models;</p></li>
 <li><p>explain how generative models can be used as learned priors, latent parameterizations, denoisers, or posterior samplers in inverse problems.</p></li>
 </ul>
 <p>This should not be interpreted rigidly. Some topics, especially diffusion models and the <strong>inverse crime</strong>, can naturally expand if discussion is lively. The point of the table is simply to show that the module has an internal progression rather than being a collection of isolated techniques.</p>
 </section>
-<section id="structure-and-guiding-principle">
-<h2>Structure and Guiding Principle<a class="headerlink" href="#structure-and-guiding-principle" title="Link to this heading">#</a></h2>
-<p>The material is organized into four conceptual blocks.</p>
-<p>The first block concerns neural networks for image reconstruction. We begin from the <strong>supervised learning</strong> formulation</p>
-<div class="math notranslate nohighlight">
-\[
-(\boldsymbol{y}^\delta,\boldsymbol{x}^\dagger)\sim\mathbb{P},
-\qquad
-\boldsymbol{y}^\delta=\mathcal{A}(\boldsymbol{x}^\dagger)+\boldsymbol{e},
-\]</div>
-<p>and study how a neural network</p>
-<div class="math notranslate nohighlight">
-\[
-f_{\boldsymbol{\Theta}}:\mathbb{R}^m\to\mathbb{R}^n
-\]</div>
-<p>can be trained to approximate an inverse map from measurements to images. This first block develops the transition from generic machine learning concepts to image-specific architectures.</p>
-<p>The second block examines the data-generation process critically. A reconstructor is only as good as the assumptions encoded in the training and testing pipeline. This part introduces realistic noise modeling, discretization mismatch, and the notion of <strong>inverse crime</strong>.</p>
-<p>The third block moves from discriminative reconstruction maps to generative modeling. The central goal is to understand how to represent a high-dimensional image distribution using <strong>latent variable</strong>s, adversarial learning, stochastic denoising, or deterministic transport.</p>
-<p>The fourth block returns to the inverse problem</p>
-<div class="math notranslate nohighlight">
-\[
-\boldsymbol{y}^\delta = K \boldsymbol{x}^\dagger + \boldsymbol{e}
-\]</div>
-<p>and ask how the learned prior encoded by a generative model can be combined with the forward operator and the likelihood. This leads naturally to <strong>Bayesian formulation</strong>s, latent optimization, <strong>plug-and-play</strong> priors, <strong>posterior sampling</strong>, and conditional generative reconstruction.</p>
-<p>Throughout the notes, one principle will appear again and again:</p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>In computational imaging, a method should never be judged only by how good a few reconstructions look. It should also be judged by the assumptions built into the forward model, the realism of the noise, the stability of the reconstruction map, and the physical plausibility of the evaluation protocol.</p>
-</div>
-<p>This principle is especially important in the age of deep learning, where visually impressive outputs can hide severe modeling flaws. The goal of these notes is therefore not to present neural networks and generative models as automatic replacements for inverse-problem theory, but as new mathematical tools that must be analyzed, interpreted, and used with care.</p>
-</section>
 <section id="how-to-use-these-notes">
 <h2>How to Use These Notes<a class="headerlink" href="#how-to-use-these-notes" title="Link to this heading">#</a></h2>
 <p>The notes are designed to be read alongside executable Jupyter notebooks. Each major topic comes with a companion notebook where the ideas are implemented and tested. Before working through the material, make sure your Python environment is correctly configured. The <a class="reference internal" href="intro/environment-setup.html"><span class="doc std std-doc">environment setup</span></a> page describes how to do this using <code class="docutils literal notranslate"><span class="pre">uv</span></code>, including how to install Python itself on a machine where it is not yet present.</p>
+</section>
+<section id="office-hour">
+<h2>Office hour<a class="headerlink" href="#office-hour" title="Link to this heading">#</a></h2>
+<p>The office hour is Wednesday morning, from 9a.m. to 12p.m., via Microsoft Teams or in my office, at Ex Veneta, close to the Zanolini train station.</p>
+<p>Either cases, it is <strong>mandatory</strong> to set an appointment by e-mail, via the address <code class="docutils literal notranslate"><span class="pre">davide.evangelista5&#64;unibo.it</span></code>.</p>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -511,8 +485,8 @@ f_{\boldsymbol{\Theta}}:\mathbb{R}^m\to\mathbb{R}^n
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#teaching-roadmap-and-main-questions">Teaching Roadmap and Main Questions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-and-guiding-principle">Structure and Guiding Principle</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-these-notes">How to Use These Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#office-hour">Office hour</a></li>
 </ul>
   </nav></div>
 

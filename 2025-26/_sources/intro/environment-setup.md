@@ -15,6 +15,10 @@ Traditional Python tooling has a well-known fragmentation problem. You need Pyth
 
 For a course like this one, where code is executed interactively and reproducibility matters, `uv` removes a whole class of "it works on my machine" problems.
 
+```{info}
+A **virtual environment** in Python is an isolated environment on your computer, where you can run and test your Python projects. It allows you to manage project-specific dependencies without interfering with other projects or the original Python installation. It is recommended to always work within virtual environments, to avoid breaking the main Python environment due to conflicts caused by different dependencies.
+```
+
 ## Installing uv
 
 `uv` is distributed as a standalone binary. You do not need Python, pip, or any other tool to install it.
@@ -31,15 +35,23 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+If you already have `pip` installed, you can easily install `uv` as
+
+```bash
+pip install uv
+```
+
 After the installer finishes, restart your terminal (or open a new one) so that the `uv` command is available on your path. Verify the installation with:
 
 ```bash
 uv --version
 ```
 
+If you need help regarding the installation of `uv`, please check the official website at [](https://docs.astral.sh/uv/getting-started/installation/).
+
 ## Creating the Course Folder
 
-During this course you will write code, run experiments, and save notebooks. All of this should live in a single folder called `computational-imaging`. Create it wherever you prefer and enter it:
+During this course you will write code to run experiments. I suggest to keep all the files produced for this course in a single folder called `computational-imaging`. Create it wherever you prefer and enter it:
 
 ```bash
 mkdir computational-imaging
@@ -50,13 +62,13 @@ Every command in the rest of this guide should be run from inside this folder.
 
 ## Initialising the uv Project
 
-Initialise a new `uv` project in the current directory:
+Initialize a new `uv` project in the current directory:
 
 ```bash
 uv init .
 ```
 
-This creates a `pyproject.toml` file that describes the project and its dependencies, and a `.python-version` file that pins the Python version. `uv` will automatically download that version of Python if it is not already present on your system — no separate Python installer is needed.
+This creates a `pyproject.toml` file that describes the project and its dependencies, and a `.python-version` file that pins the Python version. `uv` will automatically download that version of Python if it is not already present on your system.
 
 If you want to target a specific Python version explicitly (Python 3.12 is recommended for this course), run:
 
@@ -80,7 +92,6 @@ The course notebooks use the following external libraries:
 | `scikit-learn` | Classical machine learning utilities |
 | `numba` | JIT compilation for numerical code |
 | `pandas` | Tabular data handling |
-| `jupyterlab` | Interactive notebook environment |
 
 Install them all in one command:
 
@@ -100,9 +111,15 @@ Check the [PyTorch installation page](https://pytorch.org/get-started/locally/) 
 
 ## The IPPy Package
 
-Several notebooks in the course use **IPPy**, a small imaging library developed specifically for this course. It is not distributed via PyPI — it is provided as a folder that you should place directly inside your `computational-imaging` directory.
+Several algorithms in the course use **IPPy**, a small imaging library developed specifically for this course, which you should've already encountered during the previous Module. `IPPy` is available for download via Github, simply running the command:
 
-Once you have received the `IPPy` folder (it will be distributed alongside the course materials), your directory should look like this:
+```bash
+git clone https://github.com/devangelista2/IPPy.git
+```
+
+By running this command inside your `computational-imaging` directory, it should place an `IPPy` folder inside the project itself. However, to be able to run functions, you should extract the inner `IPPy` folder (which contains the actual functionalities), and place it in the root `computational-imaging` folder.
+
+Your directory should look like this:
 
 ```
 computational-imaging/
@@ -118,16 +135,6 @@ computational-imaging/
 ```
 
 Because `IPPy` sits in the same directory as your notebooks, Python can import it directly without any installation step.
-
-## Launching JupyterLab
-
-To open a Jupyter notebook, activate the `uv`-managed environment and start JupyterLab:
-
-```bash
-uv run jupyter lab
-```
-
-The `uv run` prefix ensures that JupyterLab and the notebook kernel use the packages installed in your project environment, rather than any system-level Python. A browser tab will open automatically. From there, you can create new notebooks or open existing ones.
 
 ## Syncing on a New Machine
 

@@ -373,7 +373,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialising-the-uv-project">Initialising the uv Project</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-required-packages">Installing the Required Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ippy-package">The IPPy Package</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#launching-jupyterlab">Launching JupyterLab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#syncing-on-a-new-machine">Syncing on a New Machine</a></li>
 </ul>
             </nav>
@@ -412,14 +411,19 @@
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">powershell</span> <span class="n">-ExecutionPolicy</span> <span class="n">ByPass</span> <span class="n">-c</span> <span class="s2">&quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span>
 </pre></div>
 </div>
+<p>If you already have <code class="docutils literal notranslate"><span class="pre">pip</span></code> installed, you can easily install <code class="docutils literal notranslate"><span class="pre">uv</span></code> as</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>uv
+</pre></div>
+</div>
 <p>After the installer finishes, restart your terminal (or open a new one) so that the <code class="docutils literal notranslate"><span class="pre">uv</span></code> command is available on your path. Verify the installation with:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>--version
 </pre></div>
 </div>
+<p>If you need help regarding the installation of <code class="docutils literal notranslate"><span class="pre">uv</span></code>, please check the official website at <a class="reference external" href="https://docs.astral.sh/uv/getting-started/installation/"></a>.</p>
 </section>
 <section id="creating-the-course-folder">
 <h2>Creating the Course Folder<a class="headerlink" href="#creating-the-course-folder" title="Link to this heading">#</a></h2>
-<p>During this course you will write code, run experiments, and save notebooks. All of this should live in a single folder called <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code>. Create it wherever you prefer and enter it:</p>
+<p>During this course you will write code to run experiments. I suggest to keep all the files produced for this course in a single folder called <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code>. Create it wherever you prefer and enter it:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>computational-imaging
 <span class="nb">cd</span><span class="w"> </span>computational-imaging
 </pre></div>
@@ -428,11 +432,11 @@
 </section>
 <section id="initialising-the-uv-project">
 <h2>Initialising the uv Project<a class="headerlink" href="#initialising-the-uv-project" title="Link to this heading">#</a></h2>
-<p>Initialise a new <code class="docutils literal notranslate"><span class="pre">uv</span></code> project in the current directory:</p>
+<p>Initialize a new <code class="docutils literal notranslate"><span class="pre">uv</span></code> project in the current directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>init<span class="w"> </span>.
 </pre></div>
 </div>
-<p>This creates a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file that describes the project and its dependencies, and a <code class="docutils literal notranslate"><span class="pre">.python-version</span></code> file that pins the Python version. <code class="docutils literal notranslate"><span class="pre">uv</span></code> will automatically download that version of Python if it is not already present on your system — no separate Python installer is needed.</p>
+<p>This creates a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file that describes the project and its dependencies, and a <code class="docutils literal notranslate"><span class="pre">.python-version</span></code> file that pins the Python version. <code class="docutils literal notranslate"><span class="pre">uv</span></code> will automatically download that version of Python if it is not already present on your system.</p>
 <p>If you want to target a specific Python version explicitly (Python 3.12 is recommended for this course), run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>python<span class="w"> </span>pin<span class="w"> </span><span class="m">3</span>.12
 </pre></div>
@@ -478,9 +482,6 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pandas</span></code></p></td>
 <td><p>Tabular data handling</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code></p></td>
-<td><p>Interactive notebook environment</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -500,8 +501,12 @@
 </section>
 <section id="the-ippy-package">
 <h2>The IPPy Package<a class="headerlink" href="#the-ippy-package" title="Link to this heading">#</a></h2>
-<p>Several notebooks in the course use <strong>IPPy</strong>, a small imaging library developed specifically for this course. It is not distributed via PyPI — it is provided as a folder that you should place directly inside your <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code> directory.</p>
-<p>Once you have received the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> folder (it will be distributed alongside the course materials), your directory should look like this:</p>
+<p>Several algorithms in the course use <strong>IPPy</strong>, a small imaging library developed specifically for this course, which you should’ve already encountered during the previous Module. <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is available for download via Github, simply running the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/devangelista2/IPPy.git
+</pre></div>
+</div>
+<p>By running this command inside your <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code> directory, it should place an <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> folder inside the project itself. However, to be able to run functions, you should extract the inner <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> folder (which contains the actual functionalities), and place it in the root <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code> folder.</p>
+<p>Your directory should look like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>computational-imaging/
 ├── IPPy/
 │   ├── __init__.py
@@ -515,14 +520,6 @@
 </pre></div>
 </div>
 <p>Because <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> sits in the same directory as your notebooks, Python can import it directly without any installation step.</p>
-</section>
-<section id="launching-jupyterlab">
-<h2>Launching JupyterLab<a class="headerlink" href="#launching-jupyterlab" title="Link to this heading">#</a></h2>
-<p>To open a Jupyter notebook, activate the <code class="docutils literal notranslate"><span class="pre">uv</span></code>-managed environment and start JupyterLab:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>jupyter<span class="w"> </span>lab
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code> prefix ensures that JupyterLab and the notebook kernel use the packages installed in your project environment, rather than any system-level Python. A browser tab will open automatically. From there, you can create new notebooks or open existing ones.</p>
 </section>
 <section id="syncing-on-a-new-machine">
 <h2>Syncing on a New Machine<a class="headerlink" href="#syncing-on-a-new-machine" title="Link to this heading">#</a></h2>
@@ -606,7 +603,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialising-the-uv-project">Initialising the uv Project</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-required-packages">Installing the Required Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ippy-package">The IPPy Package</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#launching-jupyterlab">Launching JupyterLab</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#syncing-on-a-new-machine">Syncing on a New Machine</a></li>
 </ul>
   </nav></div>
