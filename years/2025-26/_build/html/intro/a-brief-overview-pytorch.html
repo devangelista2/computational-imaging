@@ -65,8 +65,8 @@
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="End-to-End Reconstruction and Imaging Architectures" href="../end-to-end/end-to-end.html" />
-    <link rel="prev" title="From Supervised Learning to Neural Networks" href="from-ml-to-nn.html" />
+    <link rel="next" title="From Machine Learning to Neural Networks" href="from-ml-to-nn.html" />
+    <link rel="prev" title="Environment Setup" href="environment-setup.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -177,15 +177,14 @@
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="environment-setup.html">Environment Setup</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -692,11 +691,11 @@ d loss / d w: 30.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 1.2465085983276367
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 1.0328664779663086
 Weights before the update:
-tensor([[0.6851, 0.1344]])
+tensor([[-0.6125, -0.5329]])
 Weights after one SGD step:
-tensor([[ 0.8244, -0.0360]])
+tensor([[-0.4725, -0.6800]])
 </pre></div>
 </div>
 </div>
@@ -760,7 +759,7 @@ Inside its <code class="docutils literal notranslate"><span class="pre">optim</s
   _warn_get_lr_called_within_step(self)
 </pre></div>
 </div>
-<img alt="../_images/64346c0e62f74499bdd3f81a227b4723d72f7854f0288cfa3d1217f5c70c5811.png" src="../_images/64346c0e62f74499bdd3f81a227b4723d72f7854f0288cfa3d1217f5c70c5811.png" />
+<img alt="../_images/a8c1e868244a302e60a4e20900393367bd2b8a5fe0a5c44603ccac7ca54e880a.png" src="../_images/a8c1e868244a302e60a4e20900393367bd2b8a5fe0a5c44603ccac7ca54e880a.png" />
 <img alt="../_images/ca0f032687f4ac0b52c6139ec095489fda1a3c36bba08dc039c2a08ef4fc38bd.png" src="../_images/ca0f032687f4ac0b52c6139ec095489fda1a3c36bba08dc039c2a08ef4fc38bd.png" />
 </div>
 </div>
@@ -820,20 +819,20 @@ While finite number precision has been already briefly discussed in this section
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="from-ml-to-nn.html"
+       href="environment-setup.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">From Supervised Learning to Neural Networks</p>
+        <p class="prev-next-title">Environment Setup</p>
       </div>
     </a>
     <a class="right-next"
-       href="../end-to-end/end-to-end.html"
+       href="from-ml-to-nn.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">End-to-End Reconstruction and Imaging Architectures</p>
+        <p class="prev-next-title">From Machine Learning to Neural Networks</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

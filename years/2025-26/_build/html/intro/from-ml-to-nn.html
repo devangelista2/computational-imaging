@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>From Supervised Learning to Neural Networks &#8212; Computational Imaging</title>
+    <title>From Machine Learning to Neural Networks &#8212; Computational Imaging</title>
   
   
   
@@ -65,8 +65,8 @@
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="A Brief PyTorch Viewpoint" href="a-brief-overview-pytorch.html" />
-    <link rel="prev" title="Environment Setup" href="environment-setup.html" />
+    <link rel="next" title="End-to-End Image Reconstruction methods" href="../end-to-end/end-to-end.html" />
+    <link rel="prev" title="A Brief PyTorch Viewpoint" href="a-brief-overview-pytorch.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -179,13 +179,12 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="environment-setup.html">Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">From Supervised Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -375,7 +374,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>From Supervised Learning to Neural Networks</h1>
+    <h1>From Machine Learning to Neural Networks</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -405,8 +404,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="from-supervised-learning-to-neural-networks">
-<h1>From Supervised Learning to Neural Networks<a class="headerlink" href="#from-supervised-learning-to-neural-networks" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="from-machine-learning-to-neural-networks">
+<h1>From Machine Learning to Neural Networks<a class="headerlink" href="#from-machine-learning-to-neural-networks" title="Link to this heading">#</a></h1>
 <section id="why-this-chapter-comes-first">
 <h2>Why This Chapter Comes First<a class="headerlink" href="#why-this-chapter-comes-first" title="Link to this heading">#</a></h2>
 <p>Before discussing <strong>CNNs</strong> <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>, <strong>UNets</strong> <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>, <strong>transformers</strong> <span id="id3">[<a class="reference internal" href="../references.html#id7" title="Alexey Dosovitskiy and others. An image is worth 16x16 words: transformers for image recognition at scale. International Conference on Learning Representations, 2021.">4</a>]</span>, or <strong>generative models</strong>, it is important to fix the conceptual transition from classical inverse problems to learning-based reconstruction. If this transition is not made carefully, neural networks risk appearing as a completely separate subject, disconnected from the operator-theoretic and variational language of computational imaging. In reality, the connection is very direct.</p>
@@ -809,10 +808,10 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: -1.8298230171203613
-Loss: 8.007898330688477
-Gradient with respect to the weight: -11.319292068481445
-Gradient with respect to the bias: -5.659646034240723
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 1.625720500946045
+Loss: 0.39152613282203674
+Gradient with respect to the weight: 2.5028820037841797
+Gradient with respect to the bias: 1.2514410018920898
 </pre></div>
 </div>
 </div>
@@ -848,7 +847,7 @@ Gradient with respect to the bias: -5.659646034240723
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>For a comprehensive treatment of the supervised learning framework and the statistical foundations of neural network training, see <span id="id11">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">5</a>]</span> and <span id="id12">[<a class="reference internal" href="../references.html#id19" title="Christopher M Bishop. Pattern Recognition and Machine Learning. Springer, 2006.">2</a>]</span>. The theoretical and probabilistic foundations of inverse problems, including the role of noise, regularization, and prior information, are developed rigorously in <span id="id13">[<a class="reference internal" href="../references.html#id2" title="Jari Kaipio and Erkki Somersalo. Statistical and Computational Inverse Problems. Springer, 2005.">8</a>]</span>. The specific question of how deep learning techniques apply to imaging inverse problems, including the risk minimization perspective, generalization considerations, and connections to classical reconstruction theory, is surveyed in <span id="id14">[<a class="reference internal" href="../references.html#id22" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
+<p>For a comprehensive treatment of the statistical foundations of neural network training, see <span id="id11">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">5</a>]</span> and <span id="id12">[<a class="reference internal" href="../references.html#id19" title="Christopher M Bishop. Pattern Recognition and Machine Learning. Springer, 2006.">2</a>]</span>. The theoretical and probabilistic foundations of inverse problems, including the role of noise, regularization, and prior information, are developed rigorously in <span id="id13">[<a class="reference internal" href="../references.html#id2" title="Jari Kaipio and Erkki Somersalo. Statistical and Computational Inverse Problems. Springer, 2005.">8</a>]</span>. The specific question of how deep learning techniques apply to imaging inverse problems, including the risk minimization perspective, generalization considerations, and connections to classical reconstruction theory, is surveyed in <span id="id14">[<a class="reference internal" href="../references.html#id22" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
 <p>The original backpropagation algorithm is due to <span id="id15">[<a class="reference internal" href="../references.html#id21" title="David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">14</a>]</span>; understanding this paper remains one of the best ways to internalize what automatic differentiation actually computes.</p>
 </section>
 </section>
@@ -884,20 +883,20 @@ Gradient with respect to the bias: -5.659646034240723
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="environment-setup.html"
+       href="a-brief-overview-pytorch.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Environment Setup</p>
+        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
       </div>
     </a>
     <a class="right-next"
-       href="a-brief-overview-pytorch.html"
+       href="../end-to-end/end-to-end.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
+        <p class="prev-next-title">End-to-End Image Reconstruction methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -7,12 +7,12 @@ parts:
   - caption: Getting Started
     chapters:
       - file: intro/environment-setup
+      - file: intro/a-brief-overview-pytorch
   - caption: Neural Networks for Imaging
     chapters:
       - file: intro/from-ml-to-nn
-      - file: intro/a-brief-overview-pytorch
       - file: end-to-end/end-to-end
-      - file: end-to-end/self-supervised-training
+#      - file: end-to-end/self-supervised-training
 #  - caption: Noise, Data, and Evaluation
 #    chapters:
 #      - file: noise/the-inverse-crime
