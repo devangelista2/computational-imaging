@@ -412,7 +412,7 @@
 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">gray</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">tensor</span> <span class="k">as</span> <span class="n">image_tensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gray</span><span class="p">,</span> <span class="n">show</span>
 </pre></div>
 </div>
 </div>
@@ -434,19 +434,28 @@
 <p>Shape errors are among the most common mistakes when moving from equations to code. An operator that expects input of shape <span class="math notranslate nohighlight">\((B,1,H,W)\)</span> and receives <span class="math notranslate nohighlight">\((B,H,W)\)</span> will either fail silently or broadcast in an unintended way. Getting shapes right is the first step in getting the mathematics right.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="n">tensor</span> <span class="o">=</span> <span class="n">image_tensor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook-ready tensor shape:&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dtype:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;intensity range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="n">x_hw</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>                  <span class="c1"># (H, W)</span>
+<span class="n">x_chw</span> <span class="o">=</span> <span class="n">x_hw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                  <span class="c1"># (C, H, W)</span>
+<span class="n">x_bchw</span> <span class="o">=</span> <span class="n">x_chw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                <span class="c1"># (B, C, H, W)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tensor with shape (H, W):&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x_hw</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tensor with shape (C, H, W):&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x_chw</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tensor with shape (B, C, H, W):&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x_bchw</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dtype:&#39;</span><span class="p">,</span> <span class="n">x_bchw</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;intensity range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">x_bchw</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">x_bchw</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Notebook-ready tensor shape: (1, 1, 256, 256)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tensor with shape (H, W): (256, 256)
+Tensor with shape (C, H, W): (1, 256, 256)
+Tensor with shape (B, C, H, W): (1, 1, 256, 256)
 dtype: torch.float32
 intensity range: 0.0 0.8627451062202454
 </pre></div>
@@ -658,11 +667,11 @@ d loss / d w: 30.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 1.0560426712036133
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 3.0339691638946533
 Weights before the update:
-tensor([[0.5270, 0.1976]])
+tensor([[-0.5498, -0.0656]])
 Weights after one SGD step:
-tensor([[0.6006, 0.0375]])
+tensor([[-0.2913, -0.2968]])
 </pre></div>
 </div>
 </div>
@@ -726,7 +735,7 @@ Inside its <code class="docutils literal notranslate"><span class="pre">optim</s
   _warn_get_lr_called_within_step(self)
 </pre></div>
 </div>
-<img alt="../_images/1ab3e19d017cf38cb9f66af8e0560c75192330122fcb909cdf02625f0627c36b.png" src="../_images/1ab3e19d017cf38cb9f66af8e0560c75192330122fcb909cdf02625f0627c36b.png" />
+<img alt="../_images/e59c8e13e9190d44d424e58e0dc261d25da0191a8c4ad59b42d48fa7925f5e3d.png" src="../_images/e59c8e13e9190d44d424e58e0dc261d25da0191a8c4ad59b42d48fa7925f5e3d.png" />
 <img alt="../_images/9395deba681bdf11532e8e38139dbc752a3e475f738ba4020c8c5dcdf386d49a.png" src="../_images/9395deba681bdf11532e8e38139dbc752a3e475f738ba4020c8c5dcdf386d49a.png" />
 </div>
 </div>
@@ -822,9 +831,21 @@ Inside its <code class="docutils literal notranslate"><span class="pre">optim</s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/30676e61c1766cc24dcebf88f0b1af5cd904cec2d2ae25c0a68193c1020ac92e.png" src="../_images/30676e61c1766cc24dcebf88f0b1af5cd904cec2d2ae25c0a68193c1020ac92e.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Working device: cpu
-Measurement tensor shape: (1, 1, 256, 256)
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">38</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="n">device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">38</span> <span class="n">x_true</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span> <span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span>     <span class="n">kernel_type</span><span class="o">=</span><span class="s1">&#39;motion&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="n">kernel_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="n">motion_angle</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span> <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+
+<span class="ne">NameError</span>: name &#39;tensor&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -889,7 +910,14 @@ Measurement tensor shape: (1, 1, 256, 256)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final training loss: 0.002446
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">patches</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">patches</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">patches</span><span class="p">,</span> <span class="n">patches</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">patches</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">patches</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;tensor&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -921,8 +949,21 @@ Measurement tensor shape: (1, 1, 256, 256)
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6e2b1c112791e495aeeaf253db9e2b6e7f0d3ea091b9a0c8d804e64c9524d3f0.png" src="../_images/6e2b1c112791e495aeeaf253db9e2b6e7f0d3ea091b9a0c8d804e64c9524d3f0.png" />
-<img alt="../_images/b3fba90d444162e9344d1c9e4c5f51cc7f584bfa3738ef4fac1ce6c3a35739b2.png" src="../_images/b3fba90d444162e9344d1c9e4c5f51cc7f584bfa3738ef4fac1ce6c3a35739b2.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">x_pred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">axes</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="p">[</span><span class="n">x_true</span><span class="p">,</span> <span class="n">y_delta</span><span class="p">,</span> <span class="n">x_adjoint</span><span class="p">,</span> <span class="n">x_pred</span><span class="p">],</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="p">[</span><span class="s1">&#39;Original&#39;</span><span class="p">,</span> <span class="s1">&#39;Blurred input&#39;</span><span class="p">,</span> <span class="s1">&#39;Adjoint image&#39;</span><span class="p">,</span> <span class="s1">&#39;Network output&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="p">):</span>
+
+<span class="ne">NameError</span>: name &#39;y_delta&#39; is not defined
+</pre></div>
+</div>
 </div>
 </div>
 </section>

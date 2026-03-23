@@ -452,7 +452,7 @@ K : \mathbb{R}^{B \times C \times H \times W} \to \mathbb{R}^{B \times C' \times
 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">gray</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">tensor</span> <span class="k">as</span> <span class="n">image_tensor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gray</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">show</span>
 </pre></div>
 </div>
 </div>
@@ -463,8 +463,8 @@ K : \mathbb{R}^{B \times C \times H \times W} \to \mathbb{R}^{B \times C' \times
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="n">array_uint8</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">array_float</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">array_uint8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">array_float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
 
 <span class="n">single_image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array_float</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">batched_image</span> <span class="o">=</span> <span class="n">single_image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -509,17 +509,21 @@ Mini-batch of three images: (3, 1, 256, 256)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MayoStylePatchDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
-        <span class="n">tensor</span> <span class="o">=</span> <span class="n">image_tensor</span><span class="p">(</span><span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">))</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (C, H, W)</span>
+
         <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span> <span class="o">-</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span> <span class="o">-</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
-                <span class="n">patch</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">patch_size</span><span class="p">]</span>
+                <span class="n">patch</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">patch_size</span><span class="p">]</span>
                 <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patches</span> <span class="o">=</span> <span class="n">patches</span>
 
@@ -545,7 +549,7 @@ Mini-batch of three images: (3, 1, 256, 256)
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches in the dataset: 16
 Batch tensor shape: (4, 1, 64, 64)
 Batch dtype: torch.float32
-Batch intensity range: 0.0 0.8549019694328308
+Batch intensity range: 0.0 0.8627451062202454
 </pre></div>
 </div>
 </div>
