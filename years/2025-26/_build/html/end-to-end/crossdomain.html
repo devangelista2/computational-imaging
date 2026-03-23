@@ -560,41 +560,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\tivog\computational-imaging\years\2025-26\end-to-end\..\IPPy\solvers.py:20: RuntimeWarning: numba is not installed. IPPy solvers will run without JIT acceleration.
-  warnings.warn(
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">69</span>
-<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="c1"># --- Load data</span>
-<span class="g g-Whitespace">     </span><span class="mi">68</span> <span class="n">train_data</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="s2">&quot;../data/Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">69</span> <span class="n">train_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="c1"># Define CTProjector operator</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span> <span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">CTProjector</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span>     <span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="n">angles</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="n">det_size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span>     <span class="n">geometry</span><span class="o">=</span><span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">77</span> <span class="p">)</span>
-
-<span class="nn">File ~\anaconda3\envs\teaching\Lib\site-packages\torch\utils\data\dataloader.py:394,</span> in <span class="ni">DataLoader.__init__</span><span class="nt">(self, dataset, batch_size, shuffle, sampler, batch_sampler, num_workers, collate_fn, pin_memory, drop_last, timeout, worker_init_fn, multiprocessing_context, generator, prefetch_factor, persistent_workers, pin_memory_device, in_order)</span>
-<span class="g g-Whitespace">    </span><span class="mi">392</span> <span class="k">else</span><span class="p">:</span>  <span class="c1"># map-style</span>
-<span class="g g-Whitespace">    </span><span class="mi">393</span>     <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">394</span>         <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
-<span class="g g-Whitespace">    </span><span class="mi">395</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">396</span>         <span class="n">sampler</span> <span class="o">=</span> <span class="n">SequentialSampler</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
-
-<span class="nn">File ~\anaconda3\envs\teaching\Lib\site-packages\torch\utils\data\sampler.py:149,</span> in <span class="ni">RandomSampler.__init__</span><span class="nt">(self, data_source, replacement, num_samples, generator)</span>
-<span class="g g-Whitespace">    </span><span class="mi">144</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">145</span>         <span class="sa">f</span><span class="s2">&quot;replacement should be a boolean value, but got replacement=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replacement</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">146</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">148</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">149</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">150</span>         <span class="sa">f</span><span class="s2">&quot;num_samples should be a positive integer value, but got num_samples=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">151</span>     <span class="p">)</span>
-
-<span class="ne">ValueError</span>: num_samples should be a positive integer value, but got num_samples=0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>CUDA not available. CTProjector will use CPU.
+Attempting to create ASTRA projector type: &#39;linear&#39; for &#39;parallel&#39; geometry...
+Successfully created ASTRA projector type: &#39;linear&#39;
+CTProjector initialized. Geometry: parallel. Using GPU: False. FBP Algorithm: FBP
 </pre></div>
 </div>
 </div>
