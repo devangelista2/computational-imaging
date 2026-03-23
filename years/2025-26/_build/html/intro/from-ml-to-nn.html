@@ -28,11 +28,11 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
@@ -66,7 +66,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="End-to-End Image Reconstruction methods" href="../end-to-end/end-to-end.html" />
-    <link rel="prev" title="A Brief PyTorch Viewpoint" href="a-brief-overview-pytorch.html" />
+    <link rel="prev" title="PyTorch, Automatic Differentiation, and Training Mechanics" href="a-brief-overview-pytorch.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -179,7 +179,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="environment-setup.html">Environment Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing-images-for-neural-networks.html">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="current nav bd-sidenav">
@@ -461,10 +462,10 @@ f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
 <p>This is a straight line in the <span class="math notranslate nohighlight">\((x, y)\)</span> plane. The code below plots two different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> and shows how dramatically the prediction can change.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
 
 <span class="n">theta1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
@@ -485,7 +486,7 @@ f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/106387af66aa9261215da4fcb9d029c0b0417585ec7d607a7d35d21651712667.png" src="../_images/106387af66aa9261215da4fcb9d029c0b0417585ec7d607a7d35d21651712667.png" />
+<img alt="../_images/6f3c90cdbebea4bf366639ec5ef7068473a4d1968eda39697cfa31c2eeafa3f6.png" src="../_images/6f3c90cdbebea4bf366639ec5ef7068473a4d1968eda39697cfa31c2eeafa3f6.png" />
 </div>
 </div>
 <p>Think of <span class="math notranslate nohighlight">\(x\)</span> as the input and <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}(x)\)</span> as the model’s prediction. Notice how different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> lead to very different outputs. Now overlay the training data on the same plot.</p>
@@ -509,7 +510,7 @@ f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/b118641cab82c529b529194f8e22a2ca1aa82126d7762b5327797252453d5ed2.png" src="../_images/b118641cab82c529b529194f8e22a2ca1aa82126d7762b5327797252453d5ed2.png" />
+<img alt="../_images/535c180e05a052d66877e6ac4334e6b9d9f46c7e35e82058499378c96903fd72.png" src="../_images/535c180e05a052d66877e6ac4334e6b9d9f46c7e35e82058499378c96903fd72.png" />
 </div>
 </div>
 <p><em>Which line fits the data better?</em> The first one, parameterised by <span class="math notranslate nohighlight">\(\boldsymbol{\Theta} = (1, 0.2)\)</span> and, as inspection of the data-generation code confirms, those are exactly the parameters used.</p>
@@ -527,8 +528,8 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x}) = W\boldsymbol{x} + \boldsymbol{b},
 <p>This model, parameterized by <span class="math notranslate nohighlight">\(\Theta = (W, \boldsymbol{b})\)</span>, comprises a total of <span class="math notranslate nohighlight">\(s(d+1)\)</span> parameters, i.e. <span class="math notranslate nohighlight">\(sd\)</span> parameters for <span class="math notranslate nohighlight">\(W\)</span> and <span class="math notranslate nohighlight">\(s\)</span> parameters for <span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span>. Linear models are easy to analyse and optimize, but their expressivity is fundamentally limited: they can only represent linear functions of the input. Other classical ML methods, such as polynomial regression, Support Vector Machines (SVM), Random Forests, or XGBoost, improve expressivity, but none of them are expressive enough for the complexity of image reconstruction tasks. The simplest way to see the limitation is to try to approximate <span class="math notranslate nohighlight">\(\sin(x)\)</span> with an affine model. The code below shows the failure directly.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
@@ -564,7 +565,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x}) = W\boldsymbol{x} + \boldsymbol{b},
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a05bd000257c2e9499245c2710478131b3154099f53546c6f8794d2f9c82b40a.png" src="../_images/a05bd000257c2e9499245c2710478131b3154099f53546c6f8794d2f9c82b40a.png" />
+<img alt="../_images/fbf107fd2b65d537ff5b0388059de8dec75f3427590ce1d66bc9c7f90389bc92.png" src="../_images/fbf107fd2b65d537ff5b0388059de8dec75f3427590ce1d66bc9c7f90389bc92.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best-fit affine MSE on sin(x): 0.4218
 </pre></div>
 </div>
@@ -611,7 +612,7 @@ W_2W_1\boldsymbol{x}+W_2\boldsymbol{b}_1+\boldsymbol{b}_2,
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define ReLU</span>
-<span class="k">def</span> <span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
 <span class="c1"># Define x</span>
@@ -632,7 +633,7 @@ W_2W_1\boldsymbol{x}+W_2\boldsymbol{b}_1+\boldsymbol{b}_2,
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/75bf902b4713c816abad0f41b234ca557ac77c7189d2e15d171ecf2d41e218d1.png" src="../_images/75bf902b4713c816abad0f41b234ca557ac77c7189d2e15d171ecf2d41e218d1.png" />
+<img alt="../_images/af37fd8514873ed3e978a067834c5bc1884909a95dde5d728c7edd0696c421e9.png" src="../_images/af37fd8514873ed3e978a067834c5bc1884909a95dde5d728c7edd0696c421e9.png" />
 </div>
 </div>
 <p>Re-define the model <span class="math notranslate nohighlight">\(f_\Theta\)</span> as above, but inserting <span class="math notranslate nohighlight">\(\rho(x)\)</span> between the two linear models <span class="math notranslate nohighlight">\(f_{\Theta^1}\)</span> and <span class="math notranslate nohighlight">\(f_{\Theta^2}\)</span>:</p>
@@ -662,8 +663,8 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=W_2\rho(W_1\boldsymbol{x}+\boldsymbol{b}
 <p>The role of the activation is deeper than simply introducing nonlinearity. It shapes the geometry of the function class. A ReLU network represents a piecewise affine map whose number of affine regions grows exponentially with depth, a concrete hint of why deep networks can approximate highly complex measurement-to-image relationships.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
 
@@ -698,7 +699,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=W_2\rho(W_1\boldsymbol{x}+\boldsymbol{b}
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d3f60f4cef18f725590e840b444537da1304aaec53fbb90aed512df8d15e5947.png" src="../_images/d3f60f4cef18f725590e840b444537da1304aaec53fbb90aed512df8d15e5947.png" />
+<img alt="../_images/b24453f5e0c9776d1eb505318378fe2ee9f95cbdfbf6362a971d8689943c244c.png" src="../_images/b24453f5e0c9776d1eb505318378fe2ee9f95cbdfbf6362a971d8689943c244c.png" />
 </div>
 </div>
 <section id="notation">
@@ -790,7 +791,7 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
 <p>Another, crucial component of neural network training is how <span class="math notranslate nohighlight">\(\ell(f_\Theta(\boldsymbol{x}^{(i)}), y^{(i)})\)</span> is computed. In practice, this is usually done via <strong>backpropagation</strong> <span id="id6">[<a class="reference internal" href="../references.html#id21" title="David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">14</a>]</span>, which is simply an efficient implementation of the chain rule through the <strong>computational graph</strong>, which exploits the recursive architecture of neural network models defined above.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">]])</span>
@@ -808,10 +809,10 @@ f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: 1.625720500946045
-Loss: 0.39152613282203674
-Gradient with respect to the weight: 2.5028820037841797
-Gradient with respect to the bias: 1.2514410018920898
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: -0.3133190870285034
+Loss: 1.7248070240020752
+Gradient with respect to the weight: -5.253276348114014
+Gradient with respect to the bias: -2.626638174057007
 </pre></div>
 </div>
 </div>
@@ -888,7 +889,7 @@ Gradient with respect to the bias: 1.2514410018920898
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
+        <p class="prev-next-title">PyTorch, Automatic Differentiation, and Training Mechanics</p>
       </div>
     </a>
     <a class="right-next"

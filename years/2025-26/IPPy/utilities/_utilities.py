@@ -5,7 +5,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from PIL import Image
-from torchvision.transforms.functional import to_pil_image
+
+try:
+    from torchvision.transforms.functional import to_pil_image
+except ImportError:
+    to_pil_image = None
 
 
 def create_path_if_not_exists(path: str) -> None:
@@ -62,7 +66,11 @@ def save_image(x: torch.Tensor, save_path: str) -> None:
     :param str save_path: the path to which x has to be saved.
     """
     # Convert to PIL Image
-    x = to_pil_image(x[0, 0])
+    if to_pil_image is not None:
+        x = to_pil_image(x[0, 0])
+    else:
+        x = x[0, 0].detach().cpu().clamp(0, 1)
+        x = Image.fromarray((255 * x).round().to(torch.uint8).numpy(), mode="L")
 
     # Save
     x.save(save_path)

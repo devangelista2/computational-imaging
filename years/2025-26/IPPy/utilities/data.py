@@ -5,12 +5,21 @@ import os
 import warnings
 
 from torch.utils.data import Dataset
-from torchvision.transforms import Resize
+import torch.nn.functional as F
 
 from ._utilities import *
 
 # Disable warnings
 warnings.filterwarnings("ignore")
+
+
+def _resize_tensor(img: torch.Tensor, data_shape: int) -> torch.Tensor:
+    return F.interpolate(
+        img.float(),
+        size=(data_shape, data_shape),
+        mode="bilinear",
+        align_corners=False,
+    )
 
 
 class ImageDataset(Dataset):
@@ -43,7 +52,7 @@ class ImageDataset(Dataset):
             img = torch.cat(imgs, dim=0)
 
         if self.data_shape is not None:
-            img = Resize(self.data_shape)(img)
+            img = _resize_tensor(img, self.data_shape)
 
         return img, self.get_name(index)
 
@@ -93,7 +102,7 @@ class TrainDataset(Dataset):
             y = torch.cat([load_image(self.out_name_list[i]) for i in range(start, index.stop)], dim=0)
 
         if self.data_shape is not None:
-            x = Resize(self.data_shape)(x)
-            y = Resize(self.data_shape)(y)
+            x = _resize_tensor(x, self.data_shape)
+            y = _resize_tensor(y, self.data_shape)
 
         return x, y

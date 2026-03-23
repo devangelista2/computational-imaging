@@ -7,6 +7,7 @@ parts:
   - caption: Getting Started
     chapters:
       - file: intro/environment-setup
+      - file: intro/processing-images-for-neural-networks
       - file: intro/a-brief-overview-pytorch
   - caption: Neural Networks for Imaging
     chapters:

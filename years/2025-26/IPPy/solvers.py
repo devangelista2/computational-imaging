@@ -1,7 +1,27 @@
 import math
 import time
+import warnings
 
-import numba as nb
+try:
+    import numba as nb
+except ImportError:
+    class _NumbaShim:
+        @staticmethod
+        def njit(*args, **kwargs):
+            if args and callable(args[0]) and len(args) == 1 and not kwargs:
+                return args[0]
+
+            def decorator(func):
+                return func
+
+            return decorator
+
+    nb = _NumbaShim()
+    warnings.warn(
+        "numba is not installed. IPPy solvers will run without JIT acceleration.",
+        RuntimeWarning,
+    )
+
 import numpy as np
 import torch
 

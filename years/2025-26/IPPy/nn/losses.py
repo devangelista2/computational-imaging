@@ -1,7 +1,11 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchvision.models as models
+
+try:
+    import torchvision.models as models
+except ImportError:
+    models = None
 
 
 class MixedLoss(nn.Module):
@@ -34,6 +38,10 @@ class FourierLoss(nn.Module):
 class PerceptualLoss(nn.Module):
     def __init__(self):
         super().__init__()
+        if models is None:
+            raise ImportError(
+                "torchvision is required to use PerceptualLoss, but it is not installed."
+            )
         vgg = models.vgg16(weights=models.VGG16_Weights.DEFAULT).features[
             :16
         ]  # Use early layers for texture

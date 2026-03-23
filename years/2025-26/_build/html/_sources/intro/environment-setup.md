@@ -60,7 +60,7 @@ cd computational-imaging
 
 Every command in the rest of this guide should be run from inside this folder.
 
-## Initialising the uv Project
+## Initializing the uv Project
 
 Initialize a new `uv` project in the current directory:
 
@@ -118,6 +118,8 @@ git clone https://github.com/devangelista2/IPPy.git
 ```
 
 By running this command inside your `computational-imaging` directory, it should place an `IPPy` folder inside the project itself. However, to be able to run functions, you should extract the inner `IPPy` folder (which contains the actual functionalities), and place it in the root `computational-imaging` folder.
+
+To avoid possible conficts with different versions of `IPPy`, a static version of the package is uploaded on Virtuale and available for download.
 
 Your directory should look like this:
 

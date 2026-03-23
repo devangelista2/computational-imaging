@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>A Brief PyTorch Viewpoint &#8212; Computational Imaging</title>
+    <title>PyTorch, Automatic Differentiation, and Training Mechanics &#8212; Computational Imaging</title>
   
   
   
@@ -28,11 +28,11 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
@@ -66,7 +66,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="From Machine Learning to Neural Networks" href="from-ml-to-nn.html" />
-    <link rel="prev" title="Environment Setup" href="environment-setup.html" />
+    <link rel="prev" title="Processing Images for Neural Networks" href="processing-images-for-neural-networks.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -179,7 +179,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="environment-setup.html">Environment Setup</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing-images-for-neural-networks.html">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
@@ -374,7 +375,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>A Brief PyTorch Viewpoint</h1>
+    <h1>PyTorch, Automatic Differentiation, and Training Mechanics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -386,9 +387,18 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-representation-and-differentiation">Computational Representation and Differentiation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-mechanics-in-practice">Training Mechanics in Practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-pytorch-to-ippy">From <strong>PyTorch</strong> to <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-computational-viewpoint-matters-for-imaging">Why This Computational Viewpoint Matters for Imaging</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-exercise-receptive-field-and-pooling-in-image-reconstruction">Structured Exercise: Receptive Field and Pooling in Image Reconstruction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-build-the-dataset">Task 1: Build the dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-2-define-two-reconstruction-models">Task 2: Define two reconstruction models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-3-train-both-models">Task 3: Train both models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-4-compare-the-outputs">Task 4: Compare the outputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverable">Deliverable</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -400,18 +410,29 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="a-brief-pytorch-viewpoint">
-<h1>A Brief <strong>PyTorch</strong> Viewpoint<a class="headerlink" href="#a-brief-pytorch-viewpoint" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="pytorch-automatic-differentiation-and-training-mechanics">
+<h1>PyTorch, Automatic Differentiation, and Training Mechanics<a class="headerlink" href="#pytorch-automatic-differentiation-and-training-mechanics" title="Link to this heading">#</a></h1>
 <section id="computational-representation-and-differentiation">
 <h2>Computational Representation and Differentiation<a class="headerlink" href="#computational-representation-and-differentiation" title="Link to this heading">#</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In these notes, <strong>PyTorch</strong> <span id="id1">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span> is not presented as a software tutorial for its own sake. It is introduced as a concrete language for implementing <strong>parameterized maps</strong>, <strong>computational graphs</strong>, and <strong>gradient-based optimization</strong> in imaging.</p>
+<p>The previous notebook introduced the data side of the pipeline: how an inverse problem is translated into tensors, batches, normalization rules, and datasets. We may now focus on the next layer of the implementation, namely the tools that make it possible to define <strong>parameterized maps</strong>, compute gradients, and carry out optimization in practice.</p>
+<p>In computational imaging, <strong>PyTorch</strong> is not important merely because it is popular. It is important because it provides a concrete framework in which forward operators, neural architectures, losses, and optimization algorithms can all be written inside one differentiable computational structure.</p>
+<p>The goal of this chapter is therefore more specific than a general software tutorial. We want to understand how the mathematical objects of the course become executable objects: tensors become data containers, modules become parameterized maps, losses become scalar functionals, and backpropagation becomes a systematic implementation of the chain rule.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">ROOT</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">&quot;course_utils.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">gray</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">tensor</span> <span class="k">as</span> <span class="n">image_tensor</span>
+</pre></div>
 </div>
-<p>Before diving into the more advanced topics of neural networks for computational imaging, we introduce here the basics of <code class="docutils literal notranslate"><span class="pre">torch</span></code>, the most widely-used framework for the implementation of neural networks in the scientific community.</p>
-<p>The goal of this chapter is not to teach <strong>PyTorch</strong> as a software package in full generality, but rather to explain how the mathematical ingredients already introduced in the course are represented computationally.</p>
+</div>
+</div>
 <p><strong>Tensors as discrete objects.</strong></p>
-<p>In <strong>PyTorch</strong>, the basic object is the <code class="docutils literal notranslate"><span class="pre">tensor</span></code>. From a mathematical viewpoint, a tensor is simply a multidimensional array, but in practice it carries additional information:</p>
+<p>In <strong>PyTorch</strong> <span id="id1">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>, the basic object is the <code class="docutils literal notranslate"><span class="pre">tensor</span></code>. From a mathematical viewpoint, a tensor is simply a multidimensional array, but in practice it carries additional information:</p>
 <ul class="simple">
 <li><p><strong>shape</strong>, which tells us the dimensions;</p></li>
 <li><p><strong>data type</strong>, which determines numerical precision;</p></li>
@@ -427,33 +448,19 @@ document.write(`
 <p>Shape errors are among the most common mistakes when moving from equations to code. An operator that expects input of shape <span class="math notranslate nohighlight">\((B,1,H,W)\)</span> and receives <span class="math notranslate nohighlight">\((B,H,W)\)</span> will either fail silently or broadcast in an unintended way. Getting shapes right is the first step in getting the mathematics right.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local course asset example: load and normalize one Mayo-style image.</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="k">def</span> <span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
-        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">candidate</span>
-    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">tensor</span> <span class="o">=</span> <span class="n">image_tensor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">batch</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-
-<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;Mayo.png&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">))</span>
-<span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook-ready tensor shape:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook-ready tensor shape:&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dtype:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;intensity range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Notebook-ready tensor shape: torch.Size([1, 1, 256, 256])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Notebook-ready tensor shape: (1, 1, 256, 256)
 dtype: torch.float32
 intensity range: 0.0 0.8627451062202454
 </pre></div>
@@ -462,44 +469,18 @@ intensity range: 0.0 0.8627451062202454
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local course asset example: load and normalize one Mayo-style image.</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-
-<span class="k">def</span> <span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
-        <span class="n">candidate</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span> <span class="o">/</span> <span class="n">name</span>
-        <span class="k">if</span> <span class="n">candidate</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">return</span> <span class="n">candidate</span>
-    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not locate imgs/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> from </span><span class="si">{</span><span class="n">here</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-
-<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">course_asset_path</span><span class="p">(</span><span class="s1">&#39;Mayo.png&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">))</span>
-<span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-<span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Notebook-ready tensor shape:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dtype:&#39;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;intensity range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
-<span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">420</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Notebook-ready tensor shape: torch.Size([1, 1, 256, 256])
-dtype: torch.float32
-intensity range: 0.0 0.8627451062202454
-</pre></div>
-</div>
-<img alt="../_images/2082743ad76270c3eb26a24eb474c9dcae39a69f1cb0523d3da87cbdc63d63f9.png" src="../_images/2082743ad76270c3eb26a24eb474c9dcae39a69f1cb0523d3da87cbdc63d63f9.png" />
+<img alt="../_images/566fe26991b27f619c15157b1a8828c980eb736f01f4e68b34edbe741d737693.png" src="../_images/566fe26991b27f619c15157b1a8828c980eb736f01f4e68b34edbe741d737693.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 <span class="n">batch</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -576,9 +557,9 @@ When needed, this computational graphs allows to compute</p>
 <p>For example, this is how <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> implement the computational graph for custom-defined operators:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">OperatorFunction</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OperatorFunction</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">Function</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass: applies op._matvec to each (c, h, w)&quot;&quot;&quot;</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">device</span>
         <span class="n">ctx</span><span class="o">.</span><span class="n">op</span> <span class="o">=</span> <span class="n">op</span>  <span class="c1"># Store the operator for backward pass</span>
@@ -598,7 +579,7 @@ When needed, this computational graphs allows to compute</p>
         <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">grad_output</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Backward pass: applies op._adjoint to each (c, h, w)&quot;&quot;&quot;</span>
         <span class="n">op</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">op</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">grad_output</span><span class="o">.</span><span class="n">device</span>
@@ -625,7 +606,7 @@ When needed, this computational graphs allows to compute</p>
 <p>Let’s see how to compute the gradient of a syntetic loss <span class="math notranslate nohighlight">\(L(\Theta)\)</span> using the computational graph in pytorch.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">3.0</span><span class="p">])</span>
@@ -666,7 +647,7 @@ d loss / d w: 30.0
 <p>To simplify the implementation, the <code class="docutils literal notranslate"><span class="pre">optim</span></code> submodule of pytorch contains a large choice of different pre-defined optimizers, such as <code class="docutils literal notranslate"><span class="pre">SGD</span></code>, <code class="docutils literal notranslate"><span class="pre">Adam</span></code>, <code class="docutils literal notranslate"><span class="pre">AdamW</span></code>, and others. Each optimizer takes as input the set of the parameters that needs to be optimized (parameters of a given Module are accessible using the <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> method), and a learning rate (representing the <span class="math notranslate nohighlight">\(\eta\)</span> term). Then, training proceeds as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
@@ -691,11 +672,11 @@ d loss / d w: 30.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 1.0328664779663086
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loss before the update: 1.1906285285949707
 Weights before the update:
-tensor([[-0.6125, -0.5329]])
+tensor([[-0.5767, -0.5932]])
 Weights after one SGD step:
-tensor([[-0.4725, -0.6800]])
+tensor([[-0.4161, -0.7400]])
 </pre></div>
 </div>
 </div>
@@ -712,8 +693,8 @@ Inside its <code class="docutils literal notranslate"><span class="pre">optim</s
 <a class="reference internal image-reference" href="../_images/lr_scheduler.png"><img alt="../_images/lr_scheduler.png" class="align-center" src="../_images/lr_scheduler.png" style="width: 95%;" /></a>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">num_iter</span> <span class="o">=</span> <span class="mi">100</span>
 
@@ -755,12 +736,207 @@ Inside its <code class="docutils literal notranslate"><span class="pre">optim</s
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/anaconda3/envs/teaching/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:1105: UserWarning: To get the last learning rate computed by the scheduler, please use `get_last_lr()`.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\tivog\anaconda3\envs\teaching\Lib\site-packages\torch\optim\lr_scheduler.py:1427: UserWarning: To get the last learning rate computed by the scheduler, please use `get_last_lr()`.
   _warn_get_lr_called_within_step(self)
 </pre></div>
 </div>
-<img alt="../_images/a8c1e868244a302e60a4e20900393367bd2b8a5fe0a5c44603ccac7ca54e880a.png" src="../_images/a8c1e868244a302e60a4e20900393367bd2b8a5fe0a5c44603ccac7ca54e880a.png" />
-<img alt="../_images/ca0f032687f4ac0b52c6139ec095489fda1a3c36bba08dc039c2a08ef4fc38bd.png" src="../_images/ca0f032687f4ac0b52c6139ec095489fda1a3c36bba08dc039c2a08ef4fc38bd.png" />
+<img alt="../_images/04984137cbbb15920e5dca650eab69eda4b45f7a6d320c5ab32065b2456052a7.png" src="../_images/04984137cbbb15920e5dca650eab69eda4b45f7a6d320c5ab32065b2456052a7.png" />
+<img alt="../_images/fd938916f32844a9e48b5cacd707e1a40f5116cce0d9bceec8500aed12decda7.png" src="../_images/fd938916f32844a9e48b5cacd707e1a40f5116cce0d9bceec8500aed12decda7.png" />
+</div>
+</div>
+</section>
+<section id="from-pytorch-to-ippy">
+<h2>From <strong>PyTorch</strong> to <code class="docutils literal notranslate"><span class="pre">IPPy</span></code><a class="headerlink" href="#from-pytorch-to-ippy" title="Link to this heading">#</a></h2>
+<p>The previous examples explain how <strong>PyTorch</strong> represents tensors, modules, gradients, and optimization. In computational imaging, however, one often needs to include in the computational graph not only learned layers, but also the <strong>forward operator</strong> that models the data acquisition process.</p>
+<p><code class="docutils literal notranslate"><span class="pre">IPPy</span></code> is designed precisely for this purpose. It does not replace <strong>PyTorch</strong>: it extends it with imaging-oriented components that behave like ordinary differentiable modules inside the same computational graph. In particular:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">operators</span></code> contains forward models such as blurring, downscaling, gradient operators, and CT projectors;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solvers</span></code> contains classical reconstruction algorithms, useful as baselines or building blocks;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nn</span></code> contains neural architectures for inverse problems.</p></li>
+</ul>
+<p>From the viewpoint of the present chapter, the key idea is simple: if a measurement model is written as</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K(\boldsymbol{x}) + \boldsymbol{e},
+\]</div>
+<p>then <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> provides an implementation of the operator <span class="math notranslate nohighlight">\(K\)</span> that can be composed with standard <strong>PyTorch</strong> networks. A trainable reconstruction map <span class="math notranslate nohighlight">\(f_\Theta\)</span> can then be fitted by minimizing a loss such as</p>
+<div class="math notranslate nohighlight">
+\[
+\min_\Theta \sum_i \ell\bigl(f_\Theta(\boldsymbol{y}_i^\delta), \boldsymbol{x}_i\bigr),
+\]</div>
+<p>while gradients still flow through the same <code class="docutils literal notranslate"><span class="pre">.backward()</span></code> mechanism introduced above.</p>
+<a class="reference internal image-reference" href="../_images/IPPy-structure.png"><img alt="../_images/IPPy-structure.png" class="align-center" src="../_images/IPPy-structure.png" style="width: 70%;" /></a>
+<p>The point is not merely software convenience. Once the operator belongs to the computational graph, one can mix physics-based components and learned components without changing the mathematical logic of training.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">TensorDataset</span>
+
+<span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">ippy_root</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Could not locate the local IPPy package.&#39;</span><span class="p">)</span>
+
+<span class="n">operators_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="s1">&#39;course_ippy_operators&#39;</span><span class="p">,</span> <span class="n">ippy_root</span> <span class="o">/</span> <span class="s1">&#39;operators.py&#39;</span><span class="p">)</span>
+<span class="n">operators</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">operators_spec</span><span class="p">)</span>
+<span class="n">operators_spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">operators</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_device</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s1">&#39;cuda&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s1">&#39;mps&#39;</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="s1">&#39;cpu&#39;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">):</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">e</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">noise_level</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
+
+<span class="n">x_true</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span>
+    <span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+    <span class="n">kernel_type</span><span class="o">=</span><span class="s1">&#39;motion&#39;</span><span class="p">,</span>
+    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+    <span class="n">motion_angle</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">y_clean</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y_clean</span> <span class="o">+</span> <span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_clean</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">x_adjoint</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">T</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="n">axes</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">x_true</span><span class="p">,</span> <span class="n">y_delta</span><span class="p">,</span> <span class="n">x_adjoint</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Original image&#39;</span><span class="p">,</span> <span class="s1">&#39;Blurred measurement&#39;</span><span class="p">,</span> <span class="s1">&#39;Adjoint backprojection&#39;</span><span class="p">],</span>
+<span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Working device:&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Measurement tensor shape:&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7d4faed7b9adc183826cfc0abf521b1a7b1fca100cf24ad49d98b664ccdad9ec.png" src="../_images/7d4faed7b9adc183826cfc0abf521b1a7b1fca100cf24ad49d98b664ccdad9ec.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Working device: cpu
+Measurement tensor shape: (1, 1, 256, 256)
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>A minimal deblurring experiment.</strong></p>
+<p>We now combine a fixed <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operator with a small convolutional network written in standard <strong>PyTorch</strong>. The operator produces motion-blurred measurements, and the network learns to approximate the inverse map.</p>
+<p>To keep the example lightweight, we extract a small collection of patches from the same image and augment them by flips. This is obviously not a realistic training dataset, but it is enough to illustrate the computational pattern:</p>
+<ol class="arabic simple">
+<li><p>choose clean training images <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span>;</p></li>
+<li><p>generate measurements through an <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> operator <span class="math notranslate nohighlight">\(K\)</span>;</p></li>
+<li><p>define a trainable model <span class="math notranslate nohighlight">\(f_\Theta\)</span> in <strong>PyTorch</strong>;</p></li>
+<li><p>optimize <span class="math notranslate nohighlight">\(\Theta\)</span> by comparing <span class="math notranslate nohighlight">\(f_\Theta(K\boldsymbol{x})\)</span> with <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span>.</p></li>
+</ol>
+<p>This is the basic end-to-end paradigm that will reappear throughout the course.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">patches</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="n">patches</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">patches</span><span class="p">,</span> <span class="n">patches</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">patches</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">TensorDataset</span><span class="p">(</span><span class="n">patches</span><span class="p">),</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">K_patch</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span>
+    <span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+    <span class="n">kernel_type</span><span class="o">=</span><span class="s1">&#39;motion&#39;</span><span class="p">,</span>
+    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+    <span class="n">motion_angle</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+    <span class="n">epoch_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">x_batch</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>
+        <span class="n">x_batch</span> <span class="o">=</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">K_patch</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span> <span class="o">+</span> <span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_batch</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">x_batch</span><span class="p">)</span>
+
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="n">epoch_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+    <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Final training loss: </span><span class="si">{</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">0.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final training loss: 0.002446
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">x_pred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="n">axes</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">x_true</span><span class="p">,</span> <span class="n">y_delta</span><span class="p">,</span> <span class="n">x_adjoint</span><span class="p">,</span> <span class="n">x_pred</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;Original&#39;</span><span class="p">,</span> <span class="s1">&#39;Blurred input&#39;</span><span class="p">,</span> <span class="s1">&#39;Adjoint image&#39;</span><span class="p">,</span> <span class="s1">&#39;Network output&#39;</span><span class="p">],</span>
+<span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Quick deblurring demo with `IPPy` + PyTorch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e47faf1026265c3648dceafc6626e9b73034450153ab6593e2454db5553b7da0.png" src="../_images/e47faf1026265c3648dceafc6626e9b73034450153ab6593e2454db5553b7da0.png" />
+<img alt="../_images/7ffcb7fff2870aa62fc679b79af1bb1296d47a6ea1367c0243992515303f15f2.png" src="../_images/7ffcb7fff2870aa62fc679b79af1bb1296d47a6ea1367c0243992515303f15f2.png" />
 </div>
 </div>
 </section>
@@ -780,11 +956,78 @@ While finite number precision has been already briefly discussed in this section
 <li><p>Write a minimal <code class="docutils literal notranslate"><span class="pre">Linear</span></code> model and verify by hand one gradient that <strong>PyTorch</strong> computes automatically.</p></li>
 <li><p>Explain why <strong>minibatch</strong> optimization changes the numerical optimization problem even when the mathematical loss is unchanged. In particular, explain why minibatch SGD lead to a stochastic optimization procedure.</p></li>
 <li><p>Give one example where a low-level implementation choice, such as padding or dtype, changes the actual model being trained.</p></li>
+<li><p>In the deblurring demo above, identify which part of the pipeline is the forward model, which part is the trainable inverse map, and how gradients are propagated through the full computation.</p></li>
 </ol>
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>.</p>
+<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id24" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. For a more detailed discussion of the imaging-oriented components of the course codebase, see the dedicated notebook on <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> in the end-to-end section.</p>
+</section>
+<section id="structured-exercise-receptive-field-and-pooling-in-image-reconstruction">
+<h2>Structured Exercise: Receptive Field and Pooling in Image Reconstruction<a class="headerlink" href="#structured-exercise-receptive-field-and-pooling-in-image-reconstruction" title="Link to this heading">#</a></h2>
+<p><strong>Expected time:</strong> about 30 minutes.</p>
+<p>The goal of this exercise is to understand, through a small <strong>PyTorch</strong> experiment, why the <strong>receptive field</strong> of a convolutional network matters in computational imaging. This idea will become important later, when deeper architectures and <code class="docutils literal notranslate"><span class="pre">UNet</span></code>-type models are introduced.</p>
+<p>Consider the following setting. Start from a clean grayscale image <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span>, create a blurred version <span class="math notranslate nohighlight">\(\boldsymbol{y}=K\boldsymbol{x}\)</span>, and train a small CNN to predict <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> from <span class="math notranslate nohighlight">\(\boldsymbol{y}\)</span>. Compare two networks:</p>
+<ul class="simple">
+<li><p><strong>Model A:</strong> a shallow CNN with a few <code class="docutils literal notranslate"><span class="pre">Conv2d</span></code> layers and no pooling;</p></li>
+<li><p><strong>Model B:</strong> a CNN that includes at least one downsampling step (for example <code class="docutils literal notranslate"><span class="pre">MaxPool2d</span></code> or a stride-2 convolution) and one upsampling step.</p></li>
+</ul>
+<p>The purpose is not to obtain the best reconstruction quality, but to observe how enlarging the effective receptive field changes the result.</p>
+<section id="task-1-build-the-dataset">
+<h3>Task 1: Build the dataset<a class="headerlink" href="#task-1-build-the-dataset" title="Link to this heading">#</a></h3>
+<p>Use the ideas already shown in this notebook.</p>
+<ol class="arabic simple">
+<li><p>Start from one or more clean images available in the course material.</p></li>
+<li><p>Extract a small set of training patches.</p></li>
+<li><p>Corrupt them with a blur operator. You may use the <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> blurring operator or a standard <code class="docutils literal notranslate"><span class="pre">Conv2d</span></code> with fixed kernel.</p></li>
+<li><p>Keep a small validation set aside.</p></li>
+</ol>
+</section>
+<section id="task-2-define-two-reconstruction-models">
+<h3>Task 2: Define two reconstruction models<a class="headerlink" href="#task-2-define-two-reconstruction-models" title="Link to this heading">#</a></h3>
+<p>Implement two models in <strong>PyTorch</strong>.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">A</span></code> should only use local convolutions and pointwise nonlinearities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">B</span></code> should include one mechanism that enlarges the receptive field, such as pooling or strided convolution, followed by an upsampling step.</p></li>
+<li><p>Keep both models small enough that training runs quickly.</p></li>
+</ol>
+</section>
+<section id="task-3-train-both-models">
+<h3>Task 3: Train both models<a class="headerlink" href="#task-3-train-both-models" title="Link to this heading">#</a></h3>
+<p>Train the two networks on the same data.</p>
+<ol class="arabic simple">
+<li><p>Use the same loss function for both models, for example MSE.</p></li>
+<li><p>Use the same optimizer and roughly the same number of training iterations.</p></li>
+<li><p>Record the training loss, and if possible also the validation loss.</p></li>
+</ol>
+</section>
+<section id="task-4-compare-the-outputs">
+<h3>Task 4: Compare the outputs<a class="headerlink" href="#task-4-compare-the-outputs" title="Link to this heading">#</a></h3>
+<p>Pick one or two validation examples and display:</p>
+<ol class="arabic simple">
+<li><p>the clean image,</p></li>
+<li><p>the blurred input,</p></li>
+<li><p>the reconstruction produced by <code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">A</span></code>,</p></li>
+<li><p>the reconstruction produced by <code class="docutils literal notranslate"><span class="pre">Model</span> <span class="pre">B</span></code>.</p></li>
+</ol>
+<p>Then answer the following questions in a short paragraph:</p>
+<ol class="arabic simple">
+<li><p>Which model reconstructs large blurred structures more effectively?</p></li>
+<li><p>What role does the receptive field appear to play?</p></li>
+<li><p>What is the possible drawback of pooling in an imaging problem where fine spatial detail matters?</p></li>
+</ol>
+</section>
+<section id="deliverable">
+<h3>Deliverable<a class="headerlink" href="#deliverable" title="Link to this heading">#</a></h3>
+<p>Submit the following four items:</p>
+<ol class="arabic simple">
+<li><p>the code defining the two models;</p></li>
+<li><p>one figure showing the training-loss curves;</p></li>
+<li><p>one figure comparing the reconstructions on at least one validation example;</p></li>
+<li><p>a short written discussion of about 8–10 lines explaining what you observed.</p></li>
+</ol>
+<p>A complete deliverable should make it possible to verify both that the models were implemented correctly and that you understood the connection between <strong>receptive field</strong>, <strong>pooling</strong>, and image reconstruction.</p>
+</section>
 </section>
 </section>
 
@@ -819,12 +1062,12 @@ While finite number precision has been already briefly discussed in this section
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="environment-setup.html"
+       href="processing-images-for-neural-networks.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Environment Setup</p>
+        <p class="prev-next-title">Processing Images for Neural Networks</p>
       </div>
     </a>
     <a class="right-next"
@@ -854,9 +1097,18 @@ While finite number precision has been already briefly discussed in this section
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-representation-and-differentiation">Computational Representation and Differentiation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-mechanics-in-practice">Training Mechanics in Practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-pytorch-to-ippy">From <strong>PyTorch</strong> to <code class="docutils literal notranslate"><span class="pre">IPPy</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-computational-viewpoint-matters-for-imaging">Why This Computational Viewpoint Matters for Imaging</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structured-exercise-receptive-field-and-pooling-in-image-reconstruction">Structured Exercise: Receptive Field and Pooling in Image Reconstruction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-build-the-dataset">Task 1: Build the dataset</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-2-define-two-reconstruction-models">Task 2: Define two reconstruction models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-3-train-both-models">Task 3: Train both models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-4-compare-the-outputs">Task 4: Compare the outputs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverable">Deliverable</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
