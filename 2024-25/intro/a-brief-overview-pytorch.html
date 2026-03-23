@@ -564,8 +564,8 @@ tensor([[0., 0., 0.],
         [0., 0., 0.]])
 tensor([[1., 1., 1., 1.],
         [1., 1., 1., 1.]])
-tensor([[0.6080, 0.3746],
-        [0.9843, 0.3518]])
+tensor([[0.3102, 0.4869],
+        [0.4543, 0.7286]])
 </pre></div>
 </div>
 </div>
@@ -723,7 +723,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([-1.7588, -0.0704]), y: tensor([-0.5176,  2.8593])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([ 2.0000, -1.1759]), y: tensor([7.0000, 0.6482])
 </pre></div>
 </div>
 </div>
@@ -881,7 +881,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_batch: torch.Size([16, 8]). Shape of y_batch: torch.Size([16, 1])
-Real value: 1.2710000276565552. Model prediction: -0.3860887885093689.
+Real value: 2.069999933242798. Model prediction: -0.03996574878692627.
 </pre></div>
 </div>
 </div>
@@ -1086,14 +1086,12 @@ This is done as follows:</p>
 <span class="g g-Whitespace">    </span><span class="mi">990</span>     <span class="n">decoupled_weight_decay</span><span class="o">=</span><span class="n">decoupled_weight_decay</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">991</span> <span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:476,</span> in <span class="ni">_single_tensor_adam</span><span class="nt">(params, grads, exp_avgs, exp_avg_sqs, max_exp_avg_sqs, state_steps, grad_scale, found_inf, amsgrad, has_complex, beta1, beta2, lr, weight_decay, eps, maximize, capturable, differentiable, decoupled_weight_decay)</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span>         <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">473</span>             <span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">474</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">475</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">476</span>     <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
-<span class="g g-Whitespace">    </span><span class="mi">478</span> <span class="k">if</span> <span class="n">capturable</span> <span class="ow">or</span> <span class="n">differentiable</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">479</span>     <span class="n">step</span> <span class="o">=</span> <span class="n">step_t</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:457,</span> in <span class="ni">_single_tensor_adam</span><span class="nt">(params, grads, exp_avgs, exp_avg_sqs, max_exp_avg_sqs, state_steps, grad_scale, found_inf, amsgrad, has_complex, beta1, beta2, lr, weight_decay, eps, maximize, capturable, differentiable, decoupled_weight_decay)</span>
+<span class="g g-Whitespace">    </span><span class="mi">453</span>     <span class="n">device_beta1</span> <span class="o">=</span> <span class="n">beta1</span>
+<span class="g g-Whitespace">    </span><span class="mi">455</span> <span class="c1"># Decay the first and second moment running average coefficient</span>
+<span class="ne">--&gt; </span><span class="mi">457</span> <span class="n">exp_avg</span><span class="o">.</span><span class="n">lerp_</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">device_beta1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">459</span> <span class="c1"># Nested if is necessary to bypass jitscript rules</span>
+<span class="g g-Whitespace">    </span><span class="mi">460</span> <span class="k">if</span> <span class="n">differentiable</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">beta2</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">):</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
