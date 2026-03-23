@@ -564,8 +564,8 @@ tensor([[0., 0., 0.],
         [0., 0., 0.]])
 tensor([[1., 1., 1., 1.],
         [1., 1., 1., 1.]])
-tensor([[0.0869, 0.9287],
-        [0.2339, 0.1738]])
+tensor([[0.6080, 0.3746],
+        [0.9843, 0.3518]])
 </pre></div>
 </div>
 </div>
@@ -723,7 +723,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([0.4724, 1.4171]), y: tensor([3.9447, 5.8342])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([-1.7588, -0.0704]), y: tensor([-0.5176,  2.8593])
 </pre></div>
 </div>
 </div>
@@ -881,7 +881,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_batch: torch.Size([16, 8]). Shape of y_batch: torch.Size([16, 1])
-Real value: 0.949999988079071. Model prediction: -0.04690548777580261.
+Real value: 1.2710000276565552. Model prediction: -0.3860887885093689.
 </pre></div>
 </div>
 </div>
@@ -996,55 +996,104 @@ This is done as follows:</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">26</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="c1"># Compute neural network prediction</span>
-<span class="ne">---&gt; </span><span class="mi">26</span> <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">28</span> <span class="c1"># Compare y_pred with the real y</span>
-<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">35</span>
+<span class="g g-Whitespace">     </span><span class="mi">32</span>         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span>         <span class="c1"># Update model weights</span>
+<span class="ne">---&gt; </span><span class="mi">35</span>         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span>         <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span> <span class="c1"># Reset the optimizer state: IMPORTANT</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span>         <span class="c1"># Print out the avg value of the loss</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span>         <span class="c1"># Commented for site impagination</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span>         <span class="c1"># print(f&quot;Epoch: {epoch}. Avg Loss: {loss.item() / (k+1):0.4f}&quot;, end=&quot;\r&quot;)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span>     <span class="c1"># print()</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span> 
+<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Saving the model after the cycle</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/nn/modules/module.py:1776,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1774</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1775</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1776</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/optimizer.py:533,</span> in <span class="ni">Optimizer.profile_hook_step.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">528</span>             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">529</span>                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">func</span><span class="si">}</span><span class="s2"> must return None or a tuple of (new_args, new_kwargs), but got </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">.&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">530</span>             <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">532</span> <span class="c1"># pyrefly: ignore [invalid-param-spec]</span>
+<span class="ne">--&gt; </span><span class="mi">533</span> <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer_step_code</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span> <span class="c1"># call optimizer step post hooks</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/nn/modules/module.py:1787,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1782</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1783</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1784</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1785</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1786</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1787</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1789</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">   </span><span class="mi">1790</span> <span class="n">called_always_called_hooks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/optimizer.py:81,</span> in <span class="ni">_use_grad_for_differentiable.&lt;locals&gt;._use_grad</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span>     <span class="n">torch</span><span class="o">.</span><span class="n">set_grad_enabled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">[</span><span class="s2">&quot;differentiable&quot;</span><span class="p">])</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span>     <span class="n">torch</span><span class="o">.</span><span class="n">_dynamo</span><span class="o">.</span><span class="n">graph_break</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">81</span>     <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">82</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">83</span>     <span class="n">torch</span><span class="o">.</span><span class="n">_dynamo</span><span class="o">.</span><span class="n">graph_break</span><span class="p">()</span>
 
-<span class="nn">Cell In[11], line 10,</span> in <span class="ni">SimpleNN.forward</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">10</span>     <span class="n">x</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1"># Apply ReLU activation to first layer</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># Output layer (no activation for now)</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="k">return</span> <span class="n">x</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:248,</span> in <span class="ni">Adam.step</span><span class="nt">(self, closure)</span>
+<span class="g g-Whitespace">    </span><span class="mi">236</span>     <span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;betas&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">238</span>     <span class="n">has_complex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_group</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">239</span>         <span class="n">group</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">240</span>         <span class="n">params_with_grad</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">245</span>         <span class="n">state_steps</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">248</span>     <span class="n">adam</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">249</span>         <span class="n">params_with_grad</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">250</span>         <span class="n">grads</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">251</span>         <span class="n">exp_avgs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">252</span>         <span class="n">exp_avg_sqs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">253</span>         <span class="n">max_exp_avg_sqs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">254</span>         <span class="n">state_steps</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">255</span>         <span class="n">amsgrad</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;amsgrad&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">256</span>         <span class="n">has_complex</span><span class="o">=</span><span class="n">has_complex</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span>         <span class="n">beta1</span><span class="o">=</span><span class="n">beta1</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">258</span>         <span class="n">beta2</span><span class="o">=</span><span class="n">beta2</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span>         <span class="n">lr</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span>         <span class="n">weight_decay</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span>         <span class="n">eps</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span>         <span class="n">maximize</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;maximize&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span>         <span class="n">foreach</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;foreach&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span>         <span class="n">capturable</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;capturable&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span>         <span class="n">differentiable</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;differentiable&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span>         <span class="n">fused</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;fused&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">267</span>         <span class="n">grad_scale</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;grad_scale&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">268</span>         <span class="n">found_inf</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;found_inf&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">269</span>         <span class="n">decoupled_weight_decay</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;decoupled_weight_decay&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">270</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span> <span class="k">return</span> <span class="n">loss</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/nn/modules/module.py:1776,</span> in <span class="ni">Module._wrapped_call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1774</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compiled_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1775</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1776</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_impl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/optimizer.py:151,</span> in <span class="ni">_disable_dynamo_if_unsupported.&lt;locals&gt;.wrapper.&lt;locals&gt;.maybe_fallback</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">149</span>     <span class="k">return</span> <span class="n">disabled_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">150</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">151</span>     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/nn/modules/module.py:1787,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1782</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
-<span class="g g-Whitespace">   </span><span class="mi">1783</span> <span class="c1"># this function, and just call forward.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1784</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backward_pre_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1785</span>         <span class="ow">or</span> <span class="n">_global_backward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
-<span class="g g-Whitespace">   </span><span class="mi">1786</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1787</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1789</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">   </span><span class="mi">1790</span> <span class="n">called_always_called_hooks</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:971,</span> in <span class="ni">adam</span><span class="nt">(params, grads, exp_avgs, exp_avg_sqs, max_exp_avg_sqs, state_steps, foreach, capturable, differentiable, fused, grad_scale, found_inf, has_complex, decoupled_weight_decay, amsgrad, beta1, beta2, lr, weight_decay, eps, maximize)</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">func</span> <span class="o">=</span> <span class="n">_single_tensor_adam</span>
+<span class="ne">--&gt; </span><span class="mi">971</span> <span class="n">func</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">972</span>     <span class="n">params</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span>     <span class="n">grads</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="n">exp_avgs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span>     <span class="n">exp_avg_sqs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span>     <span class="n">max_exp_avg_sqs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">977</span>     <span class="n">state_steps</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>     <span class="n">amsgrad</span><span class="o">=</span><span class="n">amsgrad</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>     <span class="n">has_complex</span><span class="o">=</span><span class="n">has_complex</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">980</span>     <span class="n">beta1</span><span class="o">=</span><span class="n">beta1</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">981</span>     <span class="n">beta2</span><span class="o">=</span><span class="n">beta2</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">982</span>     <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">983</span>     <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">984</span>     <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">985</span>     <span class="n">maximize</span><span class="o">=</span><span class="n">maximize</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">986</span>     <span class="n">capturable</span><span class="o">=</span><span class="n">capturable</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">987</span>     <span class="n">differentiable</span><span class="o">=</span><span class="n">differentiable</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">988</span>     <span class="n">grad_scale</span><span class="o">=</span><span class="n">grad_scale</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">989</span>     <span class="n">found_inf</span><span class="o">=</span><span class="n">found_inf</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">990</span>     <span class="n">decoupled_weight_decay</span><span class="o">=</span><span class="n">decoupled_weight_decay</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">991</span> <span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/nn/modules/linear.py:134,</span> in <span class="ni">Linear.forward</span><span class="nt">(self, input)</span>
-<span class="g g-Whitespace">    </span><span class="mi">130</span> <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">131</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">132</span><span class="sd">     Runs the forward pass.</span>
-<span class="g g-Whitespace">    </span><span class="mi">133</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">134</span>     <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:476,</span> in <span class="ni">_single_tensor_adam</span><span class="nt">(params, grads, exp_avgs, exp_avg_sqs, max_exp_avg_sqs, state_steps, grad_scale, found_inf, amsgrad, has_complex, beta1, beta2, lr, weight_decay, eps, maximize, capturable, differentiable, decoupled_weight_decay)</span>
+<span class="g g-Whitespace">    </span><span class="mi">472</span>         <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">473</span>             <span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">474</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">475</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">476</span>     <span class="n">exp_avg_sq</span><span class="o">.</span><span class="n">mul_</span><span class="p">(</span><span class="n">beta2</span><span class="p">)</span><span class="o">.</span><span class="n">addcmul_</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta2</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+<span class="g g-Whitespace">    </span><span class="mi">478</span> <span class="k">if</span> <span class="n">capturable</span> <span class="ow">or</span> <span class="n">differentiable</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">479</span>     <span class="n">step</span> <span class="o">=</span> <span class="n">step_t</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
