@@ -66,7 +66,7 @@
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="A Brief PyTorch Viewpoint" href="a-brief-overview-pytorch.html" />
+    <link rel="next" title="Processing Images for Neural Networks" href="processing-images-for-neural-networks.html" />
     <link rel="prev" title="Computational Imaging" href="../intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -166,7 +166,8 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Environment Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing-images-for-neural-networks.html">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
@@ -371,7 +372,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-uv">Why uv</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-uv">Installing uv</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-course-folder">Creating the Course Folder</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialising-the-uv-project">Initialising the uv Project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-uv-project">Initializing the uv Project</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-required-packages">Installing the Required Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ippy-package">The IPPy Package</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#syncing-on-a-new-machine">Syncing on a New Machine</a></li>
@@ -431,8 +432,8 @@
 </div>
 <p>Every command in the rest of this guide should be run from inside this folder.</p>
 </section>
-<section id="initialising-the-uv-project">
-<h2>Initialising the uv Project<a class="headerlink" href="#initialising-the-uv-project" title="Link to this heading">#</a></h2>
+<section id="initializing-the-uv-project">
+<h2>Initializing the uv Project<a class="headerlink" href="#initializing-the-uv-project" title="Link to this heading">#</a></h2>
 <p>Initialize a new <code class="docutils literal notranslate"><span class="pre">uv</span></code> project in the current directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>init<span class="w"> </span>.
 </pre></div>
@@ -507,6 +508,7 @@
 </pre></div>
 </div>
 <p>By running this command inside your <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code> directory, it should place an <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> folder inside the project itself. However, to be able to run functions, you should extract the inner <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> folder (which contains the actual functionalities), and place it in the root <code class="docutils literal notranslate"><span class="pre">computational-imaging</span></code> folder.</p>
+<p>To avoid possible conficts with different versions of <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, a static version of the package is uploaded on Virtuale and available for download.</p>
 <p>Your directory should look like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>computational-imaging/
 ├── IPPy/
@@ -572,11 +574,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="a-brief-overview-pytorch.html"
+       href="processing-images-for-neural-networks.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">A Brief <strong>PyTorch</strong> Viewpoint</p>
+        <p class="prev-next-title">Processing Images for Neural Networks</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -601,7 +603,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-uv">Why uv</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-uv">Installing uv</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-course-folder">Creating the Course Folder</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialising-the-uv-project">Initialising the uv Project</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initializing-the-uv-project">Initializing the uv Project</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-required-packages">Installing the Required Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-ippy-package">The IPPy Package</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#syncing-on-a-new-machine">Syncing on a New Machine</a></li>

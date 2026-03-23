@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Processing Images for Neural Networks &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro/processing-images-for-neural-networks';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyTorch, Automatic Differentiation, and Training Mechanics" href="a-brief-overview-pytorch.html" />
+    <link rel="prev" title="Environment Setup" href="environment-setup.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Computational Imaging - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="environment-setup.html">Environment Setup</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-brief-overview-pytorch.html">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro/processing-images-for-neural-networks.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/intro/processing-images-for-neural-networks.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Processing Images for Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-inverse-problems-to-neural-imaging-pipelines">From Inverse Problems to Neural Imaging Pipelines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representing-and-preparing-images-for-neural-networks">Representing and Preparing Images for Neural Networks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets-dataloaders-and-a-mayo-style-example">Datasets, DataLoaders, and a Mayo-Style Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-section-comes-before-pytorch-proper">Why This Section Comes Before PyTorch Proper</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="processing-images-for-neural-networks">
+<h1>Processing Images for Neural Networks<a class="headerlink" href="#processing-images-for-neural-networks" title="Link to this heading">#</a></h1>
+<section id="from-inverse-problems-to-neural-imaging-pipelines">
+<h2>From Inverse Problems to Neural Imaging Pipelines<a class="headerlink" href="#from-inverse-problems-to-neural-imaging-pipelines" title="Link to this heading">#</a></h2>
+<p>Before introducing <strong>PyTorch</strong> itself, it is useful to make one intermediate step explicit. In the first module of the course, image reconstruction was formulated as the inverse problem</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K\boldsymbol{x}^\dagger + \boldsymbol{e},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> is the discrete acquisition operator, <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger \in \mathbb{R}^n\)</span> is the unknown image, and <span class="math notranslate nohighlight">\(\boldsymbol{e} \in \mathbb{R}^m\)</span> models noise and perturbation. Classical reconstruction methods then compute an approximation of <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> by solving a variational problem of the form</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\boldsymbol{x}} = \operatorname*{arg\,min}_{\boldsymbol{x}} \Big( \mathcal{D}(K\boldsymbol{x},\boldsymbol{y}^\delta) + \mathcal{R}(\boldsymbol{x}) \Big).
+\]</div>
+<p>When neural networks enter the picture, this mathematical structure is not discarded. Rather, it is re-expressed in a form that is compatible with tensor computation, stochastic optimization, and large datasets. The purpose of the present chapter is therefore to explain how an imaging problem moves from the language of vectors and operators to the language of <strong>batches</strong>, <strong>channels</strong>, <strong>datasets</strong>, and <strong>data loaders</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A useful teaching point is that data preparation is not a secondary implementation step. The way one stores images, normalizes intensities, and batches samples already encodes assumptions on the reconstruction problem and on the class of admissible solutions.</p>
+</div>
+<p><strong>End-to-end and hybrid strategies.</strong></p>
+<p>A first conceptual distinction concerns the role played by the network inside the reconstruction method.</p>
+<p>In an <strong>end-to-end reconstruction</strong> strategy, one trains a model <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}\)</span> that maps the measured datum directly to a reconstructed image,</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{\boldsymbol{x}} = f_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta).
+\]</div>
+<p>This approach is attractive because inference is fast once training is completed: a single forward pass can replace a long iterative algorithm. The difficulty is that the network is asked to absorb, within one learned map, both the geometry of the acquisition process and the prior structure of the image class.</p>
+<a class="reference internal image-reference" href="../_images/end-to-end.png"><img alt="../_images/end-to-end.png" class="align-center" src="../_images/end-to-end.png" style="width: 95%;" /></a>
+<p>In a <strong>hybrid method</strong>, by contrast, one retains an explicit reconstruction step based on the physics or on a classical solver, and uses the neural network only as one part of the full method. The network may act as a learned regularizer, a denoiser, a post-processing operator, or a module inside an iterative scheme. This is computationally more expensive, but it often gives stronger control over <strong>data consistency</strong> and over the relation between the reconstruction and the measurement model.</p>
+<a class="reference internal image-reference" href="../_images/hybrid-approach.png"><img alt="../_images/hybrid-approach.png" class="align-center" src="../_images/hybrid-approach.png" style="width: 95%;" /></a>
+</section>
+<section id="representing-and-preparing-images-for-neural-networks">
+<h2>Representing and Preparing Images for Neural Networks<a class="headerlink" href="#representing-and-preparing-images-for-neural-networks" title="Link to this heading">#</a></h2>
+<p>Classical inverse-problem notation often treats images as vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>. This is mathematically convenient, but it hides the spatial structure of the data. Neural networks, and especially convolutional models, are designed precisely to exploit this structure. For this reason, images are not usually flattened before entering the model.</p>
+<p>Instead, a grayscale image is represented as a tensor of shape</p>
+<div class="math notranslate nohighlight">
+\[
+(C,H,W),
+\]</div>
+<p>with <span class="math notranslate nohighlight">\(C=1\)</span>, while a minibatch of <span class="math notranslate nohighlight">\(B\)</span> grayscale images is represented as</p>
+<div class="math notranslate nohighlight">
+\[
+(B,C,H,W).
+\]</div>
+<p>For RGB images one has <span class="math notranslate nohighlight">\(C=3\)</span>. For multispectral or physically richer measurements, the channel dimension may carry additional information. The crucial point is that the tensor representation preserves the two-dimensional geometry of the image.</p>
+<p>This has an immediate consequence for the operator notation. If one works with batches, the forward operator must be understood as acting on structured tensors rather than on isolated vectors. In practice, one should think of a map of the form</p>
+<div class="math notranslate nohighlight">
+\[
+K : \mathbb{R}^{B \times C \times H \times W} \to \mathbb{R}^{B \times C' \times H' \times W'}.
+\]</div>
+<p>This is one reason why it is often misleading to think of the computational operator as a literal dense matrix. In realistic imaging problems, <span class="math notranslate nohighlight">\(K\)</span> is implemented as an algorithmic operator, and when needed its transpose or adjoint is represented computationally through a companion map <span class="math notranslate nohighlight">\(K^T\)</span>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In neural imaging pipelines, shape conventions are part of the mathematical model. A tensor of shape <span class="math notranslate nohighlight">\((H,W)\)</span> and a tensor of shape <span class="math notranslate nohighlight">\((1,1,H,W)\)</span> may represent the same image visually, but they do not play the same role inside a network.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">ROOT</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">&quot;course_utils.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">gray</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">tensor</span> <span class="k">as</span> <span class="n">image_tensor</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">array_uint8</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">array_float</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+<span class="n">single_image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array_float</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">batched_image</span> <span class="o">=</span> <span class="n">single_image</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">stacked_batch</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">single_image</span><span class="p">,</span> <span class="n">single_image</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">single_image</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Original dtype:&#39;</span><span class="p">,</span> <span class="n">array_uint8</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Normalized range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">array_float</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">array_float</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Single image tensor shape (C,H,W):&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">single_image</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Batched tensor shape (B,C,H,W):&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">batched_image</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mini-batch of three images:&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">stacked_batch</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+<span class="n">show</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">420</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Original dtype: uint8
+Normalized range: 0.0 0.8627451062202454
+Single image tensor shape (C,H,W): (1, 256, 256)
+Batched tensor shape (B,C,H,W): (1, 1, 256, 256)
+Mini-batch of three images: (3, 1, 256, 256)
+</pre></div>
+</div>
+<img alt="../_images/f295b1e2e89eee79c190c6df44ea2d3a21e0a9b6c97ef3bebba2553b0504d287.png" src="../_images/f295b1e2e89eee79c190c6df44ea2d3a21e0a9b6c97ef3bebba2553b0504d287.png" />
+</div>
+</div>
+<p><strong>Normalization and data type.</strong></p>
+<p>Two preprocessing choices are especially important.</p>
+<p>The first is <strong>normalization</strong>. Images stored as <code class="docutils literal notranslate"><span class="pre">uint8</span></code> typically take values in <span class="math notranslate nohighlight">\(\{0,\ldots,255\}\)</span>. Neural networks are rarely trained directly on this scale. Instead, one usually rescales the data, for example into <span class="math notranslate nohighlight">\([0,1]\)</span>, so that activations and gradients remain in numerically stable ranges. This is not merely cosmetic. The scale of the input changes the scale of the loss, and therefore changes the optimization dynamics.</p>
+<p>The second is the <strong>data type</strong>. In most imaging applications, <code class="docutils literal notranslate"><span class="pre">float32</span></code> is the standard compromise between memory usage and numerical precision. Lower precision can be faster, but may be too crude for delicate inverse problems. Higher precision can be useful for debugging, operator verification, or especially unstable pipelines, but it increases memory cost significantly.</p>
+<p>A third practical point concerns <strong>dataset organization</strong>. Classical deterministic reconstruction methods may process one image at a time. Neural training, by contrast, relies on many samples, often shuffled and batched. The dataset is therefore not an accessory to the model. It is part of the computational definition of the learning problem.</p>
+</section>
+<section id="datasets-dataloaders-and-a-mayo-style-example">
+<h2>Datasets, DataLoaders, and a Mayo-Style Example<a class="headerlink" href="#datasets-dataloaders-and-a-mayo-style-example" title="Link to this heading">#</a></h2>
+<p>Once images are stored in a tensor-compatible format, one still needs a mechanism to serve them efficiently during training. In <strong>PyTorch</strong>, this is the role of the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> and <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> abstractions.</p>
+<p>A <strong>dataset</strong> defines how a single sample is retrieved. It may read an image from disk, normalize it, apply a crop, convert it to a tensor, and return either the clean image, the corrupted measurement, or both. A <strong>data loader</strong> then wraps the dataset and produces shuffled minibatches.</p>
+<p>For a course on computational imaging, this distinction is pedagogically important. The dataset is where the acquisition model, the train-test split, and the preprocessing pipeline are encoded. The data loader is where these samples are organized into the batches seen by stochastic optimization.</p>
+<p>In the previous academic year, this discussion was illustrated through the <strong>Mayo dataset</strong>, a standard benchmark for CT reconstruction. In the present notes we keep the same conceptual point, but use a lightweight local example so that the notebook remains runnable even without access to the full external dataset.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When a real imaging dataset is unavailable locally, one can still teach the pipeline structure by extracting patches or augmented views from a single representative image. This does not replace a proper benchmark, but it is enough to explain the mechanics of loading, batching, and preprocessing.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MayoStylePatchDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+        <span class="n">tensor</span> <span class="o">=</span> <span class="n">image_tensor</span><span class="p">(</span><span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">))</span>
+        <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span> <span class="o">-</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span> <span class="o">-</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
+                <span class="n">patch</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">patch_size</span><span class="p">]</span>
+                <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patches</span> <span class="o">=</span> <span class="n">patches</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patches</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">patches</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">MayoStylePatchDataset</span><span class="p">(</span><span class="n">patch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of patches in the dataset:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Batch tensor shape:&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Batch dtype:&#39;</span><span class="p">,</span> <span class="n">batch</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Batch intensity range:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches in the dataset: 16
+Batch tensor shape: (4, 1, 64, 64)
+Batch dtype: torch.float32
+Batch intensity range: 0.0 0.8549019694328308
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="why-this-section-comes-before-pytorch-proper">
+<h2>Why This Section Comes Before PyTorch Proper<a class="headerlink" href="#why-this-section-comes-before-pytorch-proper" title="Link to this heading">#</a></h2>
+<p>At this point the student should have a clear picture of what a neural imaging pipeline receives as input before any learned architecture is even defined.</p>
+<p>The progression is now the following:</p>
+<ol class="arabic simple">
+<li><p>start from an inverse problem written in operator form;</p></li>
+<li><p>decide whether the network acts in an <strong>end-to-end</strong> or <strong>hybrid</strong> fashion;</p></li>
+<li><p>represent images as tensors with explicit batch and channel dimensions;</p></li>
+<li><p>normalize the data and choose a suitable numeric type;</p></li>
+<li><p>build datasets and data loaders that expose the reconstruction problem to the optimizer.</p></li>
+</ol>
+<p>Only after these ingredients are in place does it make sense to discuss modules, gradients, automatic differentiation, and optimizers in <strong>PyTorch</strong> itself. This is the purpose of the next notebook.</p>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Explain why representing an image as a tensor of shape <span class="math notranslate nohighlight">\((B,C,H,W)\)</span> is more natural for neural networks than flattening it immediately into a vector.</p></li>
+<li><p>In the measurement model <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta = K\boldsymbol{x}^\dagger + \boldsymbol{e}\)</span>, discuss which parts of the problem may already be affected by preprocessing choices such as normalization or cropping.</p></li>
+<li><p>Compare <strong>end-to-end reconstruction</strong> and <strong>hybrid reconstruction</strong> from the viewpoint of speed, interpretability, and control of data consistency.</p></li>
+<li><p>Suppose a dataset contains grayscale images saved as <code class="docutils literal notranslate"><span class="pre">uint8</span></code>. Describe a mathematically sensible preprocessing pipeline before these images are used for training.</p></li>
+<li><p>Modify the patch dataset example so that each sample returns both a clean patch and a blurred patch produced by a simple fixed kernel.</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>The role of data handling in deep learning systems is discussed from a software and systems viewpoint in <span id="id1">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. For the imaging perspective, the most important follow-up is not a general machine learning text, but the later notebooks of this module, where the same dataset and tensor conventions reappear inside <strong>CNN</strong>, <strong>UNet</strong>, self-supervised, and generative reconstruction pipelines.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./intro"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="environment-setup.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Environment Setup</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="a-brief-overview-pytorch.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">PyTorch, Automatic Differentiation, and Training Mechanics</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-inverse-problems-to-neural-imaging-pipelines">From Inverse Problems to Neural Imaging Pipelines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representing-and-preparing-images-for-neural-networks">Representing and Preparing Images for Neural Networks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets-dataloaders-and-a-mayo-style-example">Datasets, DataLoaders, and a Mayo-Style Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-section-comes-before-pytorch-proper">Why This Section Comes Before PyTorch Proper</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
