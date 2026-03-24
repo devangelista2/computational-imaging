@@ -31,8 +31,8 @@ nbclient.exceptions.CellTimeoutError: A cell timed out while it was being execut
 The message was: Cell execution timed out.
 Here is a preview of the cell contents:
 -------------------
-['# Define loss function (for example, MSE)', 'loss_fn = nn.MSELoss()', '', '# Define optimizer (feeding the model parameters into it)', '# Adam -> variant of SGD algorithm commonly used nowadays']
+['test_dataset = MayoDataset(data_path="../Mayo/test", data_shape=256)', 'test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)', '', 'model = nn.Sequential(', '    nn.Conv2d(1, 16, kernel_size=3, padding=1),']
 ...
-['        # print(f"Epoch: {epoch}. Avg Loss: {loss.item() / (k+1):0.4f}", end="\\r")', '    # print()', '', '# Saving the model after the cycle', 'torch.save(model.state_dict(), "path-for-model.pth")']
+['        epoch_loss += loss.item()', '', '    history.append(epoch_loss / len(loader))', '', "print(f'Final training loss: {history[-1]:0.6f}')"]
 -------------------
 

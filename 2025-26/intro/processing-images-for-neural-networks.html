@@ -374,7 +374,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-inverse-problems-to-neural-imaging-pipelines">From Inverse Problems to Neural Imaging Pipelines</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representing-and-preparing-images-for-neural-networks">Representing and Preparing Images for Neural Networks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets-dataloaders-and-a-mayo-style-example">Datasets, DataLoaders, and a Mayo-Style Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-section-comes-before-pytorch-proper">Why This Section Comes Before PyTorch Proper</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
 </ul>
@@ -395,12 +394,12 @@
 <p>Before introducing <strong>PyTorch</strong> itself, it is useful to make one intermediate step explicit. In the first module of the course, image reconstruction was formulated as the inverse problem</p>
 <div class="math notranslate nohighlight">
 \[
-\boldsymbol{y}^\delta = K\boldsymbol{x}^\dagger + \boldsymbol{e},
+\boldsymbol{y}^\delta = K\boldsymbol{x}^* + \boldsymbol{e},
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> is the discrete acquisition operator, <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger \in \mathbb{R}^n\)</span> is the unknown image, and <span class="math notranslate nohighlight">\(\boldsymbol{e} \in \mathbb{R}^m\)</span> models noise and perturbation. Classical reconstruction methods then compute an approximation of <span class="math notranslate nohighlight">\(\boldsymbol{x}^\dagger\)</span> by solving a variational problem of the form</p>
+<p>where <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> is the discrete acquisition operator, <span class="math notranslate nohighlight">\(\boldsymbol{x}^* \in \mathbb{R}^n\)</span> is the unknown image, and <span class="math notranslate nohighlight">\(\boldsymbol{e} \in \mathbb{R}^m\)</span> models noise and perturbation. Classical reconstruction methods then compute an approximation of <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> by solving a variational problem of the form</p>
 <div class="math notranslate nohighlight">
 \[
-\widehat{\boldsymbol{x}} = \operatorname*{arg\,min}_{\boldsymbol{x}} \Big( \mathcal{D}(K\boldsymbol{x},\boldsymbol{y}^\delta) + \mathcal{R}(\boldsymbol{x}) \Big).
+\hat{\boldsymbol{x}} = \operatorname*{arg\,min}_{\boldsymbol{x}} \Big( \mathcal{D}(K\boldsymbol{x},\boldsymbol{y}^\delta) + \mathcal{R}(\boldsymbol{x}) \Big).
 \]</div>
 <p>When neural networks enter the picture, this mathematical structure is not discarded. Rather, it is re-expressed in a form that is compatible with tensor computation, stochastic optimization, and large datasets. The purpose of the present chapter is therefore to explain how an imaging problem moves from the language of vectors and operators to the language of <strong>batches</strong>, <strong>channels</strong>, <strong>datasets</strong>, and <strong>data loaders</strong>.</p>
 <div class="admonition note">
@@ -412,7 +411,7 @@
 <p>In an <strong>end-to-end reconstruction</strong> strategy, one trains a model <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}\)</span> that maps the measured datum directly to a reconstructed image,</p>
 <div class="math notranslate nohighlight">
 \[
-\widehat{\boldsymbol{x}} = f_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta).
+\hat{\boldsymbol{x}} = f_{\boldsymbol{\Theta}}(\boldsymbol{y}^\delta).
 \]</div>
 <p>This approach is attractive because inference is fast once training is completed: a single forward pass can replace a long iterative algorithm. The difficulty is that the network is asked to absorb, within one learned map, both the geometry of the acquisition process and the prior structure of the image class.</p>
 <a class="reference internal image-reference" href="../_images/end-to-end.png"><img alt="../_images/end-to-end.png" class="align-center" src="../_images/end-to-end.png" style="width: 95%;" /></a>
@@ -502,39 +501,58 @@ Mini-batch of three images: (3, 1, 256, 256)
 <p>Once images are stored in a tensor-compatible format, one still needs a mechanism to serve them efficiently during training. In <strong>PyTorch</strong>, this is the role of the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> and <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> abstractions.</p>
 <p>A <strong>dataset</strong> defines how a single sample is retrieved. It may read an image from disk, normalize it, apply a crop, convert it to a tensor, and return either the clean image, the corrupted measurement, or both. A <strong>data loader</strong> then wraps the dataset and produces shuffled minibatches.</p>
 <p>For a course on computational imaging, this distinction is pedagogically important. The dataset is where the acquisition model, the train-test split, and the preprocessing pipeline are encoded. The data loader is where these samples are organized into the batches seen by stochastic optimization.</p>
-<p>In the previous academic year, this discussion was illustrated through the <strong>Mayo dataset</strong>, a standard benchmark for CT reconstruction. In the present notes we keep the same conceptual point, but use a lightweight local example so that the notebook remains runnable even without access to the full external dataset.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>When a real imaging dataset is unavailable locally, one can still teach the pipeline structure by extracting patches or augmented views from a single representative image. This does not replace a proper benchmark, but it is enough to explain the mechanics of loading, batching, and preprocessing.</p>
-</div>
+<p>For this example we will consider an example which we will use multiple time throughout this module: the <strong>Mayo’s dataset</strong>. The Mayo’s dataset is a commonly-used dataset for benchmarking algorithms for Computed Tomography (CT) image reconstruction from sparse measurement. It can be downloaded from the following link: <a class="reference external" href="https://drive.google.com/drive/folders/13BEiz6t57qSbwBpCtfqllmYTLmkhQeFE?usp=share_link">Mayo’s Dataset Download</a>.</p>
+<p>This dataset comprises a total of <span class="math notranslate nohighlight">\(N = 3305\)</span> training images and <span class="math notranslate nohighlight">\(N = 327\)</span> test images, representing the CT scan of 10 human chests.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MayoStylePatchDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (C, H, W)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span> <span class="o">-</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span> <span class="o">-</span> <span class="n">patch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">):</span>
-                <span class="n">patch</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">patch_size</span><span class="p">]</span>
-                <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">patches</span> <span class="o">=</span> <span class="n">patches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+
+        <span class="c1"># We expect data_path to be like &quot;./data/Mayo/train&quot; or &quot;./data/Mayo/test&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s2">/*/*.png&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patches</span><span class="p">)</span>
-
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
+    
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">patches</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="c1"># Load the idx&#39;s image from fname_list</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+         <span class="c1"># To load the image as grey-scale</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Resize to the required shape</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">),</span> <span class="c1"># (1, n_x, n_y)</span>
+        <span class="p">])(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_patient_and_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A utility function. Given an idx, it returns the patient ID and the number of slice of</span>
+<span class="sd">        that patient corresponding to the idx&#39;s datapoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">patient_id</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">slice_n</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">slice_n</span>
 
 
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">MayoStylePatchDataset</span><span class="p">(</span><span class="n">patch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s2">&quot;../Mayo/train&quot;</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
 <span class="n">loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">batch</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">loader</span><span class="p">))</span>
@@ -546,27 +564,14 @@ Mini-batch of three images: (3, 1, 256, 256)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches in the dataset: 16
-Batch tensor shape: (4, 1, 64, 64)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches in the dataset: 327
+Batch tensor shape: (4, 1, 256, 256)
 Batch dtype: torch.float32
-Batch intensity range: 0.0 0.8627451062202454
+Batch intensity range: 0.0 0.9427695870399475
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="why-this-section-comes-before-pytorch-proper">
-<h2>Why This Section Comes Before PyTorch Proper<a class="headerlink" href="#why-this-section-comes-before-pytorch-proper" title="Link to this heading">#</a></h2>
-<p>At this point the student should have a clear picture of what a neural imaging pipeline receives as input before any learned architecture is even defined.</p>
-<p>The progression is now the following:</p>
-<ol class="arabic simple">
-<li><p>start from an inverse problem written in operator form;</p></li>
-<li><p>decide whether the network acts in an <strong>end-to-end</strong> or <strong>hybrid</strong> fashion;</p></li>
-<li><p>represent images as tensors with explicit batch and channel dimensions;</p></li>
-<li><p>normalize the data and choose a suitable numeric type;</p></li>
-<li><p>build datasets and data loaders that expose the reconstruction problem to the optimizer.</p></li>
-</ol>
-<p>Only after these ingredients are in place does it make sense to discuss modules, gradients, automatic differentiation, and optimizers in <strong>PyTorch</strong> itself. This is the purpose of the next notebook.</p>
 </section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
@@ -653,7 +658,6 @@ Batch intensity range: 0.0 0.8627451062202454
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-inverse-problems-to-neural-imaging-pipelines">From Inverse Problems to Neural Imaging Pipelines</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representing-and-preparing-images-for-neural-networks">Representing and Preparing Images for Neural Networks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets-dataloaders-and-a-mayo-style-example">Datasets, DataLoaders, and a Mayo-Style Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-section-comes-before-pytorch-proper">Why This Section Comes Before PyTorch Proper</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
 </ul>
