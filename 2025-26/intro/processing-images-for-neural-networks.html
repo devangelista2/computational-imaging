@@ -173,8 +173,14 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction with CNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -564,10 +570,10 @@ Mini-batch of three images: (3, 1, 256, 256)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches in the dataset: 327
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of patches in the dataset: 3306
 Batch tensor shape: (4, 1, 256, 256)
 Batch dtype: torch.float32
-Batch intensity range: 0.0 0.9488970637321472
+Batch intensity range: 0.0 0.9259803295135498
 </pre></div>
 </div>
 </div>
@@ -585,7 +591,7 @@ Batch intensity range: 0.0 0.9488970637321472
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>The role of data handling in deep learning systems is discussed from a software and systems viewpoint in <span id="id1">[<a class="reference internal" href="../references.html#id23" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. For the imaging perspective, the most important follow-up is not a general machine learning text, but the later notebooks of this module, where the same dataset and tensor conventions reappear inside <strong>CNN</strong>, <strong>UNet</strong>, self-supervised, and generative reconstruction pipelines.</p>
+<p>The role of data handling in deep learning systems is discussed from a software and systems viewpoint in <span id="id1">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. For the imaging perspective, the most important follow-up is not a general machine learning text, but the later notebooks of this module, where the same dataset and tensor conventions reappear inside <strong>CNN</strong>, <strong>UNet</strong>, self-supervised, and generative reconstruction pipelines.</p>
 </section>
 </section>
 

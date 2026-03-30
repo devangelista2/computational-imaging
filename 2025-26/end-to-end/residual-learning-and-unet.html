@@ -1,0 +1,871 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Residual Learning, Receptive Field, and UNet &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/residual-learning-and-unet';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Vision Transformers and Loss Design" href="vision-transformers-and-loss-design.html" />
+    <link rel="prev" title="Convolutions, CNNs, and End-to-End Training" href="convolutions-cnns-and-training.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Computational Imaging - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/environment-setup.html">Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/processing-images-for-neural-networks.html">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Residual Learning, Receptive Field, and UNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction with CNNs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fend-to-end/residual-learning-and-unet.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/end-to-end/residual-learning-and-unet.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Residual Learning, Receptive Field, and UNet</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-cnn">Residual CNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-cnn-the-receptive-field">Beyond CNN: the Receptive field</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet">UNet</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residualconvblock">ResidualConvBlock</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attentionconvblock">AttentionConvBlock</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="residual-learning-receptive-field-and-unet">
+<h1>Residual Learning, Receptive Field, and UNet<a class="headerlink" href="#residual-learning-receptive-field-and-unet" title="Link to this heading">#</a></h1>
+<p>This notebook develops the next steps beyond a plain CNN. We first discuss residual learning and why learning the artifact can be easier than learning the clean image directly. We then introduce the receptive field as a key design concept and conclude with the UNet architecture, which is often the strongest default choice for end-to-end image reconstruction.</p>
+<section id="residual-cnn">
+<h2>Residual CNN<a class="headerlink" href="#residual-cnn" title="Link to this heading">#</a></h2>
+<p>Any CNN for image processing works by identifying <strong>patterns</strong> in the input image, which have been previously learned during training, and by reconstructing each pattern in the same way it was learned. For this reason, if, for example, we train a model to deblur images of cats, there is no guarantee that the same model will be able to deblur images of dogs: the different patterns present in dog images make accurate reconstruction much harder.</p>
+<p>Consequently, a large line of research in CNN-based image processing tries to teach models to identify patterns that are typical of the <strong>task</strong> one wants to solve, rather than patterns that are specific to the training data. To this end, we can observe that while the patterns in the image are usually dataset-specific, the <strong>artifact</strong> (i.e. the difference between the corrupted image and the true image) tends to exhibit task-related patterns.</p>
+<p>For example, consider the following problem, where two images coming from two completely different datasets are corrupted by Gaussian blur and noise. By looking at both the true image and the corrupted image, it is clear that the <strong>content</strong> of the two examples is very different.
+On the other hand, when we look at the <strong>residual</strong>, i.e. the value <span class="math notranslate nohighlight">\(|x_{true} - y^\delta|\)</span>, the patterns in the two images look similar.</p>
+<p>This observation justifies that <strong>learning the residual is usually easier (and generalizes better) than learning the actual image</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">ROOT</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">&quot;course_utils.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gray</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+
+<span class="c1"># Load images</span>
+<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_mayo</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">x_mayo</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_mayo</span> <span class="o">-</span> <span class="n">x_mayo</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_mayo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x_mayo</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gray</span><span class="p">(</span><span class="s2">&quot;GoPro.jpg&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_gopro</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">x_gopro</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_gopro</span> <span class="o">-</span> <span class="n">x_gopro</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_gopro</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x_gopro</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+
+<span class="c1"># Visualize the images</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_mayo</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_gopro</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Corrupt and add noise</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span><span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">kernel_type</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">kernel_variance</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">y_mayo</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_mayo</span><span class="p">)</span>
+<span class="n">y_mayo_delta</span> <span class="o">=</span> <span class="n">y_mayo</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_mayo</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">y_gopro</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_gopro</span><span class="p">)</span>
+<span class="n">y_gopro_delta</span> <span class="o">=</span> <span class="n">y_gopro</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_gopro</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1"># Visualize the (corrupted) images</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_mayo_delta</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_gopro_delta</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Visualize the residual</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_mayo_delta</span> <span class="o">-</span> <span class="n">x_mayo</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_gopro_delta</span> <span class="o">-</span> <span class="n">x_gopro</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/715d3486ee139d50d028622fd6a001edabce6d15a130b59f3a11d56800fbcb1e.png" src="../_images/715d3486ee139d50d028622fd6a001edabce6d15a130b59f3a11d56800fbcb1e.png" />
+<img alt="../_images/ad18781bdf0b823e9567aa2507ceac3f8d31195e363a7963c136bb10beb7718e.png" src="../_images/ad18781bdf0b823e9567aa2507ceac3f8d31195e363a7963c136bb10beb7718e.png" />
+<img alt="../_images/32e1c481b8da542faec0e9687d803b432532c5ebb7e683f22a8eea8cf0d5890c.png" src="../_images/32e1c481b8da542faec0e9687d803b432532c5ebb7e683f22a8eea8cf0d5890c.png" />
+</div>
+</div>
+<p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed above, in which the network is trained to learn <strong>not</strong> the reconstructed image itself, but rather the <strong>residual</strong>, which is then converted into the actual image by simply adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back into the output with the aim of learning the residual is usually called a <strong>residual connection</strong> or <strong>skip connection</strong>. These architectures are called <strong>Residual Convolutional Neural Networks (ResCNNs)</strong>.</p>
+<p>What follows is a PyTorch implementation of a ResCNN architecture with the same basic structure as the CNN discussed previously. Note that we employ Tanh as the final activation function for this task, as already discussed in the previous section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ResCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Define (convolution) layers -&gt; NOTE: padding=&quot;same&quot; means &quot;padded convolution&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">n_filters</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel_size</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="o">+</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Training a residual model follows exactly the same logic as for the plain CNN, but now the network learns a correction to be added back to the corrupted input. The code below trains a <code class="docutils literal notranslate"><span class="pre">ResCNN</span></code> for 50 epochs on the Mayo motion-blur task, saves the learned parameters in <code class="docutils literal notranslate"><span class="pre">../weights/ResCNN.pth</span></code>, reloads them, and visualizes one reconstruction together with the loss history.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="o">*</span><span class="n">here</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;weights&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;Mayo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">book_root</span> <span class="o">=</span> <span class="n">base</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Could not locate the course root containing Mayo and weights.&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="o">*</span><span class="n">here</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">ippy_root</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Could not locate the local IPPy package.&#39;</span><span class="p">)</span>
+
+<span class="n">operators_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="s1">&#39;course_ippy_operators&#39;</span><span class="p">,</span> <span class="n">ippy_root</span> <span class="o">/</span> <span class="s1">&#39;operators.py&#39;</span><span class="p">)</span>
+<span class="n">operators</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">operators_spec</span><span class="p">)</span>
+<span class="n">operators_spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">operators</span><span class="p">)</span>
+
+<span class="n">weights_dir</span> <span class="o">=</span> <span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;weights&#39;</span>
+<span class="n">weights_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_device</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s1">&#39;cuda&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s1">&#39;mps&#39;</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="s1">&#39;cpu&#39;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">):</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">e</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">noise_level</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s1">/*/*.png&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">img_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span><span class="p">),</span>
+        <span class="p">])(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;Mayo&#39;</span> <span class="o">/</span> <span class="s1">&#39;train&#39;</span><span class="p">),</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;Mayo&#39;</span> <span class="o">/</span> <span class="s1">&#39;test&#39;</span><span class="p">),</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span>
+    <span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span>
+    <span class="n">kernel_type</span><span class="o">=</span><span class="s1">&#39;motion&#39;</span><span class="p">,</span>
+    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+    <span class="n">motion_angle</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ResCNN</span><span class="p">(</span><span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">weights_path</span> <span class="o">=</span> <span class="n">weights_dir</span> <span class="o">/</span> <span class="s1">&#39;ResCNN.pth&#39;</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">epoch_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">num_epochs</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">x_batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">x_batch</span> <span class="o">=</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span> <span class="o">+</span> <span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
+
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_batch</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">x_batch</span><span class="p">)</span>
+
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="n">epoch_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">progress_bar</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">batch_loss</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">avg_loss</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">epoch_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">step</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">: training loss = </span><span class="si">{</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">weights_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Saved ResCNN weights to: </span><span class="si">{</span><span class="n">weights_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">reloaded_model</span> <span class="o">=</span> <span class="n">ResCNN</span><span class="p">(</span><span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">reloaded_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">reloaded_model</span> <span class="o">=</span> <span class="n">reloaded_model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">reloaded_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">x_true</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_loader</span><span class="p">))[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y_delta</span> <span class="o">+</span> <span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_delta</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
+    <span class="n">x_rec</span> <span class="o">=</span> <span class="n">reloaded_model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_true</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ground truth&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Measurement&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_rec</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reloaded ResCNN&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(0.9113))
+SSIM: 0.9394
+</pre></div>
+</div>
+<img alt="../_images/68ca5d6477a89720b8f00583eddbd469b54b37be3cc4951b1f8101dea0b9cee4.png" src="../_images/68ca5d6477a89720b8f00583eddbd469b54b37be3cc4951b1f8101dea0b9cee4.png" />
+</div>
+</div>
+</section>
+<section id="beyond-cnn-the-receptive-field">
+<h2>Beyond CNN: the Receptive field<a class="headerlink" href="#beyond-cnn-the-receptive-field" title="Link to this heading">#</a></h2>
+<p>Modern neural-network architectures for image-processing tasks rarely use the simple CNN model described above. One reason is the concept of <strong>Receptive Field (RF)</strong>. To understand it, let us consider a model with <span class="math notranslate nohighlight">\(L\)</span> convolutional layers, each with kernel size <span class="math notranslate nohighlight">\(\kappa_l = 3\)</span>, as depicted in the following figure. It is evident that each pixel in the feature map of the second layer is influenced only by a <span class="math notranslate nohighlight">\(3 \times 3\)</span> portion of the first layer, that is, the input of the network. Similarly, each pixel in the feature map of the third layer is influenced by a <span class="math notranslate nohighlight">\(3 \times 3\)</span> portion of the previous layer, and consequently by a <span class="math notranslate nohighlight">\(5 \times 5\)</span> portion of the input image. The number of input-image pixels that affect the value of each pixel in the <span class="math notranslate nohighlight">\(l\)</span>-th feature map is what we call the receptive field of the <span class="math notranslate nohighlight">\(l\)</span>-th layer. By continuing this reasoning through the network up to the output, we can compute the receptive field of the whole network, which represents the number of input-image pixels that influence the network’s output. This quantity is crucial because, when reconstructing corrupted data containing artifacts, understanding the RF helps ensure that the model captures and addresses those artifacts accurately. In particular, when the artifacts are local, a small receptive field is enough to give the model the ability to distinguish between the artifact and the image features, while when the artifacts are global, a large RF is required to produce an accurate reconstruction.</p>
+<a class="reference internal image-reference" href="../_images/receptive_field.png"><img alt="../_images/receptive_field.png" class="align-center" src="../_images/receptive_field.png" style="width: 800px;" /></a>
+<p>Since we are interested in comparing neural network architectures in terms of their receptive field, we need to derive a formula to compute it for any given network. For each layer <span class="math notranslate nohighlight">\(l\)</span>, let <span class="math notranslate nohighlight">\(\kappa_l\)</span> and <span class="math notranslate nohighlight">\(s_l\)</span> be its kernel size and stride, respectively. Moreover, let <span class="math notranslate nohighlight">\(r_l\)</span> be the receptive field, where the receptive field of the input layer is <span class="math notranslate nohighlight">\(r_0 = 1\)</span> by definition. The value of <span class="math notranslate nohighlight">\(r_l\)</span> can be computed with the recursive formula:</p>
+<div class="math notranslate nohighlight">
+\[
+    r_l = r_{l-1} + A_l,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_l\)</span> is the non-overlapping area between subsequent filter applications. Note that <span class="math notranslate nohighlight">\(A_l\)</span> can be computed simply as</p>
+<div class="math notranslate nohighlight">
+\[
+    A_l = (k_l - 1) \prod_{i=1}^l s_i,
+\]</div>
+<p>which implies that the receptive field at each <span class="math notranslate nohighlight">\(l\)</span>-th layer is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    &amp;r_0 = 1 \\
+    &amp;r_l = r_{l-1} + (k_l - 1) \prod_{i=1}^l s_i.
+\end{aligned}
+\end{split}\]</div>
+<p>This equation shows that the receptive field scales linearly with the depth of the network if the kernel size is fixed, while it is exponentially related to the stride. For this reason, using strided convolutional layers exponentially enlarges the receptive field of the model.</p>
+</section>
+<section id="unet">
+<h2>UNet<a class="headerlink" href="#unet" title="Link to this heading">#</a></h2>
+<p>Combining all the information discussed above, we are now ready to introduce arguably the most important neural-network model ever developed for image reconstruction: <strong>UNet</strong>. The UNet is a multi-scale variant of the Convolutional Neural Network architecture, and it is able to detect and correct both global and local artifacts effectively. The UNet architecture, depicted in the figure below, is a <strong>fully convolutional neural network</strong> with a <strong>symmetric encoder-decoder structure</strong> and <strong>strided convolutions</strong> used to enlarge its receptive field. The strides in the encoder layers naturally divide the network into distinct resolution levels, which we denote by <span class="math notranslate nohighlight">\(g\)</span>, with <span class="math notranslate nohighlight">\(g = 0, \dots, \mathcal{G}\)</span>, where <span class="math notranslate nohighlight">\(\mathcal{G}+1\)</span> is the total number of levels in the network. At each level, a fixed number <span class="math notranslate nohighlight">\(n_g\)</span> of blocks <span class="math notranslate nohighlight">\(B_1, \dots, B_{n_g}\)</span> is applied. Specifically, each block is defined as a convolutional layer with <span class="math notranslate nohighlight">\(c_g\)</span> channels, constant along the level, followed by a batch-normalization layer and then by a ReLU activation function. Given a baseline number of convolutional channels <span class="math notranslate nohighlight">\(c_0\)</span> (corresponding to the number of channels in the first level), we compute the number of channels in the following levels through the recursive formula <span class="math notranslate nohighlight">\(c_{g+1} = 2c_g\)</span>, <span class="math notranslate nohighlight">\(g = 0, \dots, L-1\)</span>. In the experiments, we fixed <span class="math notranslate nohighlight">\(\mathcal{G}=4\)</span>, <span class="math notranslate nohighlight">\(n_0 = \dots = n_3 = 3\)</span>, and <span class="math notranslate nohighlight">\(c_0 = 64\)</span>.
+As already mentioned, the decoder is symmetric to the encoder, with upsampling convolutional layers instead of strided convolutions. Moreover, to preserve high-frequency information, skip connections are added between the last layer at each level of the encoder and the first layer at the corresponding level of the decoder. To reduce the number of parameters with respect to the original architecture, it is common to implement these skip connections as additions rather than concatenations. A residual connection is also added between the input layer and the output layer, as discussed previously. The output of the resulting model can be written as:</p>
+<div class="math notranslate nohighlight">
+\[
+    F_\Theta(y^\delta) = y^\delta + f_\Theta(y^\delta),
+\]</div>
+<p>which implies that the network has to learn the residual mapping between the input and the expected output. For this reason, this model is often referred to in the literature as a <strong>Residual UNet (ResUNet)</strong>. The importance of the residual connection has been highlighted in theoretical work by Han et al., where the authors proved that the residual manifold containing the artifacts is easier to learn than the true image manifold. As in many residual neural-network models, we usually employ a Tanh activation function in the last layer.</p>
+<a class="reference internal image-reference" href="../_images/ResUNet.png"><img alt="../_images/ResUNet.png" class="align-center" src="../_images/ResUNet.png" style="width: 800px;" /></a>
+<p>The UNet architecture can be implemented easily in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, as already shown in the previous chapter. Note that, due to its structure, the UNet remains relatively efficient even when the number of parameters grows to millions, or even tens of millions.</p>
+<section id="residualconvblock">
+<h3>ResidualConvBlock<a class="headerlink" href="#residualconvblock" title="Link to this heading">#</a></h3>
+<p>As you may already have observed, the convolutional blocks at each resolution level of the UNet architecture in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> are called <code class="docutils literal notranslate"><span class="pre">ResidualConvBlock</span></code>. This is because, to make training even more effective, skip connections are added to every single convolutional block, i.e. the input is summed back into its output. In general, this is the most classical choice for designing effective UNet architectures for end-to-end image-processing tasks.</p>
+</section>
+<section id="attentionconvblock">
+<h3>AttentionConvBlock<a class="headerlink" href="#attentionconvblock" title="Link to this heading">#</a></h3>
+<p>An alternative to <code class="docutils literal notranslate"><span class="pre">ResidualConvBlock</span></code> in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>-based UNet architectures is given by <code class="docutils literal notranslate"><span class="pre">AttentionDownBlock</span></code> and <code class="docutils literal notranslate"><span class="pre">AttentionUpBlock</span></code>. While a detailed discussion of attention mechanisms is beyond the scope of this course, it is enough to know that when <code class="docutils literal notranslate"><span class="pre">Attention</span></code> layers are employed, they usually replace the classical skip connection with a <strong>gated</strong> version of it, trained to help the model focus on particular portions of the image at each convolutional filter.
+Usually, <code class="docutils literal notranslate"><span class="pre">Attention</span></code> layers are used in UNet at the second-to-last resolution level, as this has been shown to perform better in practice.</p>
+</section>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Why is learning the residual often easier than learning the full image directly?</p></li>
+<li><p>Consider a CNN with three convolutional layers of kernel size <span class="math notranslate nohighlight">\(3 	imes 3\)</span> and stride <span class="math notranslate nohighlight">\(1\)</span>. What is its receptive field? How does the answer change if one layer has stride <span class="math notranslate nohighlight">\(2\)</span>?</p></li>
+<li><p>Explain why the receptive field is important when the corruption is global rather than local.</p></li>
+<li><p>What is the main architectural idea behind UNet, and why do skip connections matter so much in imaging tasks?</p></li>
+<li><p>Code exercise: compare the number of parameters of the simple CNN and the residual CNN used in this chapter.</p></li>
+<li><p>Code exercise: modify the number of channels or the number of levels in a UNet implementation and observe how the computational cost changes.</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>Residual learning is introduced in <span id="id1">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">6</a>]</span>. The standard reference for the UNet architecture is <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>. For a broader discussion of why multiscale neural architectures are effective in imaging inverse problems, see <span id="id3">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./end-to-end"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="convolutions-cnns-and-training.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Convolutions, CNNs, and End-to-End Training</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="vision-transformers-and-loss-design.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Vision Transformers and Loss Design</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-cnn">Residual CNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-cnn-the-receptive-field">Beyond CNN: the Receptive field</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet">UNet</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residualconvblock">ResidualConvBlock</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attentionconvblock">AttentionConvBlock</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>From Machine Learning to Neural Networks &#8212; Computational Imaging</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'end-to-end/from-ml-to-nn';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Convolutions, CNNs, and End-to-End Training" href="convolutions-cnns-and-training.html" />
+    <link rel="prev" title="PyTorch, Automatic Differentiation, and Training Mechanics" href="../intro/a-brief-overview-pytorch.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Computational Imaging - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro/environment-setup.html">Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/processing-images-for-neural-networks.html">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction with CNNs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fend-to-end/from-ml-to-nn.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/end-to-end/from-ml-to-nn.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>From Machine Learning to Neural Networks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-chapter-comes-first">Why This Chapter Comes First</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-linear-predictors-to-neural-networks">From Linear Predictors to Neural Networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notation">Notation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-backpropagation-and-generalization">Optimization, Backpropagation, and Generalization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="from-machine-learning-to-neural-networks">
+<h1>From Machine Learning to Neural Networks<a class="headerlink" href="#from-machine-learning-to-neural-networks" title="Link to this heading">#</a></h1>
+<section id="why-this-chapter-comes-first">
+<h2>Why This Chapter Comes First<a class="headerlink" href="#why-this-chapter-comes-first" title="Link to this heading">#</a></h2>
+<p>Before discussing <strong>CNNs</strong> <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>, <strong>UNets</strong> <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>, <strong>transformers</strong> <span id="id3">[<a class="reference internal" href="../references.html#id7" title="Alexey Dosovitskiy and others. An image is worth 16x16 words: transformers for image recognition at scale. International Conference on Learning Representations, 2021.">4</a>]</span>, or <strong>generative models</strong>, it is important to fix the conceptual transition from classical inverse problems to learning-based reconstruction. If this transition is not made carefully, neural networks risk appearing as a completely separate subject, disconnected from the operator-theoretic and variational language of computational imaging. In reality, the connection is very direct.</p>
+<p>In Module 1, the basic object of study was the forward model</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}^\delta = K \boldsymbol{x}^* + \boldsymbol{e},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}^* \in \mathbb{R}^n\)</span> denotes the unknown image, <span class="math notranslate nohighlight">\(K \in \mathbb{R}^{m \times n}\)</span> is the acquisition operator, and <span class="math notranslate nohighlight">\(\boldsymbol{e} \in \mathbb{R}^m\)</span> models the perturbation due to noise, usually <span class="math notranslate nohighlight">\(\boldsymbol{e} \sim \mathcal{N}(0, \sigma^2 I)\)</span> for some <strong>noise level</strong> <span class="math notranslate nohighlight">\(\sigma &gt; 0\)</span>.</p>
+<p>In the modern literature, this problem can be approached by two, complementary approaches: <strong>variational methods</strong> (sometimes named <em>model-based</em>), and <strong>data-driven methods</strong>.</p>
+<p>The first approach represents the category of methods that you already studied in the first Module of this course, and comprises all the methods that address reconstruction problem of recovering <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> from <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span> by exploiting knowledge of <span class="math notranslate nohighlight">\(K\)</span>, of the noise model, and of suitable regularity assumptions on the unknown image <span id="id4">[<a class="reference internal" href="../references.html#id2" title="Jari Kaipio and Erkki Somersalo. Statistical and Computational Inverse Problems. Springer, 2005.">8</a>]</span>, basically solving the optimization problem:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{x}^* \in \arg\min_{\boldsymbol{x}} \| K \boldsymbol{x} - \boldsymbol{y}^\delta \|_2^2 + \lambda \mathcal{R}(\boldsymbol{x}),
+\]</div>
+<p>where the regularization term <span class="math notranslate nohighlight">\(\mathcal{R}(\boldsymbol{x})\)</span> controls the prior information on the solution, while <span class="math notranslate nohighlight">\(\| K \boldsymbol{x} - \boldsymbol{y}^\delta \|_2^2\)</span> requires the solution to fit the observations <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>.</p>
+<p>On the other side, the learning-based viewpoint works by collecting a training set of examples, comprising couples <span class="math notranslate nohighlight">\((\boldsymbol{y}^\delta, \boldsymbol{x}^*)\)</span> of associate images, and learn a parameterized inverse map</p>
+<div class="math notranslate nohighlight">
+\[
+f_\Theta(\boldsymbol{y}^\delta) \mapsto \boldsymbol{x}^*,
+\]</div>
+<p>directly from that data.</p>
+<p>In the intersection between these two approaches there are the <strong>hybrid methods</strong>, which combines techniques from model-based and data-driven algorithms to build powerful and highly-general reconstruction methods. Since these category represents the modern state-of-the-art for image reconstruction, we will discuss them at the end of this Module (particularly, the class of the so-called <strong>generative models</strong>).</p>
+<a class="reference internal image-reference" href="../_images/hybrid.png"><img alt="../_images/hybrid.png" class="align-center" src="../_images/hybrid.png" style="width: 450px;" /></a>
+</section>
+<section id="basics-of-machine-learning">
+<h2>Basics of Machine Learning<a class="headerlink" href="#basics-of-machine-learning" title="Link to this heading">#</a></h2>
+<p>Before diving into the mathematical machinery of deep learning, it is useful to set up the notation and intuitions that will be used throughout the course.</p>
+<p>A learning problem is defined by a dataset of <span class="math notranslate nohighlight">\(N\)</span> input-output pairs:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{D} = \{ (\boldsymbol{x}^{(i)}, \boldsymbol{y}^{(i)}) \}_{i=1}^N,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}^{(i)} \in \mathbb{R}^d\)</span> is the input and <span class="math notranslate nohighlight">\(\boldsymbol{y}^{(i)} \in \mathbb{R}^s\)</span> is the target output. The goal is to learn a parameterized function <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}} : \mathbb{R}^d \to \mathbb{R}^s\)</span> that correctly maps inputs to outputs beyond the training set.</p>
+<p><strong>A concrete example.</strong> Machine learning is widely used to predict house prices based on property characteristics. Suppose each house is described by the following features:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x_1\)</span>: square footage;</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_2\)</span>: number of bedrooms;</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_3\)</span>: number of bathrooms;</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_4\)</span>: distance to the city centre;</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_5\)</span>: age of the house.</p></li>
+</ul>
+<p>The goal is to predict the selling price <span class="math notranslate nohighlight">\(y\)</span> from these features, so <span class="math notranslate nohighlight">\(\boldsymbol{x}^{(i)} \in \mathbb{R}^5\)</span> and <span class="math notranslate nohighlight">\(y^{(i)} \in \mathbb{R}\)</span>. Initially, the model has no knowledge of how these features influence price. By <strong>training</strong> on historical sales data it discovers patterns and estimates parameters that best fit the observations. Once trained, it can predict the price of new houses not seen during training.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This setup assumes that all data is represented as real numbers. Handling non-numeric data such as categorical features is beyond the scope of this course; those interested should look into <em>embedding</em> techniques.</p>
+</div>
+<p><strong>Mathematical formulation.</strong> At its core, an ML model is a function <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}} : \mathbb{R}^d \to \mathbb{R}^s\)</span> whose behaviour is entirely determined by its parameter vector <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span>. The choice of <span class="math notranslate nohighlight">\(s\)</span> depends on the task: in a regression problem <span class="math notranslate nohighlight">\(s\)</span> is the number of predicted values; in image reconstruction <span class="math notranslate nohighlight">\(s\)</span> is the number of pixels. To build intuition, start with the simplest case <span class="math notranslate nohighlight">\(d = s = 1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}(x) = \Theta_1 + \Theta_2\,x.
+\]</div>
+<p>This is a straight line in the <span class="math notranslate nohighlight">\((x, y)\)</span> plane. The code below plots two different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> and shows how dramatically the prediction can change.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">theta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="n">theta1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="n">theta2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">xx</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Theta = (1,\ 0.2)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">theta2</span><span class="p">,</span> <span class="n">xx</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Theta = (0,\ -1)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$f_\Theta(x)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Two parameter choices for $f_\Theta(x) = \Theta_1 + \Theta_2\,x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/99961fddbcdc3e8c5d19618709e6c94c23b672dca11e5b95271b3f6e58c4c2c9.png" src="../_images/99961fddbcdc3e8c5d19618709e6c94c23b672dca11e5b95271b3f6e58c4c2c9.png" />
+</div>
+</div>
+<p>Think of <span class="math notranslate nohighlight">\(x\)</span> as the input and <span class="math notranslate nohighlight">\(f_{\boldsymbol{\Theta}}(x)\)</span> as the model’s prediction. Notice how different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> lead to very different outputs. Now overlay the training data on the same plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">x_data</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">x_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">xx</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Theta = (1,\ 0.2)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">theta2</span><span class="p">,</span> <span class="n">xx</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\Theta = (0,\ -1)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Which parameter choice fits the data better?&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/92ede5ac3397e260c942a6df8382f17b820e96b9265e0884df376fbcc8407428.png" src="../_images/92ede5ac3397e260c942a6df8382f17b820e96b9265e0884df376fbcc8407428.png" />
+</div>
+</div>
+<p><em>Which line fits the data better?</em> The first one, parameterised by <span class="math notranslate nohighlight">\(\boldsymbol{\Theta} = (1, 0.2)\)</span> and, as inspection of the data-generation code confirms, those are exactly the parameters used.</p>
+<p>This illustrates two fundamental properties common to almost all ML models:</p>
+<ul class="simple">
+<li><p>Different choices of <span class="math notranslate nohighlight">\(\boldsymbol{\Theta}\)</span> lead to <em>very different</em> predictions.</p></li>
+<li><p>Given a training set, some parameter choices are better than others, and the process of finding the best choice is called <strong>training</strong>.</p></li>
+</ul>
+<p><strong>Linearity and its limits.</strong> Generalising to arbitrary dimensions, when the input <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> lies in a <span class="math notranslate nohighlight">\(d\)</span>-dimensional space and the output <span class="math notranslate nohighlight">\(y\)</span> lies in an <span class="math notranslate nohighlight">\(s\)</span>-dimensional space, the resulting <strong>linear</strong> model writes as:</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}(\boldsymbol{x}) = W\boldsymbol{x} + \boldsymbol{b},
+\qquad W \in \mathbb{R}^{s \times d},\; \boldsymbol{b} \in \mathbb{R}^s.
+\]</div>
+<p>This model, parameterized by <span class="math notranslate nohighlight">\(\Theta = (W, \boldsymbol{b})\)</span>, comprises a total of <span class="math notranslate nohighlight">\(s(d+1)\)</span> parameters, i.e. <span class="math notranslate nohighlight">\(sd\)</span> parameters for <span class="math notranslate nohighlight">\(W\)</span> and <span class="math notranslate nohighlight">\(s\)</span> parameters for <span class="math notranslate nohighlight">\(\boldsymbol{b}\)</span>. Linear models are easy to analyse and optimize, but their expressivity is fundamentally limited: they can only represent linear functions of the input. Other classical ML methods, such as polynomial regression, Support Vector Machines (SVM), Random Forests, or XGBoost, improve expressivity, but none of them are expressive enough for the complexity of image reconstruction tasks. The simplest way to see the limitation is to try to approximate <span class="math notranslate nohighlight">\(\sin(x)\)</span> with an affine model. The code below shows the failure directly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+<span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Best-fit affine model via least squares</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y_linear</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">theta</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="c1"># Left: affine model fits linear data well</span>
+<span class="n">x_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">y_l</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x_l</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">x_l</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">40</span><span class="p">)]),</span> <span class="n">y_l</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_l</span><span class="p">,</span> <span class="n">y_l</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_l</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x_l</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True line&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_l</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x_l</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Affine fit&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Affine model on linear data (works)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Right: affine model cannot fit sin(x)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_true</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;sin(x)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_linear</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best affine fit&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Affine model on sin(x) (inadequate)&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Best-fit affine MSE on sin(x): </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y_linear</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_true</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ccc9aa866b452f8664492261aebb41d5ef695e34583b52b857b4e9327d03c215.png" src="../_images/ccc9aa866b452f8664492261aebb41d5ef695e34583b52b857b4e9327d03c215.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best-fit affine MSE on sin(x): 0.4218
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="from-linear-predictors-to-neural-networks">
+<h2>From Linear Predictors to Neural Networks<a class="headerlink" href="#from-linear-predictors-to-neural-networks" title="Link to this heading">#</a></h2>
+<p>A neural network is a specific type of Machine Learning model that has gained significant relevance in recent years due to several factors, including:</p>
+<ul class="simple">
+<li><p>The exponential increase in computational power, particularly with GPUs, which enable extreme <em>parallelization</em>.</p></li>
+<li><p>The vast amount of data available, largely thanks to the internet.</p></li>
+</ul>
+<p>In this section, we will provide a high-level overview of neural networks. We will then dive deeper into neural networks specifically designed for image processing.</p>
+<p>For a more in-depth understanding of neural networks, we recommend referring to the course by Professor Andrea Asperti which will be held at the beginning of the second year of this Master Degree.</p>
+<p><strong>Why depth alone does not help.</strong></p>
+<p>The basic idea behind neural networks is fairly simple: linear models are efficient but not expressive enough, so why not stack multiple linear models on top of each other to improve expressivity?</p>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[
+f_1(\boldsymbol{x})=W_1\boldsymbol{x}+\boldsymbol{b}_1,
+\qquad
+f_2(\boldsymbol{z})=W_2\boldsymbol{z}+\boldsymbol{b}_2.
+\]</div>
+<p>Then</p>
+<div class="math notranslate nohighlight">
+\[
+f_2(f_1(\boldsymbol{x}))
+=
+W_2(W_1\boldsymbol{x}+\boldsymbol{b}_1)+\boldsymbol{b}_2
+=
+W_2W_1\boldsymbol{x}+W_2\boldsymbol{b}_1+\boldsymbol{b}_2,
+\]</div>
+<p>which is again affine. Thus, stacking linear maps without additional nonlinear operations does not enlarge the model class in any essential way.</p>
+<p>This is one of the cleanest moments in the course to explain why neural networks require <strong>nonlinear activation</strong> functions. Depth matters, but only once linearity has been broken.</p>
+<p><strong>The role of nonlinear activations.</strong></p>
+<p>We therefore proved that, to build a model that is more expressive than a linear model, we can’t just stack multiple linear models. We also need something to break the linearity. In neural networks, the solution is quite simple: we insert non-linear functions between the linear models to introduce non-linearity.</p>
+<p>Consider, for example, a simple function like:</p>
+<div class="math notranslate nohighlight">
+\[
+\rho(x) = \max(0, x),
+\]</div>
+<p>The plot of this function looks as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define ReLU</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Define x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Plot of ReLU(x)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d38759bbea10adc1ae51a332a4ba970b7a0f6f5fd17c4f85b496a1e4b6be36a4.png" src="../_images/d38759bbea10adc1ae51a332a4ba970b7a0f6f5fd17c4f85b496a1e4b6be36a4.png" />
+</div>
+</div>
+<p>Re-define the model <span class="math notranslate nohighlight">\(f_\Theta\)</span> as above, but inserting <span class="math notranslate nohighlight">\(\rho(x)\)</span> between the two linear models <span class="math notranslate nohighlight">\(f_{\Theta^1}\)</span> and <span class="math notranslate nohighlight">\(f_{\Theta^2}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\Theta}(x) := f_{\Theta^2} ( \rho (f_{\Theta^1} (x))) = W^2(\rho(W^1x + b^1)) + b^2.
+\]</div>
+<p>Surprisingly, while this simple modification doesn’t seem to drastically change the structure of the stacked linear model discussed earlier, it introduces an incredible property: <span class="math notranslate nohighlight">\(f_\Theta(x)\)</span> can approximate <em>arbitrarily well</em> any continuous function, thus exhibiting the <strong>Universal Approximation</strong> property. This model, originally called the Multi-layer Perceptron (MLP) due to its layered structure, is the simplest version of a <em>neural network</em>.</p>
+<p>As we will see in the following, more advanced versions of neural networks can be obtained by:</p>
+<ul class="simple">
+<li><p>Stacking more linear models (always placing a non-linear function in between them),</p></li>
+<li><p>Changing the non-linear function used,</p></li>
+<li><p>Limiting the structure of the parameter matrices <span class="math notranslate nohighlight">\(W^l\)</span> to allow for more efficient computation (this is particularly important for image reconstruction).</p></li>
+</ul>
+<p>More recently, researchers in AI identified other effective non-linear activation functions, generalizing the idea of the ReLU function we just described. In particular, let <span class="math notranslate nohighlight">\(\rho:\mathbb{R}\to\mathbb{R}\)</span> be a scalar nonlinear function applied componentwise to vectors. A one-hidden-layer network with activation function <span class="math notranslate nohighlight">\(\rho\)</span> takes the form</p>
+<div class="math notranslate nohighlight">
+\[
+f_{\boldsymbol{\Theta}}(\boldsymbol{x})=W_2\rho(W_1\boldsymbol{x}+\boldsymbol{b}_1)+\boldsymbol{b}_2.
+\]</div>
+<p>The choice of activation is a modelling decision with real consequences. The most commonly encountered activations in imaging architectures are listed here (we include ReLU as well for completeness):</p>
+<p><strong>ReLU</strong>, <span class="math notranslate nohighlight">\(\rho(t)=\max\{t,0\}\)</span>, is the default choice for convolutional networks. It is computationally cheap, avoids the vanishing-gradient problem that plagued earlier sigmoid-based architectures, and produces sparse activations. Its main weakness is that neurons receiving persistently negative input stop contributing entirely (<em>dead neurons</em>), which can slow or stall training.</p>
+<p><strong>Leaky ReLU</strong>, <span class="math notranslate nohighlight">\(\rho(t)=\max\{\alpha t,\,t\}\)</span> with small <span class="math notranslate nohighlight">\(\alpha&gt;0\)</span>, is a simple remedy: a small non-zero slope on the negative half-line ensures gradients can always flow back, preventing the dead-neuron problem while preserving most of the computational advantages of ReLU.</p>
+<p><strong>Sigmoid</strong>, <span class="math notranslate nohighlight">\(\sigma(t)=\frac{e^t}{1+e^t}\)</span>, and <strong>Tanh</strong>, <span class="math notranslate nohighlight">\(\tanh(t)=\frac{e^t-e^{-t}}{e^t+e^{-t}}\)</span>, are among the oldest activations. Both saturate for large <span class="math notranslate nohighlight">\(|t|\)</span>, causing vanishing gradients in deep networks, which is why they have largely been replaced by ReLU in hidden layers. They remain relevant as output nonlinearities and in gated recurrent architectures such as LSTMs.</p>
+<p><strong>GELU</strong> is a smooth, differentiable activation motivated by stochastic regularisation. It is the standard choice in transformer-based architectures, where its smoothness interacts better with the self-attention mechanism than the hard thresholding of ReLU.</p>
+<p><strong>SiLU</strong> (Sigmoid Linear Unit), <span class="math notranslate nohighlight">\(\rho(t)=t\cdot\sigma(t)\)</span>, is a smooth, self-gated activation closely related to GELU and used in EfficientNet and several other modern convolutional architectures.</p>
+<p><strong>Softmax</strong>, <span class="math notranslate nohighlight">\(\mathrm{softmax}(\boldsymbol{z})_i = e^{z_i}/\sum_j e^{z_j}\)</span>, maps a real-valued vector to a probability distribution. It is not used as a hidden-layer activation but appears as a final-layer nonlinearity in classification tasks and, in image segmentation, converts the output feature map into per-pixel class probabilities.</p>
+<p>The role of the activation is deeper than simply introducing nonlinearity. It shapes the geometry of the function class. A ReLU network represents a piecewise affine map whose number of affine regions grows exponentially with depth, a concrete hint of why deep networks can approximate highly complex measurement-to-image relationships.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+
+<span class="n">relu</span>    <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">lrelu</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">sigmoid</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+<span class="n">tanh_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">gelu</span>    <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.044715</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">)))</span>
+<span class="n">silu</span>    <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">activations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;ReLU&#39;</span><span class="p">,</span>       <span class="n">relu</span><span class="p">(</span><span class="n">xx</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;Leaky ReLU&#39;</span><span class="p">,</span> <span class="n">lrelu</span><span class="p">(</span><span class="n">xx</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;Sigmoid&#39;</span><span class="p">,</span>    <span class="n">sigmoid</span><span class="p">(</span><span class="n">xx</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;Tanh&#39;</span><span class="p">,</span>       <span class="n">tanh_fn</span><span class="p">(</span><span class="n">xx</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;GELU&#39;</span><span class="p">,</span>       <span class="n">gelu</span><span class="p">(</span><span class="n">xx</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;SiLU&#39;</span><span class="p">,</span>       <span class="n">silu</span><span class="p">(</span><span class="n">xx</span><span class="p">)),</span>
+<span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="n">activations</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bb3d70f4819d093a1e1df5ca4eb6dea8ca3a371fff871c5c44d2f993af6ee9e7.png" src="../_images/bb3d70f4819d093a1e1df5ca4eb6dea8ca3a371fff871c5c44d2f993af6ee9e7.png" />
+</div>
+</div>
+<section id="notation">
+<h3>Notation<a class="headerlink" href="#notation" title="Link to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../_images/NN.png"><img alt="../_images/NN.png" class="align-center" src="../_images/NN.png" style="width: 500px;" /></a>
+<p>The diagram above makes the architecture concrete. Any neural network can be represented as a layered graph in which each node is called a <strong>neuron</strong>. The layers are:</p>
+<ul class="simple">
+<li><p><strong>Input layer</strong> (<span class="math notranslate nohighlight">\(d\)</span> neurons): holds the input <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> directly.</p></li>
+<li><p><strong>Hidden layer(s)</strong> (<span class="math notranslate nohighlight">\(H\)</span> neurons each, with <span class="math notranslate nohighlight">\(H\)</span> the <strong>hidden dimension</strong>): intermediate representations not directly observable from outside. The <span class="math notranslate nohighlight">\(i\)</span>-th neuron in a hidden layer computes
+$<span class="math notranslate nohighlight">\(z_i = \boldsymbol{w}_i^T \boldsymbol{x} + b_i,\)</span><span class="math notranslate nohighlight">\(
+where \)</span>\boldsymbol{w}_i<span class="math notranslate nohighlight">\( and \)</span>b_i<span class="math notranslate nohighlight">\( are the neuron-specific **weights** and **bias**, represented as the edges connecting the previous layer to \)</span>z_i<span class="math notranslate nohighlight">\(. The activation function then maps \)</span>z_i \mapsto h_i = \rho(z_i)$.</p></li>
+<li><p><strong>Output layer</strong> (<span class="math notranslate nohighlight">\(s\)</span> neurons): produces the final prediction <span class="math notranslate nohighlight">\(\boldsymbol{y}\)</span>.</p></li>
+</ul>
+<p>The name <em>hidden layer</em> reflects the fact that its values are internal to the computation. Neurons in the input layer are sometimes called the <em>visible</em> units.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A common misunderstanding is to think that depth alone creates expressivity. Without <strong>nonlinear activation</strong> functions, composing affine maps still produces an affine map. This is why the activation is a structural ingredient, not an optional embellishment.</p>
+</div>
+<p><strong>Deep Neural Networks.</strong></p>
+<p>The one-hidden-layer architecture above can be extended by stacking <span class="math notranslate nohighlight">\(L\)</span> hidden layers, each taking the output of the previous layer as input and applying the same linear-transformation-plus-activation structure. A network with many hidden layers is a <strong>deep neural network</strong>, and the body of algorithms built on such architectures is called <strong>Deep Learning</strong>. The depth <span class="math notranslate nohighlight">\(L\)</span> and the width <span class="math notranslate nohighlight">\(\max_\ell H_\ell\)</span> (the largest number of neurons across all hidden layers) are the two primary descriptors of a network’s capacity.</p>
+<p><strong>Depth, features, and internal representations.</strong></p>
+<p>For a deep network we write</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{h}_0=\boldsymbol{x},
+\qquad
+\boldsymbol{h}_{\ell+1}=\rho_\ell(W_\ell \boldsymbol{h}_\ell+\boldsymbol{b}_\ell),
+\qquad
+f_{\boldsymbol{\Theta}}(\boldsymbol{x})=\boldsymbol{h}_L.
+\]</div>
+<p>The vectors <span class="math notranslate nohighlight">\(\boldsymbol{h}_\ell\)</span> are the internal features produced by the network. In early layers, one typically finds detectors of simple local events: oriented edges, contrast boundaries, and repeated low-level textures. In an imaging context these are exactly the elementary structures that acquisition artifacts and noise distort most noticeably. In the middle layers, elementary features are combined into larger-scale structures (in a medical image this might mean organ boundaries or characteristic geometric patterns of the imaging geometry). In the deepest layers, representations become task-specific: they encode the difference between a true anatomical structure and a reconstruction artifact, or between a genuine edge and ringing introduced by truncation of the measurement.</p>
+<p>The network is therefore not only computing a final answer. It is building a progressive and increasingly abstract description of the datum, layer by layer. This hierarchical viewpoint explains why depth matters beyond pure approximation power: a shallow model may approximate the same function in principle, but it cannot organize the computation into a reusable hierarchy of descriptors, which leads to much worse parameter efficiency and generalization.</p>
+<a class="reference internal image-reference" href="../_images/MLP.png"><img alt="../_images/MLP.png" class="align-center" src="../_images/MLP.png" style="width: 620px;" /></a>
+<p><strong>Universal approximation is not the end of the story.</strong></p>
+<p>The universal approximation theorem is often cited when introducing neural networks. It states, roughly speaking, that sufficiently large networks can approximate continuous functions on compact sets <span id="id5">[<a class="reference internal" href="../references.html#id23" title="George Cybenko. Approximation by superpositions of a sigmoidal function. Mathematics of Control, Signals and Systems, 2(4):303–314, 1989.">3</a>]</span>. This result is mathematically important because it proves that nonlinear networks are not fundamentally limited in the way linear models are.</p>
+<p>However, this theorem should not be overemphasized in a computational imaging course. In practice, one does not only care about approximation in an abstract sense. One also cares about:</p>
+<ul class="simple">
+<li><p>how many parameters are needed;</p></li>
+<li><p>whether the model can be trained stably;</p></li>
+<li><p>how the architecture reflects known properties of images;</p></li>
+<li><p>whether the reconstructor is robust to noise and operator mismatch.</p></li>
+</ul>
+<p>In other words, the relevant question is not only can a neural network represent the desired inverse map, but rather which neural network architecture represents it efficiently and stably.</p>
+<p>This is the precise point at which the course naturally moves from generic neural networks to image-specific architectures.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Neural networks as learned regularizers.</strong></p>
+<p>A very useful bridge with classical inverse problems is the following interpretation. Even if a neural network is trained end-to-end, one can view it as approximating the solution map of a variational problem of the form</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\boldsymbol{x}}(\boldsymbol{y}^\delta)
+=
+\operatorname*{arg\,min}_{\boldsymbol{x}}
+\Big(\mathcal{D}(K\boldsymbol{x},\boldsymbol{y}^\delta)+\mathcal{R}(\boldsymbol{x})\Big),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> is a data-fidelity term and <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> is a regularizer. This is precisely the MAP estimator under the prior <span class="math notranslate nohighlight">\(p(\boldsymbol{x}) \propto e^{-\mathcal{R}(\boldsymbol{x})}\)</span>: the regularizer and the log-prior are the same object.</p>
+<p>The network does not make <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> explicit. What it does, through training on paired data, is to absorb an implicit model of both the forward physics and the image prior into its weights.</p>
+<p>This has a direct practical implication. The quality of the implicit regularizer is limited by the quality and diversity of the training distribution. A network trained on a narrow image class carries a strong, restrictive prior. A network trained on diverse data carries a weaker, more flexible one. Knowing this helps explain many failure modes observed when such networks are applied outside their training distribution.</p>
+</div>
+</section>
+</section>
+<section id="optimization-backpropagation-and-generalization">
+<h2>Optimization, Backpropagation, and Generalization<a class="headerlink" href="#optimization-backpropagation-and-generalization" title="Link to this heading">#</a></h2>
+<p><strong>Training</strong> a neural network means finding the parameters <span class="math notranslate nohighlight">\(\Theta\)</span> such that the model’s prediction <span class="math notranslate nohighlight">\(f_\Theta(\boldsymbol{x}^{(i)})\)</span> best approximates the true target <span class="math notranslate nohighlight">\(\boldsymbol{y}^{(i)}\)</span> over the training set. In practice, this requires solving the nonconvex optimization problem</p>
+<div class="math notranslate nohighlight">
+\[
+\min_{\boldsymbol{\Theta}} L(\boldsymbol{\Theta}) = \sum_{i=1}^N \ell(f_\Theta(\boldsymbol{x}^{(i)}), y^{(i)}).
+\]</div>
+<p>This problem is usually solved by the gradient descent, namely by iterating:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{\Theta}_{k+1}
+=
+\boldsymbol{\Theta}_k-\eta_k\nabla L(\boldsymbol{\Theta}_k).
+\]</div>
+<p>However, since in practical application the total number of datapoints <span class="math notranslate nohighlight">\(N\)</span> can be very large, computing:</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla L(\boldsymbol{\Theta}_k) = \sum_{i=1}^N  \nabla  \ell(f_\Theta(\boldsymbol{x}^{(i)}), y^{(i)})
+\]</div>
+<p>can be computationally prohibitive. For this reason, in practice one rarely computes the full empirical gradient. Instead one uses <strong>minibatches</strong> and obtains a stochastic approximation:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{\Theta}_{k+1}
+=
+\boldsymbol{\Theta}_k-\eta_k \sum_{i\in B_k} \nabla \ell(f_\Theta(\boldsymbol{x}^{(i)}), y^{(i)}),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(B_k\)</span> denotes the current <strong>batch</strong>. The resulting algorithm, known as <strong>Stochastic Gradient Descent (SGD)</strong>, represent one turning point that allowed neural networks to reach the popularity they have today.</p>
+<p>Another, crucial component of neural network training is how <span class="math notranslate nohighlight">\(\ell(f_\Theta(\boldsymbol{x}^{(i)}), y^{(i)})\)</span> is computed. In practice, this is usually done via <strong>backpropagation</strong> <span id="id6">[<a class="reference internal" href="../references.html#id24" title="David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">14</a>]</span>, which is simply an efficient implementation of the chain rule through the <strong>computational graph</strong>, which exploits the recursive architecture of neural network models defined above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">layer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">2.0</span><span class="p">]])</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">]])</span>
+
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Prediction:&#39;</span><span class="p">,</span> <span class="n">prediction</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss:&#39;</span><span class="p">,</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gradient with respect to the weight:&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gradient with respect to the bias:&#39;</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">bias</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prediction: -0.2809082269668579
+Loss: 1.64072585105896
+Gradient with respect to the weight: -5.123632907867432
+Gradient with respect to the bias: -2.561816453933716
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Statistical <strong>generalization</strong>.</strong></p>
+<p>Another key topic to explain explicitly is <strong>generalization</strong>. A network may minimize the training loss very well and still fail on new data. In the inverse-problems setting this issue is even more delicate because the test datum may differ from training not only in image content, but also in:</p>
+<ul class="simple">
+<li><p>noise level;</p></li>
+<li><p>acquisition geometry;</p></li>
+<li><p>calibration;</p></li>
+<li><p>discretization;</p></li>
+<li><p>anatomical class or object class.</p></li>
+</ul>
+<p>Thus, when we say that a network generalizes, we mean that the learned inverse map remains reliable under realistic variation in both the unknown image and the measurement process.</p>
+<p>This is why one should teach students very early that reconstruction quality cannot be separated from dataset design. A model trained on unrealistic synthetic pairs may generalize only inside a narrow artificial world.</p>
+<p><strong>Why the next step must be image-specific architectures.</strong></p>
+<p>At this point the motivation for image-oriented architectures is clear. Fully connected networks are conceptually useful but computationally and statistically inefficient for images. They do not respect locality, do not exploit translational patterns, and ignore the geometry of the image grid.</p>
+<p>Once the idea of a learned inverse map is clear, one asks how to design the architecture so that it matches the structure of image data. The principal answers developed in the imaging literature are:</p>
+<ul class="simple">
+<li><p><strong>Convolutional networks</strong> <span id="id7">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>, which exploit locality and translation invariance through shared filter banks, dramatically reducing parameter count while encoding the inductive bias that meaningful patterns are local and can appear anywhere in the image;</p></li>
+<li><p><strong>Residual networks</strong> <span id="id8">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">6</a>]</span>, which enable very deep architectures by adding identity skip connections that preserve gradient flow and allow later layers to refine rather than relearn earlier representations;</p></li>
+<li><p><strong>Encoder-decoder networks</strong> such as the U-Net <span id="id9">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>, which process the image at multiple spatial resolutions and use skip connections to preserve fine-scale detail — the architecture that has become the de facto standard for image-to-image learning in medical and scientific imaging;</p></li>
+<li><p><strong>Attention mechanisms and vision transformers</strong> <span id="id10">[<a class="reference internal" href="../references.html#id7" title="Alexey Dosovitskiy and others. An image is worth 16x16 words: transformers for image recognition at scale. International Conference on Learning Representations, 2021.">4</a>]</span>, which allow long-range dependencies between spatially distant image regions, going beyond what a purely local convolutional approach can capture.</p></li>
+</ul>
+<p>Each of these is not a generic computational trick. It is a structured response to a specific property of images and of the inverse problems defined on them.</p>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Show explicitly that the composition of three linear maps is still linear. Proceeding by recursion, prove that the composition of every number of linear model is linear.</p></li>
+<li><p>Explain in your own words why the loss function changes the statistical estimator learned by the network.</p></li>
+</ol>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<p>For a comprehensive treatment of the statistical foundations of neural network training, see <span id="id11">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">5</a>]</span> and <span id="id12">[<a class="reference internal" href="../references.html#id22" title="Christopher M Bishop. Pattern Recognition and Machine Learning. Springer, 2006.">2</a>]</span>. The theoretical and probabilistic foundations of inverse problems, including the role of noise, regularization, and prior information, are developed rigorously in <span id="id13">[<a class="reference internal" href="../references.html#id2" title="Jari Kaipio and Erkki Somersalo. Statistical and Computational Inverse Problems. Springer, 2005.">8</a>]</span>. The specific question of how deep learning techniques apply to imaging inverse problems, including the risk minimization perspective, generalization considerations, and connections to classical reconstruction theory, is surveyed in <span id="id14">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
+<p>The original backpropagation algorithm is due to <span id="id15">[<a class="reference internal" href="../references.html#id24" title="David E Rumelhart, Geoffrey E Hinton, and Ronald J Williams. Learning representations by back-propagating errors. Nature, 323:533–536, 1986.">14</a>]</span>; understanding this paper remains one of the best ways to internalize what automatic differentiation actually computes.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./end-to-end"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../intro/a-brief-overview-pytorch.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">PyTorch, Automatic Differentiation, and Training Mechanics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="convolutions-cnns-and-training.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Convolutions, CNNs, and End-to-End Training</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-chapter-comes-first">Why This Chapter Comes First</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basics-of-machine-learning">Basics of Machine Learning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#from-linear-predictors-to-neural-networks">From Linear Predictors to Neural Networks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notation">Notation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-backpropagation-and-generalization">Optimization, Backpropagation, and Generalization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Davide Evangelista
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
