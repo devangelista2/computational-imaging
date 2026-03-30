@@ -53,7 +53,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -759,8 +759,8 @@ On the other side, when we take a look at the <strong>residual</strong>, i.e. th
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/bd5eb554b3125d7f115e0e37b7d1d372af2cf37aef165bff71d7aa7c95181cb9.png" src="../_images/bd5eb554b3125d7f115e0e37b7d1d372af2cf37aef165bff71d7aa7c95181cb9.png" />
-<img alt="../_images/2363e1dea7a83a86bf56537c0585997d817c866509d313aaba2bb3b255a92641.png" src="../_images/2363e1dea7a83a86bf56537c0585997d817c866509d313aaba2bb3b255a92641.png" />
-<img alt="../_images/f3cdc2f1f2730d0f8cd373fab87fb2319de82bccd98bef31f512cc9e3d4ee088.png" src="../_images/f3cdc2f1f2730d0f8cd373fab87fb2319de82bccd98bef31f512cc9e3d4ee088.png" />
+<img alt="../_images/b48b1fb4ab44f0439fd750cc63550c3d713bdbb67cb95a1ef6d3b765897caed1.png" src="../_images/b48b1fb4ab44f0439fd750cc63550c3d713bdbb67cb95a1ef6d3b765897caed1.png" />
+<img alt="../_images/9e95689569c336c259f2a33970ebd26aa8ff4ca18b432c826b98d4471238ff38.png" src="../_images/9e95689569c336c259f2a33970ebd26aa8ff4ca18b432c826b98d4471238ff38.png" />
 </div>
 </div>
 <p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed before, where the network is trained to learn <strong>not</strong> the reconstructed image, but rather the <strong>residual</strong>, which is then converted to the actual image by just adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back to the output with the aim of learning the residual is usually called <strong>residual connection</strong> or <strong>skip connection</strong>. This architectures are named <strong>Residual Convolutional Neural Netowork (ResCNN)</strong>.</p>
