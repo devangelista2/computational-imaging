@@ -5,11 +5,11 @@ title: Computational Imaging
 author: Davide Evangelista
 logo: logo.png
 
-# Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
+# Disable notebook execution during the build.
+# Execute notebooks offline first, then build using the saved outputs.
 execute:
-  execute_notebooks: "auto"  # Set to "auto", "force", or "cache"
-  allow_errors: true  # Allow the notebook to continue executing even if an error occurs
+  execute_notebooks: "off"
+  allow_errors: true
 
 
 # Define the name of the latex output file for PDF builds

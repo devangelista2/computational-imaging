@@ -11,8 +11,13 @@ parts:
       - file: intro/a-brief-overview-pytorch
   - caption: Neural Networks for Imaging
     chapters:
-      - file: intro/from-ml-to-nn
-      - file: end-to-end/end-to-end
+      - file: end-to-end/from-ml-to-nn
+      - file: end-to-end/convolutions-cnns-and-training
+      - file: end-to-end/residual-learning-and-unet
+      - file: end-to-end/vision-transformers-and-loss-design
+  - caption: Homeworks
+    chapters:
+      - file: homeworks/homework1
 #      - file: end-to-end/self-supervised-training
 #  - caption: Noise, Data, and Evaluation
 #    chapters:

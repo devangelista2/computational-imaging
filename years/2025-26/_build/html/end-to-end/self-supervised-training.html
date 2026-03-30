@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
@@ -184,8 +184,14 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="end-to-end.html">End-to-End Image Reconstruction methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction with CNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -432,7 +438,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <p>This is the key teaching point: <strong>self-supervision</strong> never means learning without prior information. It means learning without direct target labels, while obtaining the missing information from another structural source.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">A</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
 <span class="n">x1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
@@ -447,14 +453,6 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A x1 = [1.0, 2.0]
-A x2 = [1.0, 2.0]
-x1 and x2 are different: True
-But they are equally data-consistent: True
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section id="main-self-supervised-strategies">
@@ -463,7 +461,7 @@ But they are equally data-consistent: True
 <p class="admonition-title">Note</p>
 <p>A useful teaching principle is that <strong>self-supervision</strong> does not mean the absence of assumptions. It means that the assumptions are moved from explicit target images into the <strong>structure of the loss</strong>, the <strong>splitting of the data</strong>, or the <strong>architecture itself</strong>.</p>
 </div>
-<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id8" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">16</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
+<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">16</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
 <div class="math notranslate nohighlight">
 \[
 \min_{\boldsymbol{\Theta}} \|Kg_{\boldsymbol{\Theta}}(\boldsymbol{z})-\boldsymbol{y}^\delta\|_2^2.
@@ -481,7 +479,7 @@ But they are equally data-consistent: True
 <p>So DIP is both pedagogically valuable and practically limited.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># DIP-style optimization on one blurred Mayo image.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># DIP-style optimization on one blurred Mayo image.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
@@ -526,16 +524,6 @@ But they are equally data-consistent: True
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 01 | data loss = 0.146653 | image RMSE = 0.398066
-Step 10 | data loss = 0.030320 | image RMSE = 0.184844
-Step 30 | data loss = 0.030320 | image RMSE = 0.184844
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 60 | data loss = 0.030320 | image RMSE = 0.184844
-</pre></div>
-</div>
-</div>
 </div>
 <p>The important thing to observe here is the distinction between the data term and the image error. In a true self-supervised setting, the image error would not be accessible. It is printed here only for teaching purposes, to show what the network is implicitly recovering while optimizing only through the forward model.</p>
 <p><strong>Measurement splitting and cross-prediction.</strong></p>
@@ -551,7 +539,7 @@ Step 30 | data loss = 0.030320 | image RMSE = 0.184844
 \min_{\boldsymbol{\Theta}}
 \|K_2 f_{\boldsymbol{\Theta}}(\boldsymbol{y}_1^\delta)-\boldsymbol{y}_2^\delta\|^2.
 \]</div>
-<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id10" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">7</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id9" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">1</a>]</span>.</p>
+<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id11" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">7</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id10" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">1</a>]</span>.</p>
 <p>The success of this idea depends on several assumptions that should be stated explicitly:</p>
 <ul class="simple">
 <li><p>the measurement can be split in a physically meaningful way;</p></li>
@@ -562,7 +550,7 @@ Step 30 | data loss = 0.030320 | image RMSE = 0.184844
 <p>This is a very good point to slow down during the lecture. Students often see the splitting trick and think it is universally applicable. It is not. Its validity depends strongly on acquisition geometry and noise structure.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x_true</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
@@ -576,14 +564,6 @@ Step 30 | data loss = 0.030320 | image RMSE = 0.184844
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Odd-index split:&#39;</span><span class="p">,</span> <span class="n">odd_measurements</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Even-index split:&#39;</span><span class="p">,</span> <span class="n">even_measurements</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A splitting strategy can ask the model to predict one subset from the other.&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Full measurement vector: tensor([0.0770, 0.1282, 0.1768, 0.4570, 0.5172, 0.6444, 0.8773, 1.0419])
-Odd-index split: tensor([0.0770, 0.1768, 0.5172, 0.8773])
-Even-index split: tensor([0.1282, 0.4570, 0.6444, 1.0419])
-A splitting strategy can ask the model to predict one subset from the other.
 </pre></div>
 </div>
 </div>
