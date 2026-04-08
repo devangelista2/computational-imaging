@@ -15,21 +15,19 @@ parts:
       - file: end-to-end/convolutions-cnns-and-training
       - file: end-to-end/residual-learning-and-unet
       - file: end-to-end/vision-transformers-and-loss-design
-  - caption: Homeworks
-    chapters:
-      - file: homeworks/homework1
+      - file: end-to-end/crossdomain
 #      - file: end-to-end/self-supervised-training
 #  - caption: Noise, Data, and Evaluation
 #    chapters:
 #      - file: noise/the-inverse-crime
-#  - caption: Generative Models
-#    chapters:
-#      - file: generative/vaes-and-gans
-#      - file: generative/diffusion-models
-#      - file: generative/flow-matching
-#  - caption: Generative Priors for Inverse Problems
-#    chapters:
-#      - file: inverse-problems/generative-inverse-problems
+  - caption: Generative Models
+    chapters:
+      - file: generative/vaes-and-gans
+      - file: generative/diffusion-models
+      - file: generative/generative-inverse-problems
+  - caption: Homeworks
+    chapters:
+      - file: homeworks/homework1
   - caption: References
     chapters:
       - file: references

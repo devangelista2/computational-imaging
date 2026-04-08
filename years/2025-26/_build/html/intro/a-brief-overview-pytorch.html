@@ -188,6 +188,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../end-to-end/vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
@@ -453,7 +460,7 @@ Intensity range: 0.0 0.8627451062202454
 </div>
 </div>
 <p><strong>Tensors as discrete objects.</strong></p>
-<p>In <strong>PyTorch</strong> <span id="id1">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>, the basic object is the <code class="docutils literal notranslate"><span class="pre">tensor</span></code>. From a mathematical viewpoint, a tensor is simply a multidimensional array, but in practice it carries additional information:</p>
+<p>In <strong>PyTorch</strong> <span id="id1">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">23</a>]</span>, the basic object is the <code class="docutils literal notranslate"><span class="pre">tensor</span></code>. From a mathematical viewpoint, a tensor is simply a multidimensional array, but in practice it carries additional information:</p>
 <ul class="simple">
 <li><p><strong>shape</strong>, which tells us the dimensions;</p></li>
 <li><p><strong>data type</strong>, which determines numerical precision;</p></li>
@@ -670,7 +677,7 @@ d loss / d w: 30.0
 =
 \boldsymbol{\Theta}_k-\eta \nabla L(\boldsymbol{\Theta}_k).
 \]</div>
-<p>Adam <span id="id2">[<a class="reference internal" href="../references.html#id28" title="Diederik P Kingma and Jimmy Ba. Adam: a method for stochastic optimization. International Conference on Learning Representations, 2015.">9</a>]</span> modifies this rule by rescaling and averaging gradients. It is useful for students to see that <strong>optimizer</strong> choice belongs to numerical optimization, not to model design.</p>
+<p>Adam <span id="id2">[<a class="reference internal" href="../references.html#id28" title="Diederik P Kingma and Jimmy Ba. Adam: a method for stochastic optimization. International Conference on Learning Representations, 2015.">17</a>]</span> modifies this rule by rescaling and averaging gradients. It is useful for students to see that <strong>optimizer</strong> choice belongs to numerical optimization, not to model design.</p>
 <p>To simplify the implementation, the <code class="docutils literal notranslate"><span class="pre">optim</span></code> submodule of pytorch contains a large choice of different pre-defined optimizers, such as <code class="docutils literal notranslate"><span class="pre">SGD</span></code>, <code class="docutils literal notranslate"><span class="pre">Adam</span></code>, <code class="docutils literal notranslate"><span class="pre">AdamW</span></code>, and others. Each optimizer takes as input the set of the parameters that needs to be optimized (parameters of a given Module are accessible using the <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code> method), and a learning rate (representing the <span class="math notranslate nohighlight">\(\eta\)</span> term). Then, training proceeds as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1048,7 +1055,7 @@ While finite number precision has been already briefly discussed in this section
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id27" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span>. For a more detailed discussion of the imaging-oriented components of the course codebase, see the dedicated notebook on <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> in the end-to-end section.</p>
+<p>This chapter is intentionally brief. Its role is to make the later notebooks readable at the code level. For a thorough and practical introduction to deep learning with <strong>PyTorch</strong>, see <span id="id3">[<a class="reference internal" href="../references.html#id27" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">27</a>]</span>. The framework itself, including its design principles and performance characteristics, is described in <span id="id4">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">23</a>]</span>. For a more detailed discussion of the imaging-oriented components of the course codebase, see the dedicated notebook on <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> in the end-to-end section.</p>
 </section>
 <section id="structured-exercise-receptive-field-and-pooling-in-image-reconstruction">
 <h2>Structured Exercise: Receptive Field and Pooling in Image Reconstruction<a class="headerlink" href="#structured-exercise-receptive-field-and-pooling-in-image-reconstruction" title="Link to this heading">#</a></h2>

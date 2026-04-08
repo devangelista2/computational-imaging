@@ -188,6 +188,13 @@
 <li class="toctree-l1"><a class="reference internal" href="convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
@@ -461,7 +468,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <p class="admonition-title">Note</p>
 <p>A useful teaching principle is that <strong>self-supervision</strong> does not mean the absence of assumptions. It means that the assumptions are moved from explicit target images into the <strong>structure of the loss</strong>, the <strong>splitting of the data</strong>, or the <strong>architecture itself</strong>.</p>
 </div>
-<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">16</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
+<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">28</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
 <div class="math notranslate nohighlight">
 \[
 \min_{\boldsymbol{\Theta}} \|Kg_{\boldsymbol{\Theta}}(\boldsymbol{z})-\boldsymbol{y}^\delta\|_2^2.
@@ -539,7 +546,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 \min_{\boldsymbol{\Theta}}
 \|K_2 f_{\boldsymbol{\Theta}}(\boldsymbol{y}_1^\delta)-\boldsymbol{y}_2^\delta\|^2.
 \]</div>
-<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id11" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">7</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id10" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">1</a>]</span>.</p>
+<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id11" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">13</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id10" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">3</a>]</span>.</p>
 <p>The success of this idea depends on several assumptions that should be stated explicitly:</p>
 <ul class="simple">
 <li><p>the measurement can be split in a physically meaningful way;</p></li>
