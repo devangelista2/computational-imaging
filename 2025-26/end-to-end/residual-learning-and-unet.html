@@ -177,6 +177,13 @@
 <li class="toctree-l1"><a class="reference internal" href="convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Residual Learning, Receptive Field, and UNet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
@@ -380,8 +387,16 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-cnn">Residual CNN</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-cnn-the-receptive-field">Beyond CNN: the Receptive field</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet">UNet</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residualconvblock">ResidualConvBlock</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attentionconvblock">AttentionConvBlock</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-unet-works-so-well">Why UNet Works So Well</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-unet-variants">Common UNet Variants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline-unet">Baseline UNet</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet-variants">UNet Variants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-unet">Residual UNet</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-unet">Attention UNet</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">UNet++</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-variants-on-the-same-corrupted-image">Comparing the Variants on the Same Corrupted Image</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
@@ -412,29 +427,29 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">ROOT</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">&quot;course_utils.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
-<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gray</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 
-<span class="c1"># Load images</span>
-<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gray</span><span class="p">(</span><span class="s2">&quot;Mayo.png&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_mayo</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
+
+<span class="n">img_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;imgs&#39;</span>
+
+<span class="c1"># Load images explicitly from disk as grayscale arrays.</span>
+<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_dir</span> <span class="o">/</span> <span class="s1">&#39;Mayo.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_mayo</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_mayo</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_mayo</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">x_mayo</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_mayo</span> <span class="o">-</span> <span class="n">x_mayo</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_mayo</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x_mayo</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
-<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gray</span><span class="p">(</span><span class="s2">&quot;GoPro.jpg&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_gopro</span><span class="o">.</span><span class="n">float</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;bilinear&quot;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_dir</span> <span class="o">/</span> <span class="s1">&#39;GoPro.jpg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_gopro</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_gopro</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x_gopro</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">x_gopro</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_gopro</span> <span class="o">-</span> <span class="n">x_gopro</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">x_gopro</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x_gopro</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 
-<span class="c1"># Visualize the images</span>
+<span class="c1"># Visualize the clean images.</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_mayo</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
@@ -444,8 +459,8 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="c1"># Corrupt and add noise</span>
-<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span><span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">kernel_type</span><span class="o">=</span><span class="s2">&quot;gaussian&quot;</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">kernel_variance</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Corrupt and add noise.</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">operators</span><span class="o">.</span><span class="n">Blurring</span><span class="p">(</span><span class="n">img_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">),</span> <span class="n">kernel_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">kernel_variance</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">y_mayo</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_mayo</span><span class="p">)</span>
 <span class="n">y_mayo_delta</span> <span class="o">=</span> <span class="n">y_mayo</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_mayo</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
@@ -453,7 +468,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <span class="n">y_gopro</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_gopro</span><span class="p">)</span>
 <span class="n">y_gopro_delta</span> <span class="o">=</span> <span class="n">y_gopro</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_gopro</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
-<span class="c1"># Visualize the (corrupted) images</span>
+<span class="c1"># Visualize the corrupted images.</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_mayo_delta</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
@@ -463,7 +478,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="c1"># Visualize the residual</span>
+<span class="c1"># Visualize the residuals.</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_mayo_delta</span> <span class="o">-</span> <span class="n">x_mayo</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
@@ -477,11 +492,12 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 </div>
 <div class="cell_output docutils container">
 <img alt="../_images/715d3486ee139d50d028622fd6a001edabce6d15a130b59f3a11d56800fbcb1e.png" src="../_images/715d3486ee139d50d028622fd6a001edabce6d15a130b59f3a11d56800fbcb1e.png" />
-<img alt="../_images/ad18781bdf0b823e9567aa2507ceac3f8d31195e363a7963c136bb10beb7718e.png" src="../_images/ad18781bdf0b823e9567aa2507ceac3f8d31195e363a7963c136bb10beb7718e.png" />
-<img alt="../_images/32e1c481b8da542faec0e9687d803b432532c5ebb7e683f22a8eea8cf0d5890c.png" src="../_images/32e1c481b8da542faec0e9687d803b432532c5ebb7e683f22a8eea8cf0d5890c.png" />
+<img alt="../_images/e8d6dbf0c1c4f10c1bbab9ac4bfd10f7613561837240675eeb4256960822543e.png" src="../_images/e8d6dbf0c1c4f10c1bbab9ac4bfd10f7613561837240675eeb4256960822543e.png" />
+<img alt="../_images/6af4321982aa85ee69d0c8a86ca07972f82d66741e4b8919c96bcc8cb3507103.png" src="../_images/6af4321982aa85ee69d0c8a86ca07972f82d66741e4b8919c96bcc8cb3507103.png" />
 </div>
 </div>
 <p>With this idea in mind, some authors developed a variant of the simple CNN architecture discussed above, in which the network is trained to learn <strong>not</strong> the reconstructed image itself, but rather the <strong>residual</strong>, which is then converted into the actual image by simply adding the corrupted image <span class="math notranslate nohighlight">\(y^\delta\)</span> back to the output of the model. The operation of summing the input back into the output with the aim of learning the residual is usually called a <strong>residual connection</strong> or <strong>skip connection</strong>. These architectures are called <strong>Residual Convolutional Neural Networks (ResCNNs)</strong>.</p>
+<a class="reference internal image-reference" href="../_images/ResCNN.png"><img alt="../_images/ResCNN.png" class="align-center" src="../_images/ResCNN.png" style="width: 800px;" /></a>
 <p>What follows is a PyTorch implementation of a ResCNN architecture with the same basic structure as the CNN discussed previously. Note that we employ Tanh as the final activation function for this task, as already discussed in the previous section.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -513,7 +529,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -524,41 +540,12 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="o">*</span><span class="n">here</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;weights&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;Mayo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">book_root</span> <span class="o">=</span> <span class="n">base</span>
-        <span class="k">break</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Could not locate the course root containing Mayo and weights.&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
 
-<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="o">*</span><span class="n">here</span><span class="o">.</span><span class="n">parents</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">ippy_root</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span>
-        <span class="k">break</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Could not locate the local IPPy package.&#39;</span><span class="p">)</span>
-
-<span class="n">operators_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="s1">&#39;course_ippy_operators&#39;</span><span class="p">,</span> <span class="n">ippy_root</span> <span class="o">/</span> <span class="s1">&#39;operators.py&#39;</span><span class="p">)</span>
-<span class="n">operators</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">operators_spec</span><span class="p">)</span>
-<span class="n">operators_spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">operators</span><span class="p">)</span>
-
+<span class="n">book_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 <span class="n">weights_dir</span> <span class="o">=</span> <span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;weights&#39;</span>
 <span class="n">weights_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_device</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s1">&#39;cuda&#39;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-            <span class="k">return</span> <span class="s1">&#39;mps&#39;</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="k">return</span> <span class="s1">&#39;cpu&#39;</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">):</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">e</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">noise_level</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
@@ -579,7 +566,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
         <span class="p">])(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
-<span class="n">device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
 <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;Mayo&#39;</span> <span class="o">/</span> <span class="s1">&#39;train&#39;</span><span class="p">),</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
 <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">MayoDataset</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;Mayo&#39;</span> <span class="o">/</span> <span class="s1">&#39;test&#39;</span><span class="p">),</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
 <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -597,7 +584,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
 <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
 
-<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">weights_path</span> <span class="o">=</span> <span class="n">weights_dir</span> <span class="o">/</span> <span class="s1">&#39;ResCNN.pth&#39;</span>
@@ -612,7 +599,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
             <span class="n">y_batch</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
-            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span> <span class="o">+</span> <span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
+            <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
 
         <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_batch</span><span class="p">)</span>
         <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">x_batch</span><span class="p">)</span>
@@ -625,7 +612,6 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
         <span class="n">progress_bar</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">batch_loss</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">avg_loss</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">epoch_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">step</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">: training loss = </span><span class="si">{</span><span class="n">history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">weights_path</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Saved ResCNN weights to: </span><span class="si">{</span><span class="n">weights_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -638,7 +624,7 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
     <span class="n">x_true</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_loader</span><span class="p">))[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
     <span class="n">y_delta</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span>
-    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y_delta</span> <span class="o">+</span> <span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_delta</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y_delta</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_delta</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
     <span class="n">x_rec</span> <span class="o">=</span> <span class="n">reloaded_model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -669,18 +655,39 @@ On the other hand, when we look at the <strong>residual</strong>, i.e. the value
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_true: torch.Size([1, 1, 256, 256]). Range of x_true: (tensor(0.), tensor(0.9113))
-SSIM: 0.9394
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/20: 100%|██████████| 414/414 [03:03&lt;00:00,  2.26it/s, avg_loss=0.000945, batch_loss=0.000529]
+Epoch 2/20: 100%|██████████| 414/414 [02:58&lt;00:00,  2.32it/s, avg_loss=0.000540, batch_loss=0.000480]
+Epoch 3/20: 100%|██████████| 414/414 [02:59&lt;00:00,  2.30it/s, avg_loss=0.000480, batch_loss=0.000528]
+Epoch 4/20: 100%|██████████| 414/414 [03:00&lt;00:00,  2.30it/s, avg_loss=0.000445, batch_loss=0.000473]
+Epoch 5/20: 100%|██████████| 414/414 [02:59&lt;00:00,  2.31it/s, avg_loss=0.000424, batch_loss=0.000369]
+Epoch 6/20: 100%|██████████| 414/414 [02:55&lt;00:00,  2.35it/s, avg_loss=0.000408, batch_loss=0.000295]
+Epoch 7/20: 100%|██████████| 414/414 [03:02&lt;00:00,  2.27it/s, avg_loss=0.000397, batch_loss=0.000360]
+Epoch 8/20: 100%|██████████| 414/414 [03:11&lt;00:00,  2.16it/s, avg_loss=0.000386, batch_loss=0.000393]
+Epoch 9/20: 100%|██████████| 414/414 [03:05&lt;00:00,  2.23it/s, avg_loss=0.000372, batch_loss=0.000459]
+Epoch 10/20: 100%|██████████| 414/414 [03:06&lt;00:00,  2.22it/s, avg_loss=0.000362, batch_loss=0.000244]
+Epoch 11/20: 100%|██████████| 414/414 [03:06&lt;00:00,  2.22it/s, avg_loss=0.000356, batch_loss=0.000393]
+Epoch 12/20: 100%|██████████| 414/414 [03:05&lt;00:00,  2.23it/s, avg_loss=0.000349, batch_loss=0.000293]
+Epoch 13/20: 100%|██████████| 414/414 [03:07&lt;00:00,  2.21it/s, avg_loss=0.000343, batch_loss=0.000334]
+Epoch 14/20: 100%|██████████| 414/414 [03:08&lt;00:00,  2.20it/s, avg_loss=0.000338, batch_loss=0.000355]
+Epoch 15/20: 100%|██████████| 414/414 [03:06&lt;00:00,  2.22it/s, avg_loss=0.000333, batch_loss=0.000342]
+Epoch 16/20: 100%|██████████| 414/414 [03:17&lt;00:00,  2.10it/s, avg_loss=0.000329, batch_loss=0.000335]
+Epoch 17/20: 100%|██████████| 414/414 [03:06&lt;00:00,  2.22it/s, avg_loss=0.000325, batch_loss=0.000250]
+Epoch 18/20: 100%|██████████| 414/414 [03:07&lt;00:00,  2.21it/s, avg_loss=0.000322, batch_loss=0.000306]
+Epoch 19/20: 100%|██████████| 414/414 [03:10&lt;00:00,  2.17it/s, avg_loss=0.000320, batch_loss=0.000276]
+Epoch 20/20: 100%|██████████| 414/414 [03:07&lt;00:00,  2.21it/s, avg_loss=0.000317, batch_loss=0.000319]
 </pre></div>
 </div>
-<img alt="../_images/68ca5d6477a89720b8f00583eddbd469b54b37be3cc4951b1f8101dea0b9cee4.png" src="../_images/68ca5d6477a89720b8f00583eddbd469b54b37be3cc4951b1f8101dea0b9cee4.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saved ResCNN weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\ResCNN.pth
+</pre></div>
+</div>
+<img alt="../_images/695b71f30c4305098b7c0930b64320c03e5bde502d9dd21275ffc704c9a52354.png" src="../_images/695b71f30c4305098b7c0930b64320c03e5bde502d9dd21275ffc704c9a52354.png" />
 </div>
 </div>
 </section>
 <section id="beyond-cnn-the-receptive-field">
 <h2>Beyond CNN: the Receptive field<a class="headerlink" href="#beyond-cnn-the-receptive-field" title="Link to this heading">#</a></h2>
 <p>Modern neural-network architectures for image-processing tasks rarely use the simple CNN model described above. One reason is the concept of <strong>Receptive Field (RF)</strong>. To understand it, let us consider a model with <span class="math notranslate nohighlight">\(L\)</span> convolutional layers, each with kernel size <span class="math notranslate nohighlight">\(\kappa_l = 3\)</span>, as depicted in the following figure. It is evident that each pixel in the feature map of the second layer is influenced only by a <span class="math notranslate nohighlight">\(3 \times 3\)</span> portion of the first layer, that is, the input of the network. Similarly, each pixel in the feature map of the third layer is influenced by a <span class="math notranslate nohighlight">\(3 \times 3\)</span> portion of the previous layer, and consequently by a <span class="math notranslate nohighlight">\(5 \times 5\)</span> portion of the input image. The number of input-image pixels that affect the value of each pixel in the <span class="math notranslate nohighlight">\(l\)</span>-th feature map is what we call the receptive field of the <span class="math notranslate nohighlight">\(l\)</span>-th layer. By continuing this reasoning through the network up to the output, we can compute the receptive field of the whole network, which represents the number of input-image pixels that influence the network’s output. This quantity is crucial because, when reconstructing corrupted data containing artifacts, understanding the RF helps ensure that the model captures and addresses those artifacts accurately. In particular, when the artifacts are local, a small receptive field is enough to give the model the ability to distinguish between the artifact and the image features, while when the artifacts are global, a large RF is required to produce an accurate reconstruction.</p>
-<a class="reference internal image-reference" href="../_images/receptive_field.png"><img alt="../_images/receptive_field.png" class="align-center" src="../_images/receptive_field.png" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../_images/receptive_field.png"><img alt="../_images/receptive_field.png" class="align-center" src="../_images/receptive_field.png" style="width: 95%;" /></a>
 <p>Since we are interested in comparing neural network architectures in terms of their receptive field, we need to derive a formula to compute it for any given network. For each layer <span class="math notranslate nohighlight">\(l\)</span>, let <span class="math notranslate nohighlight">\(\kappa_l\)</span> and <span class="math notranslate nohighlight">\(s_l\)</span> be its kernel size and stride, respectively. Moreover, let <span class="math notranslate nohighlight">\(r_l\)</span> be the receptive field, where the receptive field of the input layer is <span class="math notranslate nohighlight">\(r_0 = 1\)</span> by definition. The value of <span class="math notranslate nohighlight">\(r_l\)</span> can be computed with the recursive formula:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -703,39 +710,519 @@ SSIM: 0.9394
 </section>
 <section id="unet">
 <h2>UNet<a class="headerlink" href="#unet" title="Link to this heading">#</a></h2>
-<p>Combining all the information discussed above, we are now ready to introduce arguably the most important neural-network model ever developed for image reconstruction: <strong>UNet</strong>. The UNet is a multi-scale variant of the Convolutional Neural Network architecture, and it is able to detect and correct both global and local artifacts effectively. The UNet architecture, depicted in the figure below, is a <strong>fully convolutional neural network</strong> with a <strong>symmetric encoder-decoder structure</strong> and <strong>strided convolutions</strong> used to enlarge its receptive field. The strides in the encoder layers naturally divide the network into distinct resolution levels, which we denote by <span class="math notranslate nohighlight">\(g\)</span>, with <span class="math notranslate nohighlight">\(g = 0, \dots, \mathcal{G}\)</span>, where <span class="math notranslate nohighlight">\(\mathcal{G}+1\)</span> is the total number of levels in the network. At each level, a fixed number <span class="math notranslate nohighlight">\(n_g\)</span> of blocks <span class="math notranslate nohighlight">\(B_1, \dots, B_{n_g}\)</span> is applied. Specifically, each block is defined as a convolutional layer with <span class="math notranslate nohighlight">\(c_g\)</span> channels, constant along the level, followed by a batch-normalization layer and then by a ReLU activation function. Given a baseline number of convolutional channels <span class="math notranslate nohighlight">\(c_0\)</span> (corresponding to the number of channels in the first level), we compute the number of channels in the following levels through the recursive formula <span class="math notranslate nohighlight">\(c_{g+1} = 2c_g\)</span>, <span class="math notranslate nohighlight">\(g = 0, \dots, L-1\)</span>. In the experiments, we fixed <span class="math notranslate nohighlight">\(\mathcal{G}=4\)</span>, <span class="math notranslate nohighlight">\(n_0 = \dots = n_3 = 3\)</span>, and <span class="math notranslate nohighlight">\(c_0 = 64\)</span>.
-As already mentioned, the decoder is symmetric to the encoder, with upsampling convolutional layers instead of strided convolutions. Moreover, to preserve high-frequency information, skip connections are added between the last layer at each level of the encoder and the first layer at the corresponding level of the decoder. To reduce the number of parameters with respect to the original architecture, it is common to implement these skip connections as additions rather than concatenations. A residual connection is also added between the input layer and the output layer, as discussed previously. The output of the resulting model can be written as:</p>
+<p>Combining all the information discussed above, we are now ready to introduce arguably the most important neural-network model ever developed for image reconstruction: <strong>UNet</strong>. The UNet is a multi-scale variant of the Convolutional Neural Network architecture, and it is able to detect and correct both global and local artifacts effectively. Its central idea is simple but extremely powerful: instead of processing the image at a single resolution, the network analyzes it across a hierarchy of scales and then recombines the information while reconstructing the output.</p>
+<p>At a high level, a UNet is a <strong>fully convolutional encoder-decoder architecture</strong>. The encoder progressively reduces the spatial resolution through downsampling operations, while simultaneously increasing the number of feature channels. This makes the representation more compact and enlarges the receptive field quickly. The decoder then reverses the process, progressively restoring spatial resolution until the output has the same size as the input. In imaging inverse problems, this multi-scale mechanism is particularly effective because many artifacts are neither purely local nor purely global: they can have fine edges, wide spatial extent, and interactions across multiple scales.</p>
+<p>More formally, the encoder naturally divides the network into distinct resolution levels, which we denote by <span class="math notranslate nohighlight">\(g\)</span>, with <span class="math notranslate nohighlight">\(g = 0, \dots, \mathcal{G}\)</span>, where <span class="math notranslate nohighlight">\(\mathcal{G}+1\)</span> is the total number of levels in the network. At each level, the number of channels is usually increased as the resolution decreases. If <span class="math notranslate nohighlight">\(c_0\)</span> denotes the number of channels in the first level, a very common choice is</p>
 <div class="math notranslate nohighlight">
 \[
-    F_\Theta(y^\delta) = y^\delta + f_\Theta(y^\delta),
+    c_{g+1} = 2 c_g, \qquad g = 0, \dots, \mathcal{G} - 1.
 \]</div>
-<p>which implies that the network has to learn the residual mapping between the input and the expected output. For this reason, this model is often referred to in the literature as a <strong>Residual UNet (ResUNet)</strong>. The importance of the residual connection has been highlighted in theoretical work by Han et al., where the authors proved that the residual manifold containing the artifacts is easier to learn than the true image manifold. As in many residual neural-network models, we usually employ a Tanh activation function in the last layer.</p>
-<a class="reference internal image-reference" href="../_images/ResUNet.png"><img alt="../_images/ResUNet.png" class="align-center" src="../_images/ResUNet.png" style="width: 800px;" /></a>
-<p>The UNet architecture can be implemented easily in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>, as already shown in the previous chapter. Note that, due to its structure, the UNet remains relatively efficient even when the number of parameters grows to millions, or even tens of millions.</p>
-<section id="residualconvblock">
-<h3>ResidualConvBlock<a class="headerlink" href="#residualconvblock" title="Link to this heading">#</a></h3>
-<p>As you may already have observed, the convolutional blocks at each resolution level of the UNet architecture in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> are called <code class="docutils literal notranslate"><span class="pre">ResidualConvBlock</span></code>. This is because, to make training even more effective, skip connections are added to every single convolutional block, i.e. the input is summed back into its output. In general, this is the most classical choice for designing effective UNet architectures for end-to-end image-processing tasks.</p>
+<p>This is one of the reasons why UNets remain computationally manageable: the deeper layers have many channels, but they operate on much smaller spatial grids.</p>
+<p>The most characteristic feature of the UNet is the presence of <strong>skip connections between encoder and decoder levels</strong>. When feature maps are downsampled, some high-frequency spatial information is inevitably compressed. The skip connections transfer feature maps from the encoder directly to the decoder at the same resolution level, allowing the reconstruction path to recover fine details that would otherwise be difficult to rebuild. In practice, these skip connections are one of the main reasons for the success of the architecture in segmentation, denoising, deblurring, tomography, and many other image-to-image tasks.</p>
+<p>A second important design choice concerns the <strong>bottleneck</strong>. The deepest portion of the network is where the receptive field is largest and where the model can combine the widest contextual information. In inverse problems, this is often the place where the network resolves ambiguities that cannot be handled by local filters alone. For this reason, even relatively small changes in the bottleneck design can affect performance significantly.</p>
+<a class="reference internal image-reference" href="../_images/UNet.png"><img alt="../_images/UNet.png" class="align-center" src="../_images/UNet.png" style="width: 95%;" /></a>
+<section id="why-unet-works-so-well">
+<h3>Why UNet Works So Well<a class="headerlink" href="#why-unet-works-so-well" title="Link to this heading">#</a></h3>
+<p>The practical strength of the UNet comes from the combination of three ingredients:</p>
+<ol class="arabic simple">
+<li><p>a rapidly increasing receptive field through downsampling;</p></li>
+<li><p>preservation of fine spatial detail through skip connections;</p></li>
+<li><p>efficient local refinement through convolutions in the decoder.</p></li>
+</ol>
+<p>A plain CNN is often too local. A pure encoder may lose too much detail. A plain decoder may be unable to reconstruct sharp structures reliably. The UNet combines all three aspects in a relatively simple architecture, which is why it is so often the default choice in imaging applications.</p>
 </section>
-<section id="attentionconvblock">
-<h3>AttentionConvBlock<a class="headerlink" href="#attentionconvblock" title="Link to this heading">#</a></h3>
-<p>An alternative to <code class="docutils literal notranslate"><span class="pre">ResidualConvBlock</span></code> in <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>-based UNet architectures is given by <code class="docutils literal notranslate"><span class="pre">AttentionDownBlock</span></code> and <code class="docutils literal notranslate"><span class="pre">AttentionUpBlock</span></code>. While a detailed discussion of attention mechanisms is beyond the scope of this course, it is enough to know that when <code class="docutils literal notranslate"><span class="pre">Attention</span></code> layers are employed, they usually replace the classical skip connection with a <strong>gated</strong> version of it, trained to help the model focus on particular portions of the image at each convolutional filter.
-Usually, <code class="docutils literal notranslate"><span class="pre">Attention</span></code> layers are used in UNet at the second-to-last resolution level, as this has been shown to perform better in practice.</p>
+<section id="common-unet-variants">
+<h3>Common UNet Variants<a class="headerlink" href="#common-unet-variants" title="Link to this heading">#</a></h3>
+<p>The implementation below focuses on the most classical and simplest version of the architecture: plain convolutional blocks, max pooling, transposed convolutions, and concatenation-based skip connections. This is the right starting point for students.</p>
+<p>After this basic version is understood, one can introduce many useful variants:</p>
+<ul class="simple">
+<li><p><strong>Residual UNet:</strong> residual connections are added inside blocks or globally across the network to make optimization easier.</p></li>
+<li><p><strong>Attention UNet:</strong> attention gates are inserted, typically in the deeper levels, to help the model emphasize the most relevant features.</p></li>
+<li><p><strong>UNet++:</strong> the skip connections are redesigned into a denser nested structure, reducing the semantic gap between encoder and decoder features.</p></li>
+<li><p><strong>3D UNet:</strong> the same multi-scale idea is extended to volumetric data, which is especially important in medical imaging.</p></li>
+</ul>
+<p>In practice, one should not think of the UNet as a single rigid architecture, but rather as a family of encoder-decoder designs built around multi-scale processing and skip connections.</p>
+</section>
+<section id="baseline-unet">
+<h3>Baseline UNet<a class="headerlink" href="#baseline-unet" title="Link to this heading">#</a></h3>
+<p>To make the architecture explicit for teaching, we now implement a plain UNet directly in PyTorch rather than importing it from <code class="docutils literal notranslate"><span class="pre">IPPy</span></code>. The version below is intentionally simple:</p>
+<ul class="simple">
+<li><p>each resolution level uses a standard two-convolution block;</p></li>
+<li><p>downsampling is done by max pooling;</p></li>
+<li><p>upsampling is done by transposed convolutions;</p></li>
+<li><p>skip connections are implemented through concatenation;</p></li>
+<li><p>there are <strong>no</strong> residual blocks and <strong>no</strong> attention blocks.</p></li>
+</ul>
+<p>This is the most classical form of UNet and is the right starting point for students. It already captures the main reason why the architecture is so successful: it combines a large receptive field in the deeper layers with high-resolution detail recovery through skip connections.</p>
+<p>From a modeling point of view, this baseline UNet should be understood as the reference architecture against which later variants are compared. The motivation for introducing variants is usually not to replace the UNet idea, but to refine one specific aspect of it: optimization, feature selection, or skip-connection design.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DoubleConv</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">out_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DownBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">DoubleConv</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">block_cls</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UpBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">skip_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">DoubleConv</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">block_cls</span><span class="p">(</span><span class="n">out_ch</span> <span class="o">+</span> <span class="n">skip_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">skip</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">skip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">skip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">skip</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleUNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc1</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc2</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc3</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bottleneck</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec3</span> <span class="o">=</span> <span class="n">UpBlock</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec2</span> <span class="o">=</span> <span class="n">UpBlock</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec1</span> <span class="o">=</span> <span class="n">UpBlock</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc2</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc3</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottleneck</span><span class="p">(</span><span class="n">s3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec3</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec2</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s2</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec1</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train_and_reload</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weights_path</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="n">epoch_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">num_epochs</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">step</span><span class="p">,</span> <span class="n">x_batch</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">x_batch</span> <span class="o">=</span> <span class="n">x_batch</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">y_batch</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_batch</span><span class="p">)</span>
+                <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y_batch</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_batch</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">)</span>
+
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">y_batch</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">x_batch</span><span class="p">)</span>
+
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+            <span class="n">epoch_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">progress_bar</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">batch_loss</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">avg_loss</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">epoch_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">step</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+
+    <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">weights_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Saved weights to: </span><span class="si">{</span><span class="n">weights_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">reloaded_model</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)()</span>
+    <span class="n">reloaded_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">weights_path</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">reloaded_model</span> <span class="o">=</span> <span class="n">reloaded_model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">reloaded_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">reloaded_model</span><span class="p">,</span> <span class="n">history</span>
+
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">unet_model</span><span class="p">,</span> <span class="n">unet_history</span> <span class="o">=</span> <span class="n">train_and_reload</span><span class="p">(</span><span class="n">SimpleUNet</span><span class="p">(</span><span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span> <span class="n">weights_dir</span> <span class="o">/</span> <span class="s1">&#39;UNet.pth&#39;</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">x_true</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">test_loader</span><span class="p">))[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_true</span><span class="p">)</span>
+    <span class="n">y_delta</span> <span class="o">=</span> <span class="n">y_delta</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_delta</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">x_rec</span> <span class="o">=</span> <span class="n">unet_model</span><span class="p">(</span><span class="n">y_delta</span><span class="p">)</span>
+
+<span class="n">num_params</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">unet_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total trainable parameters: </span><span class="si">{</span><span class="n">num_params</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_true</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ground truth&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_delta</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Measurement&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_rec</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reloaded UNet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">unet_history</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/10: 100%|██████████| 414/414 [16:31&lt;00:00,  2.40s/it, avg_loss=0.001695, batch_loss=0.000446]
+Epoch 2/10: 100%|██████████| 414/414 [16:29&lt;00:00,  2.39s/it, avg_loss=0.000253, batch_loss=0.000196]
+Epoch 3/10: 100%|██████████| 414/414 [15:45&lt;00:00,  2.28s/it, avg_loss=0.000152, batch_loss=0.000106]
+Epoch 4/10: 100%|██████████| 414/414 [15:39&lt;00:00,  2.27s/it, avg_loss=0.000119, batch_loss=0.000084]
+Epoch 5/10: 100%|██████████| 414/414 [15:38&lt;00:00,  2.27s/it, avg_loss=0.000104, batch_loss=0.000084]
+Epoch 6/10: 100%|██████████| 414/414 [15:32&lt;00:00,  2.25s/it, avg_loss=0.000092, batch_loss=0.000088]
+Epoch 7/10: 100%|██████████| 414/414 [15:45&lt;00:00,  2.28s/it, avg_loss=0.000084, batch_loss=0.000082]
+Epoch 8/10: 100%|██████████| 414/414 [16:19&lt;00:00,  2.37s/it, avg_loss=0.000079, batch_loss=0.000073]
+Epoch 9/10: 100%|██████████| 414/414 [16:02&lt;00:00,  2.32s/it, avg_loss=0.000075, batch_loss=0.000086]
+Epoch 10/10: 100%|██████████| 414/414 [16:07&lt;00:00,  2.34s/it, avg_loss=0.000072, batch_loss=0.000057]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saved weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\UNet.pth
+Total trainable parameters: 1925025
+</pre></div>
+</div>
+<img alt="../_images/8a4f99838d60b5ebba29782631fc22bdd5f07aa9018e47693bdedc6f887c7fe1.png" src="../_images/8a4f99838d60b5ebba29782631fc22bdd5f07aa9018e47693bdedc6f887c7fe1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="unet-variants">
+<h2>UNet Variants<a class="headerlink" href="#unet-variants" title="Link to this heading">#</a></h2>
+<p>Once the plain UNet is understood, the next natural question is: <em>what should be modified when the baseline architecture is not enough?</em> Different variants of UNet answer this question in different ways.</p>
+<ul class="simple">
+<li><p>Some variants try to make the network <strong>easier to optimize</strong>.</p></li>
+<li><p>Some try to make the skip connections <strong>more selective</strong>.</p></li>
+<li><p>Some try to make the encoder-decoder fusion <strong>more gradual and better aligned</strong>.</p></li>
+</ul>
+<p>The three variants below are among the most classical ones and are worth knowing because they represent three different design philosophies.</p>
+<section id="residual-unet">
+<h3>Residual UNet<a class="headerlink" href="#residual-unet" title="Link to this heading">#</a></h3>
+<p>A first natural extension is the <strong>Residual UNet</strong>. The motivation is the same as for residual CNNs: instead of forcing each block to learn a full transformation from scratch, we let it learn a correction around an identity map. This often makes optimization easier and helps gradients propagate through deeper networks.</p>
+<p>This variant is especially attractive when:</p>
+<ul class="simple">
+<li><p>the network becomes deeper and harder to train;</p></li>
+<li><p>the task is naturally phrased as artifact removal or correction;</p></li>
+<li><p>one wants the network to preserve stable features while refining only what needs to be changed.</p></li>
+</ul>
+<p>In practice, residual blocks often make training more robust and can improve convergence speed. The price is a slightly more structured block design, but conceptually the architecture remains close to the baseline UNet.</p>
+<a class="reference internal image-reference" href="../_images/ResUNet.png"><img alt="../_images/ResUNet.png" class="align-center" src="../_images/ResUNet.png" style="width: 95%;" /></a>
+<p>In the code below, we keep the same encoder-decoder structure as the plain UNet, but replace the standard convolutional blocks with residual blocks.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ResidualDoubleConv</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">out_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shortcut</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">in_ch</span> <span class="o">!=</span> <span class="n">out_ch</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shortcut</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="n">identity</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ResidualUNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc1</span> <span class="o">=</span> <span class="n">ResidualDoubleConv</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc2</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">ResidualDoubleConv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc3</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">ResidualDoubleConv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bottleneck</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">ResidualDoubleConv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec3</span> <span class="o">=</span> <span class="n">UpBlock</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">ResidualDoubleConv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec2</span> <span class="o">=</span> <span class="n">UpBlock</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">ResidualDoubleConv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec1</span> <span class="o">=</span> <span class="n">UpBlock</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">block_cls</span><span class="o">=</span><span class="n">ResidualDoubleConv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc2</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc3</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottleneck</span><span class="p">(</span><span class="n">s3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec3</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec2</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s2</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec1</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">resunet_model</span><span class="p">,</span> <span class="n">resunet_history</span> <span class="o">=</span> <span class="n">train_and_reload</span><span class="p">(</span><span class="n">ResidualUNet</span><span class="p">(</span><span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span> <span class="n">weights_dir</span> <span class="o">/</span> <span class="s1">&#39;ResidualUNet.pth&#39;</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">resunet_history</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Residual UNet training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/10: 100%|██████████| 414/414 [18:55&lt;00:00,  2.74s/it, avg_loss=0.001613, batch_loss=0.000466]
+Epoch 2/10: 100%|██████████| 414/414 [19:16&lt;00:00,  2.79s/it, avg_loss=0.000285, batch_loss=0.000201]
+Epoch 3/10:   4%|▎         | 15/414 [00:41&lt;18:13,  2.74s/it, avg_loss=0.000195, batch_loss=0.000189]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="attention-unet">
+<h3>Attention UNet<a class="headerlink" href="#attention-unet" title="Link to this heading">#</a></h3>
+<p>A second extension is the <strong>Attention UNet</strong>. The main idea is to modulate the skip connections: instead of forwarding all encoder features unchanged, the network learns gates that emphasize the features that are most relevant to the current decoder state.</p>
+<p>The motivation here is different from the residual case. The issue is no longer mainly optimization, but <strong>feature selection</strong>. In a standard UNet, every skip connection forwards a large amount of information. This is often useful, but it can also pass irrelevant or weakly informative activations to the decoder. Attention gates try to filter these features and highlight the spatial structures that matter most for the reconstruction.</p>
+<p>This can be particularly useful when:</p>
+<ul class="simple">
+<li><p>the image contains many structures but only some are relevant to the reconstruction task;</p></li>
+<li><p>the corruption is spatially nonuniform;</p></li>
+<li><p>one wants the decoder to focus more strongly on salient regions rather than treating all skip features equally.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/AttentionUNet.png"><img alt="../_images/AttentionUNet.png" class="align-center" src="../_images/AttentionUNet.png" style="width: 95%;" /></a>
+<p>The implementation below inserts a simple attention gate before concatenating the skip features with the upsampled decoder features. This is not the most elaborate attention design possible, but it captures the central teaching idea clearly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AttentionGate</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate_ch</span><span class="p">,</span> <span class="n">skip_ch</span><span class="p">,</span> <span class="n">inter_ch</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gate_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">gate_ch</span><span class="p">,</span> <span class="n">inter_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">skip_ch</span><span class="p">,</span> <span class="n">inter_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">inter_ch</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gate</span><span class="p">,</span> <span class="n">skip</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_proj</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_proj</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">skip</span> <span class="o">*</span> <span class="n">alpha</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AttentionUpBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">skip_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">AttentionGate</span><span class="p">(</span><span class="n">out_ch</span><span class="p">,</span> <span class="n">skip_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">out_ch</span> <span class="o">+</span> <span class="n">skip_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">skip</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">skip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">skip</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">skip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">skip</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">skip</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AttentionUNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc1</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc2</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enc3</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bottleneck</span> <span class="o">=</span> <span class="n">DownBlock</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec3</span> <span class="o">=</span> <span class="n">AttentionUpBlock</span><span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec2</span> <span class="o">=</span> <span class="n">AttentionUpBlock</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dec1</span> <span class="o">=</span> <span class="n">AttentionUpBlock</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc2</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+        <span class="n">s3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enc3</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottleneck</span><span class="p">(</span><span class="n">s3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec3</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec2</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s2</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec1</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">s1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">attunet_model</span><span class="p">,</span> <span class="n">attunet_history</span> <span class="o">=</span> <span class="n">train_and_reload</span><span class="p">(</span><span class="n">AttentionUNet</span><span class="p">(</span><span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span> <span class="n">weights_dir</span> <span class="o">/</span> <span class="s1">&#39;AttentionUNet.pth&#39;</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">attunet_history</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Attention UNet training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>UNet++<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>A third important variant is <strong>UNet++</strong>. Its motivation is slightly different: instead of modifying the convolutional blocks or the skip gates, it redesigns the skip connections themselves. The nested skip pathways try to reduce the <strong>semantic gap</strong> between encoder features and decoder features by refining them progressively before fusion.</p>
+<p>This point is worth stressing. In a classical UNet, encoder features and decoder features at the same resolution are fused directly, even though they may represent information at rather different stages of abstraction. UNet++ addresses this mismatch by inserting intermediate convolutional refinements along the skip pathways. In this way, the decoder receives features that have already been partially adapted before the final concatenation.</p>
+<p>This variant is attractive when:</p>
+<ul class="simple">
+<li><p>direct encoder-decoder fusion seems too abrupt;</p></li>
+<li><p>one wants richer multiscale feature aggregation;</p></li>
+<li><p>one is willing to pay a higher implementation and computational cost for potentially better feature alignment.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/UNetPP.png"><img alt="../_images/UNetPP.png" class="align-center" src="../_images/UNetPP.png" style="width: 95%;" /></a>
+<p>A full UNet++ implementation can become quite large, so for teaching we use a compact three-level version. The key point is already visible: intermediate skip pathways are themselves processed by convolutional blocks before reaching the final decoder output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">UNetPP</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bilinear&#39;</span><span class="p">,</span> <span class="n">align_corners</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0_0</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x1_0</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x2_0</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0_1</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">base_ch</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x1_1</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0_2</span> <span class="o">=</span> <span class="n">DoubleConv</span><span class="p">(</span><span class="n">base_ch</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_ch</span><span class="p">,</span> <span class="n">base_ch</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">base_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x0_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0_0</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x1_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x1_0</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">x0_0</span><span class="p">))</span>
+        <span class="n">x2_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2_0</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">(</span><span class="n">x1_0</span><span class="p">))</span>
+
+        <span class="n">x0_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0_1</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x0_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">x1_0</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">x1_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x1_1</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x1_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">x2_0</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">x0_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0_2</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x0_0</span><span class="p">,</span> <span class="n">x0_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">x1_1</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_conv</span><span class="p">(</span><span class="n">x0_2</span><span class="p">)</span>
+
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">unetpp_model</span><span class="p">,</span> <span class="n">unetpp_history</span> <span class="o">=</span> <span class="n">train_and_reload</span><span class="p">(</span><span class="n">UNetPP</span><span class="p">(</span><span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">base_ch</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span> <span class="n">weights_dir</span> <span class="o">/</span> <span class="s1">&#39;UNetPP.pth&#39;</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">unetpp_history</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;UNet++ training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="comparing-the-variants-on-the-same-corrupted-image">
+<h3>Comparing the Variants on the Same Corrupted Image<a class="headerlink" href="#comparing-the-variants-on-the-same-corrupted-image" title="Link to this heading">#</a></h3>
+<p>To conclude the section, we now reconstruct the <strong>same</strong> corrupted test image with all four architectures: the plain UNet, the Residual UNet, the Attention UNet, and UNet++. This comparison is useful because it isolates the architectural choice while keeping the input corruption fixed.</p>
+<p>Pedagogically, this final step matters a lot. Students should not leave the discussion with the impression that these variants are only abstract design ideas. The point is to see that small changes in block design, skip selection, or feature fusion can lead to visibly different reconstruction behavior even when the overall encoder-decoder structure remains the same.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">x_compare</span> <span class="o">=</span> <span class="n">test_dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">y_compare</span> <span class="o">=</span> <span class="n">K</span><span class="p">(</span><span class="n">x_compare</span><span class="p">)</span>
+    <span class="n">y_compare</span> <span class="o">=</span> <span class="n">y_compare</span> <span class="o">+</span> <span class="n">utilities</span><span class="o">.</span><span class="n">gaussian_noise</span><span class="p">(</span><span class="n">y_compare</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="n">recon_plain</span> <span class="o">=</span> <span class="n">unet_model</span><span class="p">(</span><span class="n">y_compare</span><span class="p">)</span>
+    <span class="n">recon_residual</span> <span class="o">=</span> <span class="n">resunet_model</span><span class="p">(</span><span class="n">y_compare</span><span class="p">)</span>
+    <span class="n">recon_attention</span> <span class="o">=</span> <span class="n">attunet_model</span><span class="p">(</span><span class="n">y_compare</span><span class="p">)</span>
+    <span class="n">recon_pp</span> <span class="o">=</span> <span class="n">unetpp_model</span><span class="p">(</span><span class="n">y_compare</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">x_compare</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ground truth&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">y_compare</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Measurement&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">recon_plain</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;UNet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">recon_residual</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Residual UNet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">recon_attention</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Attention UNet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">recon_pp</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;UNet++&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">rec</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;UNet&#39;</span><span class="p">,</span> <span class="n">recon_plain</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Residual UNet&#39;</span><span class="p">,</span> <span class="n">recon_residual</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Attention UNet&#39;</span><span class="p">,</span> <span class="n">recon_attention</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;UNet++&#39;</span><span class="p">,</span> <span class="n">recon_pp</span><span class="p">)]:</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">rec</span> <span class="o">-</span> <span class="n">x_compare</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s1">&gt;16</span><span class="si">}</span><span class="s1"> | MSE = </span><span class="si">{</span><span class="n">mse</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Why is learning the residual often easier than learning the full image directly?</p></li>
-<li><p>Consider a CNN with three convolutional layers of kernel size <span class="math notranslate nohighlight">\(3 	imes 3\)</span> and stride <span class="math notranslate nohighlight">\(1\)</span>. What is its receptive field? How does the answer change if one layer has stride <span class="math notranslate nohighlight">\(2\)</span>?</p></li>
+<li><p>Consider a CNN with three convolutional layers of kernel size <span class="math notranslate nohighlight">\(3 \times 3\)</span> and stride <span class="math notranslate nohighlight">\(1\)</span>. What is its receptive field? How does the answer change if one layer has stride <span class="math notranslate nohighlight">\(2\)</span>?</p></li>
 <li><p>Explain why the receptive field is important when the corruption is global rather than local.</p></li>
 <li><p>What is the main architectural idea behind UNet, and why do skip connections matter so much in imaging tasks?</p></li>
-<li><p>Code exercise: compare the number of parameters of the simple CNN and the residual CNN used in this chapter.</p></li>
-<li><p>Code exercise: modify the number of channels or the number of levels in a UNet implementation and observe how the computational cost changes.</p></li>
+<li><p>Compare a plain UNet and a Residual UNet conceptually. What optimization advantage do residual blocks provide?</p></li>
+<li><p>What is the motivation behind attention gates in an Attention UNet?</p></li>
+<li><p>In your own words, what problem is UNet++ trying to solve with nested skip connections?</p></li>
+<li><p>Code exercise: change the base number of channels in one or more variants and compare both the number of parameters and the reconstruction quality.</p></li>
+<li><p>Code exercise: repeat the final comparison on a different corrupted test image and check whether the relative behavior of the variants changes.</p></li>
 </ol>
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>Residual learning is introduced in <span id="id1">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">6</a>]</span>. The standard reference for the UNet architecture is <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">13</a>]</span>. For a broader discussion of why multiscale neural architectures are effective in imaging inverse problems, see <span id="id3">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
+<p>Residual learning is introduced in <span id="id2">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">12</a>]</span>. The standard reference for the UNet architecture is <span id="id3">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">24</a>]</span>. For volumetric imaging, see the 3D UNet of <span id="id4">[<a class="reference internal" href="../references.html#id29" title="&quot;Ozg&quot;un Cicek, Ahmed Abdulkadir, Soeren S. Lienkamp, Thomas Brox, and Olaf Ronneberger. 3d u-net: learning dense volumetric segmentation from sparse annotation. In Medical Image Computing and Computer-Assisted Intervention (MICCAI). 2016.">7</a>]</span>. For an attention-based variant, see <span id="id5">[<a class="reference internal" href="../references.html#id30" title="Ozan Oktay, Jo Schlemper, Loic Le Folgoc, Matthew Lee, Mattias Heinrich, Kazunari Misawa, Kensaku Mori, Steven McDonagh, Nils Y. Hammerla, Bernhard Kainz, Ben Glocker, and Daniel Rueckert. Attention u-net: learning where to look for the pancreas. arXiv preprint arXiv:1804.03999, 2018.">21</a>]</span>. For a nested skip-connection design, see <span id="id6">[<a class="reference internal" href="../references.html#id31" title="Zongwei Zhou, Md Mahfuzur Rahman Siddiquee, Nima Tajbakhsh, and Jianming Liang. Unet++: a nested u-net architecture for medical image segmentation. arXiv preprint arXiv:1807.10165, 2018.">34</a>]</span>. For a broader discussion of why multiscale neural architectures are effective in imaging inverse problems, see <span id="id7">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">22</a>]</span>.</p>
 </section>
 </section>
 
@@ -808,8 +1295,16 @@ Usually, <code class="docutils literal notranslate"><span class="pre">Attention<
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-cnn">Residual CNN</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#beyond-cnn-the-receptive-field">Beyond CNN: the Receptive field</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet">UNet</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residualconvblock">ResidualConvBlock</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attentionconvblock">AttentionConvBlock</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-unet-works-so-well">Why UNet Works So Well</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-unet-variants">Common UNet Variants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline-unet">Baseline UNet</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet-variants">UNet Variants</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-unet">Residual UNet</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-unet">Attention UNet</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">UNet++</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-variants-on-the-same-corrupted-image">Comparing the Variants on the Same Corrupted Image</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>

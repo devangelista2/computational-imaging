@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Variational Autoencoders and GANs &#8212; Computational Imaging</title>
+    <title>What Is a Generative Model? VAEs and GANs &#8212; Computational Imaging</title>
   
   
   
@@ -16,42 +16,45 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4344bd9a" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -61,13 +64,15 @@
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'generative/vaes-and-gans';</script>
+    <script src="../_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Diffusion Models" href="diffusion-models.html" />
-    <link rel="prev" title="Noise, Model Mismatch, and the Inverse Crime" href="../noise/the-inverse-crime.html" />
+    <link rel="prev" title="Cross-Domain End-to-End Reconstruction" href="../end-to-end/crossdomain.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -83,19 +88,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -103,7 +97,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -111,8 +104,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -128,7 +121,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -158,43 +152,42 @@
     
     
     <img src="../_static/logo.png" class="logo__image only-light" alt="Computational Imaging - Home"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Computational Imaging - Home"/>`);</script>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Computational Imaging - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../intro/from-ml-to-nn.html">From Supervised Learning to Neural Networks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">A Brief <strong>PyTorch</strong> Viewpoint</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/end-to-end.html">End-to-End Reconstruction and Imaging Architectures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../end-to-end/self-supervised-training.html">Self-Supervised Training for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/environment-setup.html">Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/processing-images-for-neural-networks.html">Processing Images for Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro/a-brief-overview-pytorch.html">PyTorch, Automatic Differentiation, and Training Mechanics</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Noise, Data, and Evaluation</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Networks for Imaging</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../noise/the-inverse-crime.html">Noise, Model Mismatch, and the Inverse Crime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/from-ml-to-nn.html">From Machine Learning to Neural Networks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../end-to-end/crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Variational Autoencoders and <strong>GAN</strong>s</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">What Is a Generative Model? VAEs and GANs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="flow-matching.html">Flow Matching Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Priors for Inverse Problems</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../inverse-problems/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction with CNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -207,9 +200,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -339,7 +337,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -353,25 +351,17 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -384,7 +374,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Variational Autoencoders and GANs</h1>
+    <h1>What Is a Generative Model? VAEs and GANs</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -394,7 +384,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-modeling-and-autoencoding">Latent Variable Modeling and Autoencoding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-generative-modeling-tries-to-learn">What Generative Modeling Tries to Learn</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-autoencoders-as-probabilistic-generative-models">Variational Autoencoders as Probabilistic Generative Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adversarial-learning-and-gans">Adversarial Learning and <strong>GAN</strong>s</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-and-relevance-for-inverse-problems">Comparison and Relevance for Inverse Problems</a></li>
@@ -412,13 +402,24 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="variational-autoencoders-and-gans">
-<h1>Variational Autoencoders and <strong>GAN</strong>s<a class="headerlink" href="#variational-autoencoders-and-gans" title="Link to this heading">#</a></h1>
-<section id="latent-variable-modeling-and-autoencoding">
-<h2>Latent Variable Modeling and Autoencoding<a class="headerlink" href="#latent-variable-modeling-and-autoencoding" title="Link to this heading">#</a></h2>
-<p>Up to this point the main object of study has been a discriminative reconstructor, namely a map that takes a measured datum and outputs a reconstructed image. This is a natural place to start, but it has a limitation. It typically returns a single answer, while inverse problems are often ambiguous. Several different images may be consistent with the same measurements, especially when the forward operator is ill-conditioned or undersampled.</p>
-<p>This motivates a broader question: instead of learning only how to map data to images, can we learn the image distribution itself? If we can do this, then we gain access to a learned image prior. This prior can later be combined with the data-consistency information coming from the forward model.</p>
-<p>The rest of the course therefore shifts from discriminative learning to generative modeling. Historically, the first major deep generative paradigms were variational <strong>autoencoder</strong>s and generative adversarial networks. They are different in philosophy, in mathematical formulation, and in the kind of prior they induce.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="what-is-a-generative-model-vaes-and-gans">
+<h1>What Is a Generative Model? VAEs and GANs<a class="headerlink" href="#what-is-a-generative-model-vaes-and-gans" title="Link to this heading">#</a></h1>
+<section id="what-generative-modeling-tries-to-learn">
+<h2>What Generative Modeling Tries to Learn<a class="headerlink" href="#what-generative-modeling-tries-to-learn" title="Link to this heading">#</a></h2>
+<p>Up to this point the main object of study has been a <strong>discriminative</strong> reconstructor, namely a map that takes a measured datum and outputs a reconstructed image. This is a natural place to start, but it has a limitation. It typically returns a single answer, while inverse problems are often ambiguous. Several different images may be consistent with the same measurements, especially when the forward operator is ill-conditioned or undersampled.</p>
+<p>This motivates a broader question: instead of learning only how to map data to images, can we learn the <strong>image distribution itself</strong>? If we can do this, then we gain access to a learned prior. This prior can later be combined with the data-consistency information coming from the forward model.</p>
+<p>In general, a <strong>generative model</strong> is a model that aims to represent or sample from a distribution</p>
+<div class="math notranslate nohighlight">
+\[
+    p_\Theta(\boldsymbol{x}),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> is an image. Depending on the model class, this may mean learning a tractable density, a latent-variable model, or only an implicit sampling mechanism. From a practical point of view, the main questions are always the same:</p>
+<ul class="simple">
+<li><p>how do we train the model;</p></li>
+<li><p>how do we sample from it;</p></li>
+<li><p>how can we use it later as a prior for inverse problems.</p></li>
+</ul>
+<p>Historically, the first major deep generative paradigms were variational <strong>autoencoder</strong>s <span id="id1">[<a class="reference internal" href="../references.html#id14" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">18</a>]</span> and generative adversarial networks <span id="id2">[<a class="reference internal" href="../references.html#id15" title="Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in Neural Information Processing Systems, 2014.">11</a>]</span>. They are different in philosophy, in mathematical formulation, and in the kind of prior they induce.</p>
 <p><strong>Latent variables and the low-dimensional hypothesis.</strong></p>
 <p>Both VAEs and <strong>GAN</strong>s are built around a common idea: high-dimensional images may be generated from lower-dimensional <strong>latent variable</strong>s. If <span class="math notranslate nohighlight">\(\boldsymbol{x} \in \mathbb{R}^n\)</span> is an image and <span class="math notranslate nohighlight">\(\boldsymbol{z} \in \mathbb{R}^k\)</span> is a latent code with <span class="math notranslate nohighlight">\(k \ll n\)</span>, then one posits a generator or decoder map</p>
 <div class="math notranslate nohighlight">
@@ -428,6 +429,7 @@ G_{\boldsymbol{\Theta}} : \mathbb{R}^k \to \mathbb{R}^n,
 \boldsymbol{x} \approx G_{\boldsymbol{\Theta}}(\boldsymbol{z}).
 \]</div>
 <p>This expresses the belief that realistic images occupy only a tiny, structured region inside the ambient high-dimensional space. Inverse problems benefit enormously from this viewpoint, because restricting the search space from <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> to the range of a generator can act as a powerful regularizer.</p>
+<p>From an implementation viewpoint, this means that training a generative model often amounts to learning a decoder that can turn simple latent samples into realistic images. The later differences between VAEs and <strong>GAN</strong>s come from how they regularize the latent space and how they define the training objective.</p>
 <p><strong>Autoencoders as the starting point.</strong></p>
 <p>Before introducing VAEs, it is useful to recall the ordinary <strong>autoencoder</strong>. An <strong>autoencoder</strong> consists of:</p>
 <ul class="simple">
@@ -441,10 +443,10 @@ G_{\boldsymbol{\Theta}} : \mathbb{R}^k \to \mathbb{R}^n,
 \mathbb{E}\big[\|\boldsymbol{x}-G_{\boldsymbol{\Theta}}(E_\phi(\boldsymbol{x}))\|^2\big].
 \]</div>
 <p>This architecture learns a compressed representation of the data, but by itself it does not define a full probabilistic generative model. In particular, it does not tell us how latent codes should be sampled in order to generate new images.</p>
-<p>This is the point where the VAE enters <span id="id1">[<a class="reference internal" href="../references.html#id11" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">11</a>]</span>.</p>
+<p>This is the point where the VAE enters <span id="id3">[<a class="reference internal" href="../references.html#id14" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">18</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny autoencoder on local image patches.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny autoencoder on local image patches.</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -486,16 +488,6 @@ G_{\boldsymbol{\Theta}} : \mathbb{R}^k \to \mathbb{R}^n,
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | reconstruction loss = 0.059913
-Epoch 020 | reconstruction loss = 0.022438
-Epoch 100 | reconstruction loss = 0.002201
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 200 | reconstruction loss = 0.000237
-</pre></div>
-</div>
-</div>
 </div>
 <p>This example is deliberately small, but it shows the core <strong>autoencoder</strong> mechanism: an image patch is compressed into a low-dimensional latent representation and then decoded again. At this stage there is still no probabilistic latent model, only deterministic compression and reconstruction.</p>
 </section>
@@ -519,7 +511,7 @@ p_{\boldsymbol{\Theta}}(\boldsymbol{x})=\int p_{\boldsymbol{\Theta}}(\boldsymbol
 <p>This is the key point. The VAE is not merely compressing images. It is trying to assign a probability law to them through <strong>latent variable</strong>s.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny VAE on the same local patch collection.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny VAE on the same local patch collection.</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">course_asset_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -569,18 +561,6 @@ p_{\boldsymbol{\Theta}}(\boldsymbol{x})=\int p_{\boldsymbol{\Theta}}(\boldsymbol
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 001 | recon = 0.064360 | KL = 0.031250
-Epoch 025 | recon = 0.052795 | KL = 0.002086
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 100 | recon = 0.050103 | KL = 0.011786
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 250 | recon = 0.044030 | KL = 0.081561
-</pre></div>
-</div>
-</div>
 </div>
 <p>Compared with the deterministic <strong>autoencoder</strong>, the VAE now pays an explicit KL price for keeping the latent distribution close to a Gaussian prior. This makes sampling possible, but it also explains why VAE reconstructions tend to be more regularized and often smoother.</p>
 <p><strong>Why the exact likelihood is difficult.</strong></p>
@@ -611,7 +591,7 @@ q_\phi(\boldsymbol{z}| \boldsymbol{x}),
 <p>The second term is the KL regularization term. It pushes the encoder posterior toward the prior <span class="math notranslate nohighlight">\(p(\boldsymbol{z})\)</span>. This is what makes latent sampling possible and gives the model genuine generative semantics.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
 <span class="n">log_var</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
@@ -623,13 +603,6 @@ q_\phi(\boldsymbol{z}| \boldsymbol{x}),
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy reconstruction term:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">reconstruction_error</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy KL term:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">kl</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy ELBO:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">elbo</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Toy reconstruction term: 0.8500000238418579
-Toy KL term: 0.22822201251983643
-Toy ELBO: -1.0782220363616943
 </pre></div>
 </div>
 </div>
@@ -659,7 +632,7 @@ p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})=\mathcal{N}(\mu_{\boldsy
 <p>This is a good example of how probability and optimization interact in deep learning.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">])</span>
@@ -674,16 +647,6 @@ p_{\boldsymbol{\Theta}}(\boldsymbol{x}| \boldsymbol{z})=\mathcal{N}(\mu_{\boldsy
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Five latent samples obtained through reparameterization:&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Five latent samples obtained through reparameterization:
-tensor([ 1.7705, -1.0734])
-tensor([-0.0894, -0.8579])
-tensor([ 0.4577, -1.3496])
-tensor([ 1.2017, -0.7905])
-tensor([ 0.6404, -1.1008])
 </pre></div>
 </div>
 </div>
@@ -711,7 +674,7 @@ tensor([ 0.6404, -1.1008])
 <li><p>a generator <span class="math notranslate nohighlight">\(G_{\boldsymbol{\Theta}}(\boldsymbol{z})\)</span> that maps latent codes to images;</p></li>
 <li><p>a discriminator <span class="math notranslate nohighlight">\(D_\psi(\boldsymbol{x})\)</span> that tries to distinguish real samples from generated ones.</p></li>
 </ul>
-<p>The classical minimax problem is <span id="id2">[<a class="reference internal" href="../references.html#id12" title="Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in Neural Information Processing Systems, 2014.">6</a>]</span></p>
+<p>The classical minimax problem is <span id="id4">[<a class="reference internal" href="../references.html#id15" title="Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in Neural Information Processing Systems, 2014.">11</a>]</span></p>
 <div class="math notranslate nohighlight">
 \[
 \min_{\boldsymbol{\Theta}} \max_\psi
@@ -726,7 +689,7 @@ tensor([ 0.6404, -1.1008])
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny 1D GAN-style training loop on a simple target distribution.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tiny 1D GAN-style training loop on a simple target distribution.</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -763,23 +726,11 @@ tensor([ 0.6404, -1.1008])
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 001 | D loss = 1.4222 | G loss = 0.6463 | fake mean = 0.1051
-Step 050 | D loss = 1.2525 | G loss = 1.2192 | fake mean = 2.9288
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 100 | D loss = 1.3479 | G loss = 0.6396 | fake mean = 1.4250
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Step 200 | D loss = 1.2644 | G loss = 1.2425 | fake mean = 2.3706
-</pre></div>
-</div>
-</div>
 </div>
 <p>This is only a 1D adversarial game, but it helps students see the characteristic <strong>GAN</strong> behavior: two networks are trained against each other, and the generator is judged through the discriminator rather than through a pointwise reconstruction loss.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">real_logits</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">])</span>
 <span class="n">fake_logits</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
@@ -794,14 +745,6 @@ Step 050 | D loss = 1.2525 | G loss = 1.2192 | fake mean = 2.9288
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Discriminator probabilities on fake samples:&#39;</span><span class="p">,</span> <span class="n">fake_prob</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy discriminator loss:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">discriminator_loss</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Toy generator loss:&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">generator_loss</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Discriminator probabilities on real samples: tensor([0.9241, 0.8581, 0.9608])
-Discriminator probabilities on fake samples: tensor([0.2315, 0.3318, 0.5250])
-Toy discriminator loss: 0.5608953237533569
-Toy generator loss: 1.0702883005142212
 </pre></div>
 </div>
 </div>
@@ -870,7 +813,7 @@ Toy generator loss: 1.0702883005142212
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>To deepen this material, students should compare the philosophical difference between VAEs and <strong>GAN</strong>s as much as the technical difference. VAEs are tied to approximate likelihood-based inference, while <strong>GAN</strong>s are tied to adversarial distribution matching. Keeping that contrast in mind is very helpful when these models are later used as priors for inverse problems.</p>
+<p>To deepen this material, students should compare the philosophical difference between VAEs <span id="id5">[<a class="reference internal" href="../references.html#id14" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">18</a>]</span> and <strong>GAN</strong>s <span id="id6">[<a class="reference internal" href="../references.html#id15" title="Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial nets. Advances in Neural Information Processing Systems, 2014.">11</a>]</span> as much as the technical difference. VAEs are tied to approximate likelihood-based inference, while <strong>GAN</strong>s are tied to adversarial distribution matching. Keeping that contrast in mind is very helpful when these models are later used as priors for inverse problems.</p>
 <p>A good study question is the following: when does one care more about a tractable probabilistic interpretation, and when does one care more about sample realism?</p>
 </section>
 </section>
@@ -906,12 +849,12 @@ Toy generator loss: 1.0702883005142212
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../noise/the-inverse-crime.html"
+       href="../end-to-end/crossdomain.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Noise, Model Mismatch, and the Inverse Crime</p>
+        <p class="prev-next-title">Cross-Domain End-to-End Reconstruction</p>
       </div>
     </a>
     <a class="right-next"
@@ -930,16 +873,18 @@ Toy generator loss: 1.0702883005142212
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latent-variable-modeling-and-autoencoding">Latent Variable Modeling and Autoencoding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-generative-modeling-tries-to-learn">What Generative Modeling Tries to Learn</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-autoencoders-as-probabilistic-generative-models">Variational Autoencoders as Probabilistic Generative Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adversarial-learning-and-gans">Adversarial Learning and <strong>GAN</strong>s</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-and-relevance-for-inverse-problems">Comparison and Relevance for Inverse Problems</a></li>
@@ -994,8 +939,8 @@ By Davide Evangelista
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

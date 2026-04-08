@@ -177,6 +177,13 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Convolutions, CNNs, and End-to-End Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vision-transformers-and-loss-design.html">Vision Transformers and Loss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
@@ -431,6 +438,7 @@ The result of a padded convolution is shown in the image below.</p>
 <p class="admonition-title">Note</p>
 <p>A common practice, justified by information theory, suggests that the number of convolutional kernels should increase as we go deeper in the network.</p>
 </div>
+<a class="reference internal image-reference" href="../_images/CNN.png"><img alt="../_images/CNN.png" class="align-center" src="../_images/CNN.png" style="width: 800px;" /></a>
 <p>Let us see how to implement such a neural-network architecture in PyTorch.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -988,7 +996,7 @@ f_\Theta(x + v) = f_\Theta(x) + v.
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>For the classical foundations of convolutional neural networks, see <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">10</a>]</span>. For a practical computational reference on PyTorch and training mechanics, see <span id="id2">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">12</a>]</span> and <span id="id3">[<a class="reference internal" href="../references.html#id27" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">15</a>]</span>. For a broader imaging perspective on learned reconstruction maps and supervised training in inverse problems, see <span id="id4">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>.</p>
+<p>For the classical foundations of convolutional neural networks, see <span id="id1">[<a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">19</a>]</span>. For a practical computational reference on PyTorch and training mechanics, see <span id="id2">[<a class="reference internal" href="../references.html#id26" title="Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, and others. PyTorch: an imperative style, high-performance deep learning library. Advances in Neural Information Processing Systems, 2019.">23</a>]</span> and <span id="id3">[<a class="reference internal" href="../references.html#id27" title="Eli Stevens, Luca Antiga, and Thomas Viehmann. Deep Learning with PyTorch. Manning Publications, 2020.">27</a>]</span>. For a broader imaging perspective on learned reconstruction maps and supervised training in inverse problems, see <span id="id4">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">22</a>]</span>.</p>
 </section>
 </section>
 

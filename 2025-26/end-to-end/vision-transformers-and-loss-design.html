@@ -68,7 +68,7 @@
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Homework 1: End-to-End Reconstruction with CNNs" href="../homeworks/homework1.html" />
+    <link rel="next" title="Cross-Domain End-to-End Reconstruction" href="crossdomain.html" />
     <link rel="prev" title="Residual Learning, Receptive Field, and UNet" href="residual-learning-and-unet.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -177,6 +177,13 @@
 <li class="toctree-l1"><a class="reference internal" href="convolutions-cnns-and-training.html">Convolutions, CNNs, and End-to-End Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="residual-learning-and-unet.html">Residual Learning, Receptive Field, and UNet</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Vision Transformers and Loss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crossdomain.html">Cross-Domain End-to-End Reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
@@ -796,13 +803,13 @@ Output shape: (2, 1, 256, 256)
 </section>
 <section id="ssim">
 <h3>SSIM<a class="headerlink" href="#ssim" title="Link to this heading">#</a></h3>
-<p>A second widely used metric is the <strong>Structural Similarity Index Measure (SSIM)</strong> <span id="id1">[<a class="reference internal" href="../references.html#id12" title="Zhou Wang, Alan C Bovik, Hamid R Sheikh, and Eero P Simoncelli. Image quality assessment: from error visibility to structural similarity. IEEE Transactions on Image Processing, 13(4):600–612, 2004.">18</a>]</span>. Unlike PSNR, SSIM is not purely pixel-wise. It compares local image patches in terms of luminance, contrast, and structure, and is therefore much more sensitive to structural distortions.</p>
+<p>A second widely used metric is the <strong>Structural Similarity Index Measure (SSIM)</strong> <span id="id1">[<a class="reference internal" href="../references.html#id12" title="Zhou Wang, Alan C Bovik, Hamid R Sheikh, and Eero P Simoncelli. Image quality assessment: from error visibility to structural similarity. IEEE Transactions on Image Processing, 13(4):600–612, 2004.">32</a>]</span>. Unlike PSNR, SSIM is not purely pixel-wise. It compares local image patches in terms of luminance, contrast, and structure, and is therefore much more sensitive to structural distortions.</p>
 <p>SSIM usually takes values between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>, where values closer to <code class="docutils literal notranslate"><span class="pre">1</span></code> indicate higher similarity. In practice, SSIM often correlates better with human visual judgment than PSNR, especially when one is interested in structural preservation.</p>
 <p>Still, SSIM also has limitations. It is more perceptual than PSNR, but it is not a perfect model of human vision. It may still overestimate the quality of reconstructions with unrealistic textures or miss certain distortions that look obvious to the eye.</p>
 </section>
 <section id="lpips">
 <h3>LPIPS<a class="headerlink" href="#lpips" title="Link to this heading">#</a></h3>
-<p>A more modern metric is <strong>LPIPS</strong> (Learned Perceptual Image Patch Similarity) <span id="id2">[<a class="reference internal" href="../references.html#id13" title="Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The unreasonable effectiveness of deep features as a perceptual metric. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 586–595, 2018.">19</a>]</span>. The idea is to compare two images not directly in pixel space, but in the feature space of a deep neural network. If two images activate similar internal features in a pretrained model, then LPIPS considers them perceptually close.</p>
+<p>A more modern metric is <strong>LPIPS</strong> (Learned Perceptual Image Patch Similarity) <span id="id2">[<a class="reference internal" href="../references.html#id13" title="Richard Zhang, Phillip Isola, Alexei A Efros, Eli Shechtman, and Oliver Wang. The unreasonable effectiveness of deep features as a perceptual metric. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 586–595, 2018.">33</a>]</span>. The idea is to compare two images not directly in pixel space, but in the feature space of a deep neural network. If two images activate similar internal features in a pretrained model, then LPIPS considers them perceptually close.</p>
 <p>This usually makes LPIPS much more sensitive to perceptual realism than PSNR or SSIM. In many modern image-generation and restoration papers, LPIPS is reported precisely because it captures aspects of image quality that classical metrics miss.</p>
 <p>However, LPIPS must also be interpreted with care:</p>
 <ul class="simple">
@@ -1052,7 +1059,7 @@ The <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span> loss
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>The original Transformer architecture is introduced in <span id="id3">[<a class="reference internal" href="../references.html#id8" title="Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. Advances in Neural Information Processing Systems, 2017.">17</a>]</span>, while its adaptation to vision through the Vision Transformer is described in <span id="id4">[<a class="reference internal" href="../references.html#id7" title="Alexey Dosovitskiy and others. An image is worth 16x16 words: transformers for image recognition at scale. International Conference on Learning Representations, 2021.">4</a>]</span>. For a broader overview of deep learning methods for inverse problems in imaging, including architectural and loss-design issues, see <span id="id5">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">11</a>]</span>. For more general deep-learning background, see <span id="id6">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">5</a>]</span>.</p>
+<p>The original Transformer architecture is introduced in <span id="id3">[<a class="reference internal" href="../references.html#id8" title="Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. Advances in Neural Information Processing Systems, 2017.">29</a>]</span>, while its adaptation to vision through the Vision Transformer is described in <span id="id4">[<a class="reference internal" href="../references.html#id7" title="Alexey Dosovitskiy and others. An image is worth 16x16 words: transformers for image recognition at scale. International Conference on Learning Representations, 2021.">9</a>]</span>. For a broader overview of deep learning methods for inverse problems in imaging, including architectural and loss-design issues, see <span id="id5">[<a class="reference internal" href="../references.html#id25" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">22</a>]</span>. For more general deep-learning background, see <span id="id6">[<a class="reference internal" href="../references.html#id3" title="Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.">10</a>]</span>.</p>
 </section>
 </section>
 
@@ -1096,11 +1103,11 @@ The <span class="math notranslate nohighlight">\(\ell_{Perceptual}\)</span> loss
       </div>
     </a>
     <a class="right-next"
-       href="../homeworks/homework1.html"
+       href="crossdomain.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Homework 1: End-to-End Reconstruction with CNNs</p>
+        <p class="prev-next-title">Cross-Domain End-to-End Reconstruction</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
