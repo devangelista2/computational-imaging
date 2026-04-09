@@ -1177,9 +1177,18 @@ Epoch 10/10: 100%|██████████| 414/414 [18:46&lt;00:00,  2.72
 Epoch 2/10: 100%|██████████| 414/414 [21:58&lt;00:00,  3.19s/it, avg_loss=0.000252, batch_loss=0.000188]
 Epoch 3/10: 100%|██████████| 414/414 [20:53&lt;00:00,  3.03s/it, avg_loss=0.000161, batch_loss=0.000112]
 Epoch 4/10: 100%|██████████| 414/414 [21:35&lt;00:00,  3.13s/it, avg_loss=0.000125, batch_loss=0.000126]
-Epoch 5/10:  78%|███████▊  | 324/414 [17:26&lt;04:54,  3.27s/it, avg_loss=0.000111, batch_loss=0.000117]
+Epoch 5/10: 100%|██████████| 414/414 [22:15&lt;00:00,  3.23s/it, avg_loss=0.000110, batch_loss=0.000112]
+Epoch 6/10: 100%|██████████| 414/414 [21:58&lt;00:00,  3.19s/it, avg_loss=0.000102, batch_loss=0.000082]
+Epoch 7/10: 100%|██████████| 414/414 [21:29&lt;00:00,  3.11s/it, avg_loss=0.000098, batch_loss=0.000090]
+Epoch 8/10: 100%|██████████| 414/414 [21:36&lt;00:00,  3.13s/it, avg_loss=0.000093, batch_loss=0.000115]
+Epoch 9/10: 100%|██████████| 414/414 [21:33&lt;00:00,  3.13s/it, avg_loss=0.000096, batch_loss=0.000075]
+Epoch 10/10: 100%|██████████| 414/414 [21:41&lt;00:00,  3.14s/it, avg_loss=0.000093, batch_loss=0.000068]
 </pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saved weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\UNetPP.pth
+</pre></div>
+</div>
+<img alt="../_images/f97936813f8214b131e8fe439efb9222fde835669c5391051fd64599a023671f.png" src="../_images/f97936813f8214b131e8fe439efb9222fde835669c5391051fd64599a023671f.png" />
 </div>
 </div>
 </section>
@@ -1238,6 +1247,15 @@ Epoch 5/10:  78%|███████▊  | 324/414 [17:26&lt;04:54,  3.27s/it,
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">rec</span> <span class="ow">in</span> <span class="p">[(</span><span class="s1">&#39;UNet&#39;</span><span class="p">,</span> <span class="n">recon_plain</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Residual UNet&#39;</span><span class="p">,</span> <span class="n">recon_residual</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Attention UNet&#39;</span><span class="p">,</span> <span class="n">recon_attention</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;UNet++&#39;</span><span class="p">,</span> <span class="n">recon_pp</span><span class="p">)]:</span>
     <span class="n">mse</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">rec</span> <span class="o">-</span> <span class="n">x_compare</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s1">&gt;16</span><span class="si">}</span><span class="s1"> | MSE = </span><span class="si">{</span><span class="n">mse</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0f662698ab988019d99fbd9beea2278fe7b5f21eb0256e2c8d01ca7afe15afee.png" src="../_images/0f662698ab988019d99fbd9beea2278fe7b5f21eb0256e2c8d01ca7afe15afee.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            UNet | MSE = 0.000075
+   Residual UNet | MSE = 0.000083
+  Attention UNet | MSE = 0.000087
+          UNet++ | MSE = 0.000080
 </pre></div>
 </div>
 </div>
