@@ -564,8 +564,8 @@ tensor([[0., 0., 0.],
         [0., 0., 0.]])
 tensor([[1., 1., 1., 1.],
         [1., 1., 1., 1.]])
-tensor([[0.2906, 0.1651],
-        [0.5926, 0.3250]])
+tensor([[0.9324, 0.5593],
+        [0.2601, 0.0780]])
 </pre></div>
 </div>
 </div>
@@ -723,7 +723,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([-1.6784, -1.6583]), y: tensor([-0.3568, -0.3166])
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Batch - x: tensor([ 1.3367, -1.0151]), y: tensor([5.6734, 0.9698])
 </pre></div>
 </div>
 </div>
@@ -881,7 +881,7 @@ A minibatch is a subset of the dataset which contains a limited amount of memory
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shape of x_batch: torch.Size([16, 8]). Shape of y_batch: torch.Size([16, 1])
-Real value: 5.000010013580322. Model prediction: -0.1572405993938446.
+Real value: 1.7109999656677246. Model prediction: 0.11305142939090729.
 </pre></div>
 </div>
 </div>
@@ -996,102 +996,82 @@ This is done as follows:</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">35</span>
-<span class="g g-Whitespace">     </span><span class="mi">32</span>         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>         <span class="c1"># Update model weights</span>
-<span class="ne">---&gt; </span><span class="mi">35</span>         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">36</span>         <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span> <span class="c1"># Reset the optimizer state: IMPORTANT</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span>         <span class="c1"># Print out the avg value of the loss</span>
-<span class="g g-Whitespace">     </span><span class="mi">39</span>         <span class="c1"># Commented for site impagination</span>
-<span class="g g-Whitespace">     </span><span class="mi">40</span>         <span class="c1"># print(f&quot;Epoch: {epoch}. Avg Loss: {loss.item() / (k+1):0.4f}&quot;, end=&quot;\r&quot;)</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span>     <span class="c1"># print()</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span> 
-<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="c1"># Saving the model after the cycle</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">17</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">avg_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="c1"># Training loop</span>
+<span class="ne">---&gt; </span><span class="mi">17</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span>     <span class="c1"># Get x, y from data</span>
+<span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">data</span>
+<span class="g g-Whitespace">     </span><span class="mi">21</span>     <span class="c1"># Send to device</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/optimizer.py:533,</span> in <span class="ni">Optimizer.profile_hook_step.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">528</span>             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span>                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">func</span><span class="si">}</span><span class="s2"> must return None or a tuple of (new_args, new_kwargs), but got </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">.&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>             <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">532</span> <span class="c1"># pyrefly: ignore [invalid-param-spec]</span>
-<span class="ne">--&gt; </span><span class="mi">533</span> <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">534</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizer_step_code</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">536</span> <span class="c1"># call optimizer step post hooks</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/dataloader.py:741,</span> in <span class="ni">_BaseDataLoaderIter.__next__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">738</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampler_iter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">739</span>     <span class="c1"># TODO(https://github.com/pytorch/pytorch/issues/76750)</span>
+<span class="g g-Whitespace">    </span><span class="mi">740</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>  <span class="c1"># type: ignore[call-arg]</span>
+<span class="ne">--&gt; </span><span class="mi">741</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_data</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">742</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_yielded</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">743</span> <span class="k">if</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">744</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_kind</span> <span class="o">==</span> <span class="n">_DatasetKind</span><span class="o">.</span><span class="n">Iterable</span>
+<span class="g g-Whitespace">    </span><span class="mi">745</span>     <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_IterableDataset_len_called</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">746</span>     <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_yielded</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_IterableDataset_len_called</span>
+<span class="g g-Whitespace">    </span><span class="mi">747</span> <span class="p">):</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/optimizer.py:81,</span> in <span class="ni">_use_grad_for_differentiable.&lt;locals&gt;._use_grad</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">79</span>     <span class="n">torch</span><span class="o">.</span><span class="n">set_grad_enabled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">[</span><span class="s2">&quot;differentiable&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">     </span><span class="mi">80</span>     <span class="n">torch</span><span class="o">.</span><span class="n">_dynamo</span><span class="o">.</span><span class="n">graph_break</span><span class="p">()</span>
-<span class="ne">---&gt; </span><span class="mi">81</span>     <span class="n">ret</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">82</span> <span class="k">finally</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">83</span>     <span class="n">torch</span><span class="o">.</span><span class="n">_dynamo</span><span class="o">.</span><span class="n">graph_break</span><span class="p">()</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/dataloader.py:801,</span> in <span class="ni">_SingleProcessDataLoaderIter._next_data</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span> <span class="k">def</span><span class="w"> </span><span class="nf">_next_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">800</span>     <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span><span class="p">()</span>  <span class="c1"># may raise StopIteration</span>
+<span class="ne">--&gt; </span><span class="mi">801</span>     <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_fetcher</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>  <span class="c1"># may raise StopIteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">802</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pin_memory</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">803</span>         <span class="n">data</span> <span class="o">=</span> <span class="n">_utils</span><span class="o">.</span><span class="n">pin_memory</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pin_memory_device</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:248,</span> in <span class="ni">Adam.step</span><span class="nt">(self, closure)</span>
-<span class="g g-Whitespace">    </span><span class="mi">236</span>     <span class="n">beta1</span><span class="p">,</span> <span class="n">beta2</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;betas&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span>     <span class="n">has_complex</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_group</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span>         <span class="n">group</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">240</span>         <span class="n">params_with_grad</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">245</span>         <span class="n">state_steps</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">246</span>     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">248</span>     <span class="n">adam</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">249</span>         <span class="n">params_with_grad</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">250</span>         <span class="n">grads</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">251</span>         <span class="n">exp_avgs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span>         <span class="n">exp_avg_sqs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">253</span>         <span class="n">max_exp_avg_sqs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">254</span>         <span class="n">state_steps</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">255</span>         <span class="n">amsgrad</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;amsgrad&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>         <span class="n">has_complex</span><span class="o">=</span><span class="n">has_complex</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>         <span class="n">beta1</span><span class="o">=</span><span class="n">beta1</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span>         <span class="n">beta2</span><span class="o">=</span><span class="n">beta2</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>         <span class="n">lr</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>         <span class="n">weight_decay</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>         <span class="n">eps</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span>         <span class="n">maximize</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;maximize&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>         <span class="n">foreach</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;foreach&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">264</span>         <span class="n">capturable</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;capturable&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">265</span>         <span class="n">differentiable</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;differentiable&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span>         <span class="n">fused</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;fused&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">267</span>         <span class="n">grad_scale</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;grad_scale&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">268</span>         <span class="n">found_inf</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;found_inf&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span>         <span class="n">decoupled_weight_decay</span><span class="o">=</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;decoupled_weight_decay&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span> <span class="k">return</span> <span class="n">loss</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/_utils/fetch.py:57,</span> in <span class="ni">_MapDatasetFetcher.fetch</span><span class="nt">(self, possibly_batched_index)</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span>     <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">possibly_batched_index</span><span class="p">]</span>
+<span class="ne">---&gt; </span><span class="mi">57</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collate_fn</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/optimizer.py:151,</span> in <span class="ni">_disable_dynamo_if_unsupported.&lt;locals&gt;.wrapper.&lt;locals&gt;.maybe_fallback</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">149</span>     <span class="k">return</span> <span class="n">disabled_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">150</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">151</span>     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py:401,</span> in <span class="ni">default_collate</span><span class="nt">(batch)</span>
+<span class="g g-Whitespace">    </span><span class="mi">340</span> <span class="k">def</span><span class="w"> </span><span class="nf">default_collate</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">341</span><span class="w">     </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">342</span><span class="sd">     Take in a batch of data and put the elements within the batch into a tensor with an additional outer dimension - batch size.</span>
+<span class="g g-Whitespace">    </span><span class="mi">343</span><span class="sd"> </span>
+<span class="sd">   (...)    399         &gt;&gt;&gt; default_collate(batch)  # Handle `CustomType` automatically</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">401</span>     <span class="k">return</span> <span class="n">collate</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">collate_fn_map</span><span class="o">=</span><span class="n">default_collate_fn_map</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:971,</span> in <span class="ni">adam</span><span class="nt">(params, grads, exp_avgs, exp_avg_sqs, max_exp_avg_sqs, state_steps, foreach, capturable, differentiable, fused, grad_scale, found_inf, has_complex, decoupled_weight_decay, amsgrad, beta1, beta2, lr, weight_decay, eps, maximize)</span>
-<span class="g g-Whitespace">    </span><span class="mi">968</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">func</span> <span class="o">=</span> <span class="n">_single_tensor_adam</span>
-<span class="ne">--&gt; </span><span class="mi">971</span> <span class="n">func</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">972</span>     <span class="n">params</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">973</span>     <span class="n">grads</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="n">exp_avgs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">975</span>     <span class="n">exp_avg_sqs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">976</span>     <span class="n">max_exp_avg_sqs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">977</span>     <span class="n">state_steps</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">978</span>     <span class="n">amsgrad</span><span class="o">=</span><span class="n">amsgrad</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">979</span>     <span class="n">has_complex</span><span class="o">=</span><span class="n">has_complex</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">980</span>     <span class="n">beta1</span><span class="o">=</span><span class="n">beta1</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">981</span>     <span class="n">beta2</span><span class="o">=</span><span class="n">beta2</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">982</span>     <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">983</span>     <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">984</span>     <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">985</span>     <span class="n">maximize</span><span class="o">=</span><span class="n">maximize</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">986</span>     <span class="n">capturable</span><span class="o">=</span><span class="n">capturable</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">987</span>     <span class="n">differentiable</span><span class="o">=</span><span class="n">differentiable</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">988</span>     <span class="n">grad_scale</span><span class="o">=</span><span class="n">grad_scale</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">989</span>     <span class="n">found_inf</span><span class="o">=</span><span class="n">found_inf</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">990</span>     <span class="n">decoupled_weight_decay</span><span class="o">=</span><span class="n">decoupled_weight_decay</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">991</span> <span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py:214,</span> in <span class="ni">collate</span><span class="nt">(batch, collate_fn_map)</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span> <span class="n">transposed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span>     <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">batch</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span> <span class="p">)</span>  <span class="c1"># It may be accessed twice, so we use a list.</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">214</span>     <span class="k">return</span> <span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span>         <span class="n">collate</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">collate_fn_map</span><span class="o">=</span><span class="n">collate_fn_map</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">216</span>         <span class="k">for</span> <span class="n">samples</span> <span class="ow">in</span> <span class="n">transposed</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="p">]</span>  <span class="c1"># Backwards compatibility.</span>
+<span class="g g-Whitespace">    </span><span class="mi">218</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">219</span>     <span class="k">try</span><span class="p">:</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/optim/adam.py:431,</span> in <span class="ni">_single_tensor_adam</span><span class="nt">(params, grads, exp_avgs, exp_avg_sqs, max_exp_avg_sqs, state_steps, grad_scale, found_inf, amsgrad, has_complex, beta1, beta2, lr, weight_decay, eps, maximize, capturable, differentiable, decoupled_weight_decay)</span>
-<span class="g g-Whitespace">    </span><span class="mi">428</span>         <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">429</span>             <span class="n">grad</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">431</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">is_complex</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">432</span>     <span class="n">grad</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">grad</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">433</span>     <span class="n">exp_avg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">view_as_real</span><span class="p">(</span><span class="n">exp_avg</span><span class="p">)</span>
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py:215,</span> in <span class="ni">&lt;listcomp&gt;</span><span class="nt">(.0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span> <span class="n">transposed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span>     <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">batch</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span> <span class="p">)</span>  <span class="c1"># It may be accessed twice, so we use a list.</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">return</span> <span class="p">[</span>
+<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">collate</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">collate_fn_map</span><span class="o">=</span><span class="n">collate_fn_map</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">216</span>         <span class="k">for</span> <span class="n">samples</span> <span class="ow">in</span> <span class="n">transposed</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span>     <span class="p">]</span>  <span class="c1"># Backwards compatibility.</span>
+<span class="g g-Whitespace">    </span><span class="mi">218</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">219</span>     <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py:155,</span> in <span class="ni">collate</span><span class="nt">(batch, collate_fn_map)</span>
+<span class="g g-Whitespace">    </span><span class="mi">153</span> <span class="k">if</span> <span class="n">collate_fn_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">154</span>     <span class="k">if</span> <span class="n">elem_type</span> <span class="ow">in</span> <span class="n">collate_fn_map</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">155</span>         <span class="k">return</span> <span class="n">collate_fn_map</span><span class="p">[</span><span class="n">elem_type</span><span class="p">](</span><span class="n">batch</span><span class="p">,</span> <span class="n">collate_fn_map</span><span class="o">=</span><span class="n">collate_fn_map</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">157</span>     <span class="k">for</span> <span class="n">collate_type</span> <span class="ow">in</span> <span class="n">collate_fn_map</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">158</span>         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">collate_type</span><span class="p">):</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.11.15/x64/lib/python3.11/site-packages/torch/utils/data/_utils/collate.py:275,</span> in <span class="ni">collate_tensor_fn</span><span class="nt">(batch, collate_fn_map)</span>
+<span class="g g-Whitespace">    </span><span class="mi">273</span>     <span class="n">storage</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">_typed_storage</span><span class="p">()</span><span class="o">.</span><span class="n">_new_shared</span><span class="p">(</span><span class="n">numel</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">elem</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="n">out</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">storage</span><span class="p">)</span><span class="o">.</span><span class="n">resize_</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">),</span> <span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
+<span class="ne">--&gt; </span><span class="mi">275</span> <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
