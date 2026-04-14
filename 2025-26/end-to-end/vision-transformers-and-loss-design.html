@@ -428,6 +428,7 @@
 <p>For image classification, this sequence is usually mapped to a single output token. For <strong>image-to-image</strong> tasks, such as deblurring, denoising, or super-resolution, this is not enough: after the Transformer encoder, one also needs a <strong>decoder</strong> that maps the encoded tokens back to an image.</p>
 <section id="from-images-to-patch-tokens">
 <h3>From images to patch tokens<a class="headerlink" href="#from-images-to-patch-tokens" title="Link to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../_images/Patching.png"><img alt="../_images/Patching.png" class="align-center" src="../_images/Patching.png" style="width: 90%;" /></a>
 <p>Suppose that an image <span class="math notranslate nohighlight">\(x \in \mathbb{R}^{C \times H \times W}\)</span> is divided into non-overlapping patches of size <span class="math notranslate nohighlight">\(P \times P\)</span>. The total number of patches is then</p>
 <div class="math notranslate nohighlight">
 \[
@@ -447,6 +448,7 @@ z_j = E \, \mathrm{vec}(x^{(j)}) + e_j^{\mathrm{pos}},
 </section>
 <section id="how-the-transformer-encoder-works">
 <h3>How the Transformer encoder works<a class="headerlink" href="#how-the-transformer-encoder-works" title="Link to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../_images/SA.png"><img alt="../_images/SA.png" class="align-center" src="../_images/SA.png" style="width: 90%;" /></a>
 <p>Once the image has been converted into a sequence of patch tokens, the sequence is processed by a stack of Transformer blocks. The central operation in each block is the <strong>self-attention</strong> mechanism.</p>
 <p>Given a matrix of tokens <span class="math notranslate nohighlight">\(Z \in \mathbb{R}^{N \times d}\)</span>, the model computes three learned projections:</p>
 <div class="math notranslate nohighlight">
@@ -467,6 +469,7 @@ Q = ZW_Q, \qquad K = ZW_K, \qquad V = ZW_V,
 <li><p>a second residual connection around that feed-forward part.</p></li>
 </ul>
 <p>This yields a model that alternates global token mixing through attention and pointwise nonlinear processing through the MLP.</p>
+<a class="reference internal image-reference" href="../_images/MHSA.png"><img alt="../_images/MHSA.png" class="align-center" src="../_images/MHSA.png" style="width: 90%;" /></a>
 </section>
 <section id="why-vit-can-be-useful-for-inverse-problems">
 <h3>Why ViT can be useful for inverse problems<a class="headerlink" href="#why-vit-can-be-useful-for-inverse-problems" title="Link to this heading">#</a></h3>
@@ -482,6 +485,7 @@ Q = ZW_Q, \qquad K = ZW_K, \qquad V = ZW_V,
 </section>
 <section id="vit-for-image-to-image-reconstruction">
 <h3>ViT for image-to-image reconstruction<a class="headerlink" href="#vit-for-image-to-image-reconstruction" title="Link to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../_images/ViT.png"><img alt="../_images/ViT.png" class="align-center" src="../_images/ViT.png" style="width: 90%;" /></a>
 <p>To use a ViT for an image-to-image task, the most common strategy is to split the model into two parts:</p>
 <ol class="arabic simple">
 <li><p>an <strong>encoder</strong>, which transforms the input image into a sequence of contextualized patch tokens;</p></li>
