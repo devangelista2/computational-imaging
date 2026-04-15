@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Homework 1: End-to-End Reconstruction with CNNs &#8212; Computational Imaging</title>
+    <title>Homework 1: End-to-End Reconstruction Before Generative Models &#8212; Computational Imaging</title>
   
   
   
@@ -69,7 +69,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="References" href="../references.html" />
-    <link rel="prev" title="Generative Models for Inverse Problems" href="../generative/generative-inverse-problems.html" />
+    <link rel="prev" title="Diffusion Models for Inverse Problems" href="../generative/generative-inverse-problems.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -181,13 +181,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Deep Generative Models, VAEs, and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models: DDPM and DDIM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Diffusion Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Homework 1: End-to-End Reconstruction with CNNs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -374,7 +374,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Homework 1: End-to-End Reconstruction with CNNs</h1>
+    <h1>Homework 1: End-to-End Reconstruction Before Generative Models</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -384,9 +384,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tasks">Tasks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discussion">Discussion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework-goals-and-deliverables">Homework Goals and Deliverables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-structure-of-the-work">Suggested Structure of the Work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-data-pipeline-and-synthetic-measurements">Part 1: Data Pipeline and Synthetic Measurements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-reconstruction-networks">Part 2: Reconstruction Networks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-training-saving-and-evaluating-the-models">Part 3: Training, Saving, and Evaluating the Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-visual-and-quantitative-comparison">Part 4: Visual and Quantitative Comparison</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverables-and-discussion">Deliverables and Discussion</a></li>
 </ul>
             </nav>
         </div>
@@ -398,141 +402,134 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="homework-1-end-to-end-reconstruction-with-cnns">
-<h1>Homework 1: End-to-End Reconstruction with CNNs<a class="headerlink" href="#homework-1-end-to-end-reconstruction-with-cnns" title="Link to this heading">#</a></h1>
-<p>This homework asks you to implement a compact <strong>end-to-end reconstruction pipeline</strong> using the ideas developed in the lecture. You will start from clean Mayo images, generate synthetic measurements with a known operator <span class="math notranslate nohighlight">\(K\)</span>, train simple neural networks with <code class="docutils literal notranslate"><span class="pre">MSELoss</span></code>, and compare the quality of the reconstructed images. The goal is not to build the strongest possible method, but to understand the full workflow and test a few basic design choices in a controlled setting.</p>
-<p>You should submit the completed notebook together with a short written discussion of the final questions. Keep the code readable and add brief comments only where your implementation is not obvious.</p>
-<section id="tasks">
-<h2>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">#</a></h2>
-<p>Work through the notebook in order. In particular, you should:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="homework-1-end-to-end-reconstruction-before-generative-models">
+<h1>Homework 1: End-to-End Reconstruction Before Generative Models<a class="headerlink" href="#homework-1-end-to-end-reconstruction-before-generative-models" title="Link to this heading">#</a></h1>
+<p>This homework is entirely based on the material covered <strong>before</strong> the generative-model chapter. The goal is to implement a compact end-to-end reconstruction pipeline, train a few neural architectures, and analyze their behavior on a controlled inverse problem.</p>
+<p>Starting from clean Mayo images <span class="math notranslate nohighlight">\(\{\boldsymbol{x}_i\}_{i=1}^N\)</span>, you will generate synthetic measurements of the form</p>
+<div class="math notranslate nohighlight">
+\[
+    \boldsymbol{y}_i^\delta = K\boldsymbol{x}_i + \boldsymbol{e},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(K\)</span> is a known motion-blur operator and <span class="math notranslate nohighlight">\(\boldsymbol{e}\)</span> is additive Gaussian noise. You will then train neural networks to reconstruct <span class="math notranslate nohighlight">\(\boldsymbol{x}_i\)</span> from <span class="math notranslate nohighlight">\(\boldsymbol{y}_i^\delta\)</span> and compare the results.</p>
+<p>The purpose of the assignment is not to obtain the strongest possible model, but to demonstrate that you understand the full workflow discussed in the lectures: dataset preparation, synthetic corruption, model design, training, evaluation, and critical discussion of the results.</p>
+<section id="homework-goals-and-deliverables">
+<h2>Homework Goals and Deliverables<a class="headerlink" href="#homework-goals-and-deliverables" title="Link to this heading">#</a></h2>
+<p>You are asked to complete the notebook and submit the following:</p>
 <ol class="arabic simple">
-<li><p>build a dataset pipeline for the Mayo images;</p></li>
-<li><p>generate measurements of the form
-$<span class="math notranslate nohighlight">\(
-y^\delta = Kx + e,
-\)</span><span class="math notranslate nohighlight">\(
-where \)</span>K<span class="math notranslate nohighlight">\( is a motion-blur operator and \)</span>e$ is additive Gaussian noise;</p></li>
-<li><p>implement and train both a <code class="docutils literal notranslate"><span class="pre">SimpleCNN</span></code> and a <code class="docutils literal notranslate"><span class="pre">ResCNN</span></code>;</p></li>
-<li><p>compare the two models visually and, if you wish, quantitatively;</p></li>
-<li><p>answer the short conceptual questions at the end.</p></li>
+<li><p>A completed version of this notebook with all <code class="docutils literal notranslate"><span class="pre">TODO</span></code> sections filled in.</p></li>
+<li><p>The trained weights of your models, saved in <code class="docutils literal notranslate"><span class="pre">../weights/</span></code> with meaningful names.</p></li>
+<li><p>A short written discussion, included at the end of the notebook, answering the conceptual questions.</p></li>
+<li><p>At least one figure comparing the reconstructions produced by your models on the same test image.</p></li>
 </ol>
-<p>Use <code class="docutils literal notranslate"><span class="pre">nn.MSELoss()</span></code> and generate the corrupted data <strong>online during training</strong>. You may work on CPU, but a GPU is recommended if available.</p>
+<p>Your work should show that you can:</p>
+<ul class="simple">
+<li><p>build a dataset pipeline for imaging data;</p></li>
+<li><p>simulate an inverse problem through a known operator <span class="math notranslate nohighlight">\(K\)</span>;</p></li>
+<li><p>implement simple end-to-end architectures in PyTorch;</p></li>
+<li><p>train and compare the models fairly;</p></li>
+<li><p>interpret the results rather than only showing them.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may work entirely on CPU, but training will be faster on a GPU if one is available. Keep the code readable, and add comments only where the implementation is not obvious.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This homework is about the material of the end-to-end and cross-domain chapters. Do <strong>not</strong> use generative models, diffusion models, pretrained foundation models, or external black-box reconstruction libraries.</p>
+</div>
+</section>
+<section id="suggested-structure-of-the-work">
+<h2>Suggested Structure of the Work<a class="headerlink" href="#suggested-structure-of-the-work" title="Link to this heading">#</a></h2>
+<p>A reasonable workflow is to start from the dataset and the corruption model, then move to the reconstruction architectures, then to training and evaluation. The mandatory part of the homework is based on <strong>SimpleCNN</strong> and <strong>ResCNN</strong>. An additional comparison with a <strong>UNet</strong> is recommended as an extension for students who want to go one step further.</p>
+<p>The notebook intentionally leaves several implementation choices open. You are expected to reuse the ideas developed in the lecture notebooks, but not simply copy them without understanding them.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="n">here</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="p">(</span><span class="n">here</span><span class="p">,</span> <span class="n">here</span><span class="o">.</span><span class="n">parent</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">ippy_root</span> <span class="o">=</span> <span class="n">base</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span>
-        <span class="k">break</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;Could not locate the local IPPy package.&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
 
-<span class="n">operators_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="s1">&#39;course_ippy_operators&#39;</span><span class="p">,</span> <span class="n">ippy_root</span> <span class="o">/</span> <span class="s1">&#39;operators.py&#39;</span><span class="p">)</span>
-<span class="n">operators</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">operators_spec</span><span class="p">)</span>
-<span class="n">operators_spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">operators</span><span class="p">)</span>
+<span class="n">book_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">weights_dir</span> <span class="o">=</span> <span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;weights&#39;</span>
+<span class="n">weights_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_device</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s1">&#39;cuda&#39;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
-            <span class="k">return</span> <span class="s1">&#39;mps&#39;</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="k">return</span> <span class="s1">&#39;cpu&#39;</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">gaussian_noise</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">):</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">e</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">noise_level</span>
-
-
-<span class="n">device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Working device:&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Weights directory:&#39;</span><span class="p">,</span> <span class="n">weights_dir</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="implementation">
-<h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h2>
-<p>Complete the code cells below. A good workflow is the following:</p>
-<ul class="simple">
-<li><p>first make sure the dataset and dataloaders work correctly;</p></li>
-<li><p>then define the motion blur operator and inspect one corrupted example;</p></li>
-<li><p>implement the two networks;</p></li>
-<li><p>train both models with the same settings;</p></li>
-<li><p>finally compare the reconstructions on a few test images.</p></li>
-</ul>
-<p>Use <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> to track training, inspect tensor shapes carefully, and keep the code close to the style used in the lecture notebook.</p>
+<section id="part-1-data-pipeline-and-synthetic-measurements">
+<h2>Part 1: Data Pipeline and Synthetic Measurements<a class="headerlink" href="#part-1-data-pipeline-and-synthetic-measurements" title="Link to this heading">#</a></h2>
+<p>In this first part, implement a dataset for the Mayo images and create the synthetic inverse problem. Use grayscale images resized to <span class="math notranslate nohighlight">\(256 \times 256\)</span>.</p>
+<p>Your implementation should build training and test dataloaders, then generate measurements of the form</p>
+<div class="math notranslate nohighlight">
+\[
+    \boldsymbol{y}^\delta = K\boldsymbol{x} + \boldsymbol{e}
+\]</div>
+<p>using a Motion Blur operator from <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> and additive Gaussian noise.</p>
+<p>The objective of this part is to verify that the data pipeline is correct <strong>before</strong> any model is trained.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">=</span> <span class="n">data_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_shape</span> <span class="o">=</span> <span class="n">data_shape</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s1">/*/*.png&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s1">/*/*.png&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="n">data_shape</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">)),</span>
+        <span class="p">])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
-        <span class="c1"># TODO:</span>
-        <span class="c1"># 1. load the image from disk</span>
-        <span class="c1"># 2. convert it to grayscale</span>
-        <span class="c1"># 3. transform it into a tensor</span>
-        <span class="c1"># 4. resize it to self.data_shape</span>
-        <span class="c1"># 5. return the resulting tensor of shape (1, H, W)</span>
+        <span class="c1"># TODO: complete the dataset implementation.</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
-<span class="c1"># TODO: create train_dataset, test_dataset, train_loader, test_loader</span>
-<span class="c1"># Suggested shape: 256</span>
-<span class="c1"># Suggested batch size: 8</span>
-
-
-<span class="c1"># TODO: inspect one training batch</span>
-<span class="c1"># Print:</span>
-<span class="c1"># - batch shape</span>
-<span class="c1"># - dtype</span>
-<span class="c1"># - min / max intensity</span>
-<span class="c1"># Then display one clean image from the batch.</span>
+<span class="c1"># TODO:</span>
+<span class="c1"># Build the training and test datasets, create the dataloaders,</span>
+<span class="c1"># inspect a batch, define the operator K, and visualize at least</span>
+<span class="c1"># one clean / corrupted pair.</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO:</span>
-<span class="c1"># 1. define K = operators.Blurring(...)</span>
-<span class="c1"># 2. take one image x from the training loader</span>
-<span class="c1"># 3. compute y_delta = K(x) + gaussian_noise(...)</span>
-<span class="c1"># 4. visualize x and y_delta</span>
-</pre></div>
-</div>
-</div>
+</section>
+<section id="part-2-reconstruction-networks">
+<h2>Part 2: Reconstruction Networks<a class="headerlink" href="#part-2-reconstruction-networks" title="Link to this heading">#</a></h2>
+<p>In the lecture, we discussed a plain convolutional baseline and a residual variant. In this homework you must implement both:</p>
+<ul class="simple">
+<li><p><strong>SimpleCNN</strong>, which directly predicts the reconstruction;</p></li>
+<li><p><strong>ResCNN</strong>, which predicts a correction to be added back to the corrupted image.</p></li>
+</ul>
+<p>Architecturally, both models should remain simple and close to the lecture notebooks, but the exact implementation details are part of the assignment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want an optional extension after the mandatory part is completed, you may also implement a plain UNet and include it in the final comparison.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimpleCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># TODO: implement a 3-layer CNN</span>
+        <span class="c1"># TODO: implement the model.</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -542,7 +539,7 @@ where \)</span>K<span class="math notranslate nohighlight">\( is a motion-blur o
 <span class="k">class</span><span class="w"> </span><span class="nc">ResCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># TODO: implement a residual CNN</span>
+        <span class="c1"># TODO: implement the model.</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
@@ -550,60 +547,77 @@ where \)</span>K<span class="math notranslate nohighlight">\( is a motion-blur o
 
 
 <span class="c1"># TODO:</span>
-<span class="c1"># 1. instantiate both models</span>
-<span class="c1"># 2. print the number of trainable parameters of each model</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
-    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
-    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># TODO:</span>
-    <span class="c1"># complete the training loop</span>
-    <span class="c1"># - generate y_batch on the fly from x_batch</span>
-    <span class="c1"># - compute the loss</span>
-    <span class="c1"># - perform backward + optimizer step</span>
-    <span class="c1"># - track the average epoch loss</span>
-    <span class="c1"># - use tqdm for the batch loop</span>
-
-    <span class="k">return</span> <span class="n">history</span>
-
-
-<span class="c1"># TODO:</span>
-<span class="c1"># 1. train both models</span>
-<span class="c1"># 2. save the histories</span>
-<span class="c1"># 3. plot the training curves together</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO:</span>
-<span class="c1"># evaluate the two models on one or two test examples</span>
-<span class="c1"># and visualize the results in a clean figure.</span>
+<span class="c1"># Instantiate the models you want to study and report their number</span>
+<span class="c1"># of trainable parameters.</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="discussion">
-<h2>Discussion<a class="headerlink" href="#discussion" title="Link to this heading">#</a></h2>
-<p>Answer the following questions in a few sentences each.</p>
+<section id="part-3-training-saving-and-evaluating-the-models">
+<h2>Part 3: Training, Saving, and Evaluating the Models<a class="headerlink" href="#part-3-training-saving-and-evaluating-the-models" title="Link to this heading">#</a></h2>
+<p>Train the models by generating the corrupted measurements <strong>online during training</strong>, exactly as done in the lecture. Use <code class="docutils literal notranslate"><span class="pre">nn.MSELoss()</span></code> as the default loss function and track the training with <code class="docutils literal notranslate"><span class="pre">tqdm</span></code>.</p>
+<p>Your implementation must train the models fairly under the same corruption setup, save the trained weights in <code class="docutils literal notranslate"><span class="pre">../weights/</span></code>, reload the weights before the final evaluation, and compare the models on the same test images.</p>
+<p>A reasonable baseline is to train for about <code class="docutils literal notranslate"><span class="pre">20</span></code> epochs. If your hardware allows it, you may train longer.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">weights_path</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># TODO: complete the training procedure.</span>
+
+    <span class="k">return</span> <span class="n">history</span>
+
+
+<span class="c1"># TODO:</span>
+<span class="c1"># Train the models you implemented, save their weights, plot the</span>
+<span class="c1"># training curves, and reload the weights before evaluation.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="part-4-visual-and-quantitative-comparison">
+<h2>Part 4: Visual and Quantitative Comparison<a class="headerlink" href="#part-4-visual-and-quantitative-comparison" title="Link to this heading">#</a></h2>
+<p>Use the <strong>same corrupted test image</strong> for all trained models and compare the outputs both visually and quantitatively.</p>
+<p>At a minimum, compute the <strong>MSE</strong>. If you want to connect this homework to the evaluation section of the course, you may also compute <strong>PSNR</strong> and <strong>SSIM</strong>.</p>
+<p>The final comparison should make it possible to judge both the visual quality and the numerical behavior of the models.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO:</span>
+<span class="c1"># Evaluate the trained models on one or more test examples and build</span>
+<span class="c1"># a clear visual and quantitative comparison.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="deliverables-and-discussion">
+<h2>Deliverables and Discussion<a class="headerlink" href="#deliverables-and-discussion" title="Link to this heading">#</a></h2>
+<p>Complete the notebook by answering the following questions in a few sentences each.</p>
 <ol class="arabic simple">
 <li><p>Which model performed better in your experiments, and why do you think that happened?</p></li>
 <li><p>Did the residual architecture help? If yes, in what sense?</p></li>
 <li><p>How did the noise level affect training and reconstruction quality?</p></li>
 <li><p>Why is it important to generate the corruption through a known operator <span class="math notranslate nohighlight">\(K\)</span> instead of treating the problem as a generic image-to-image task?</p></li>
 <li><p>Why should one be cautious when evaluating pure end-to-end methods only through visual quality?</p></li>
+<li><p>If you implemented the optional UNet extension, how did it compare with the simpler CNN-based models?</p></li>
 </ol>
-<p>If you want to go a little further, try one of the following extensions: replace <code class="docutils literal notranslate"><span class="pre">MSELoss</span></code> with <code class="docutils literal notranslate"><span class="pre">L1Loss</span></code>, change the blur strength, enlarge the number of filters, or compare training with and without added noise.</p>
+<p>In your final submission, make sure that the notebook contains:</p>
+<ul class="simple">
+<li><p>the completed code;</p></li>
+<li><p>the saved weights;</p></li>
+<li><p>the training curves;</p></li>
+<li><p>the final comparison figure;</p></li>
+<li><p>and the written discussion.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A reconstruction that looks visually pleasing is not automatically reliable. In inverse problems, one must always keep in mind the role of the forward operator, the noise model, and the possibility of distribution shift.</p>
+</div>
 </section>
 </section>
 
@@ -643,7 +657,7 @@ where \)</span>K<span class="math notranslate nohighlight">\( is a motion-blur o
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Generative Models for Inverse Problems</p>
+        <p class="prev-next-title">Diffusion Models for Inverse Problems</p>
       </div>
     </a>
     <a class="right-next"
@@ -673,9 +687,13 @@ where \)</span>K<span class="math notranslate nohighlight">\( is a motion-blur o
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tasks">Tasks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discussion">Discussion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework-goals-and-deliverables">Homework Goals and Deliverables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-structure-of-the-work">Suggested Structure of the Work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-data-pipeline-and-synthetic-measurements">Part 1: Data Pipeline and Synthetic Measurements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-reconstruction-networks">Part 2: Reconstruction Networks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-training-saving-and-evaluating-the-models">Part 3: Training, Saving, and Evaluating the Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-visual-and-quantitative-comparison">Part 4: Visual and Quantitative Comparison</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverables-and-discussion">Deliverables and Discussion</a></li>
 </ul>
   </nav></div>
 
