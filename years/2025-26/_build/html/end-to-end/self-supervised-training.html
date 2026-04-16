@@ -28,11 +28,11 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=80dbe81b" />
@@ -192,13 +192,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Generative Models</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">What Is a Generative Model? VAEs and GANs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Generative Models for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/vaes-and-gans.html">Deep Generative Models, VAEs, and GANs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/diffusion-models.html">Diffusion Models: DDPM and DDIM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generative/generative-inverse-problems.html">Diffusion Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction with CNNs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -445,7 +445,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <p>This is the key teaching point: <strong>self-supervision</strong> never means learning without prior information. It means learning without direct target labels, while obtaining the missing information from another structural source.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">A</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]])</span>
 <span class="n">x1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
@@ -468,7 +468,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <p class="admonition-title">Note</p>
 <p>A useful teaching principle is that <strong>self-supervision</strong> does not mean the absence of assumptions. It means that the assumptions are moved from explicit target images into the <strong>structure of the loss</strong>, the <strong>splitting of the data</strong>, or the <strong>architecture itself</strong>.</p>
 </div>
-<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">28</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
+<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">38</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
 <div class="math notranslate nohighlight">
 \[
 \min_{\boldsymbol{\Theta}} \|Kg_{\boldsymbol{\Theta}}(\boldsymbol{z})-\boldsymbol{y}^\delta\|_2^2.
@@ -487,16 +487,16 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># DIP-style optimization on one blurred Mayo image.</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="n">ROOT</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="o">*</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">&quot;course_utils.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ROOT</span><span class="p">))</span>
 
-<span class="kn">from</span> <span class="nn">course_utils</span> <span class="kn">import</span> <span class="n">gray</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">course_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gray</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
@@ -546,7 +546,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 \min_{\boldsymbol{\Theta}}
 \|K_2 f_{\boldsymbol{\Theta}}(\boldsymbol{y}_1^\delta)-\boldsymbol{y}_2^\delta\|^2.
 \]</div>
-<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id11" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">13</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id10" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">3</a>]</span>.</p>
+<p>Intuitively, the network is prevented from merely copying its input, because the target lives in a complementary measurement subset. This principle underlies methods such as Noise2Inverse and related strategies <span id="id2">[<a class="reference internal" href="../references.html#id11" title="Allard A Hendriksen, Daniël M Pelt, and Kees Joost Batenburg. Noise2inverse: self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging, 6:1320–1335, 2020.">15</a>]</span>, and is closely related in spirit to self-supervised denoising ideas such as <span id="id3">[<a class="reference internal" href="../references.html#id10" title="Joshua Batson and Loic Royer. Noise2self: blind denoising by self-supervision. International Conference on Machine Learning, pages 524–533, 2019.">4</a>]</span>.</p>
 <p>The success of this idea depends on several assumptions that should be stated explicitly:</p>
 <ul class="simple">
 <li><p>the measurement can be split in a physically meaningful way;</p></li>
@@ -557,7 +557,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <p>This is a very good point to slow down during the lecture. Students often see the splitting trick and think it is universally applicable. It is not. Its validity depends strongly on acquisition geometry and noise structure.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">x_true</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
