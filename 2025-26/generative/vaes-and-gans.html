@@ -546,19 +546,13 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\tivog\anaconda3\envs\ml\Lib\site-packages\tqdm\auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
-c:\Users\tivog\computational-imaging\years\2025-26\generative\..\IPPy\solvers.py:20: RuntimeWarning: numba is not installed. IPPy solvers will run without JIT acceleration.
-  warnings.warn(
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Device: cuda
 Training images: 3306
 Test images: 327
 Weights directory: C:\Users\tivog\computational-imaging\years\2025-26\weights
 </pre></div>
 </div>
-<img alt="../_images/3c26ddd9418a20e7b5a67eaa4e997904219558af0d1d455ce565c1927a4cfa4b.png" src="../_images/3c26ddd9418a20e7b5a67eaa4e997904219558af0d1d455ce565c1927a4cfa4b.png" />
+<img alt="../_images/2ad050b7dbed6b3182a6e0c1a6819f29dfcc55b5b21de722a61d8c51c9029f12.png" src="../_images/2ad050b7dbed6b3182a6e0c1a6819f29dfcc55b5b21de722a61d8c51c9029f12.png" />
 </div>
 </div>
 </section>
@@ -881,6 +875,67 @@ Weights directory: C:\Users\tivog\computational-imaging\years\2025-26\weights
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AE pretrain 1/10: 100%|██████████| 104/104 [00:34&lt;00:00,  3.04it/s, avg=0.09909, loss=0.09326]
+AE pretrain 2/10: 100%|██████████| 104/104 [00:33&lt;00:00,  3.12it/s, avg=0.08045, loss=0.07391]
+AE pretrain 3/10: 100%|██████████| 104/104 [00:32&lt;00:00,  3.16it/s, avg=0.07084, loss=0.06022]
+AE pretrain 4/10: 100%|██████████| 104/104 [00:35&lt;00:00,  2.91it/s, avg=0.05256, loss=0.05106]
+AE pretrain 5/10: 100%|██████████| 104/104 [00:34&lt;00:00,  3.04it/s, avg=0.04302, loss=0.04339]
+AE pretrain 6/10: 100%|██████████| 104/104 [00:33&lt;00:00,  3.06it/s, avg=0.03899, loss=0.03825]
+AE pretrain 7/10: 100%|██████████| 104/104 [00:33&lt;00:00,  3.11it/s, avg=0.03597, loss=0.03760]
+AE pretrain 8/10: 100%|██████████| 104/104 [00:33&lt;00:00,  3.07it/s, avg=0.03415, loss=0.03509]
+AE pretrain 9/10: 100%|██████████| 104/104 [00:33&lt;00:00,  3.15it/s, avg=0.03227, loss=0.03605]
+AE pretrain 10/10: 100%|██████████| 104/104 [00:33&lt;00:00,  3.13it/s, avg=0.03068, loss=0.02976]
+VAE finetune 1/40: 100%|██████████| 104/104 [00:33&lt;00:00,  3.08it/s, cap=0.30, kl=19.642, loss=0.08532, recon=0.07565]   
+VAE finetune 2/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.20it/s, cap=0.60, kl=20.409, loss=0.06434, recon=0.05444]
+VAE finetune 3/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=0.90, kl=29.762, loss=0.07159, recon=0.05715]
+VAE finetune 4/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=1.20, kl=21.643, loss=0.06383, recon=0.05361]
+VAE finetune 5/40: 100%|██████████| 104/104 [00:33&lt;00:00,  3.13it/s, cap=1.50, kl=21.009, loss=0.05735, recon=0.04759]
+VAE finetune 6/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.18it/s, cap=1.80, kl=23.607, loss=0.05119, recon=0.04028]
+VAE finetune 7/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=2.10, kl=19.473, loss=0.05048, recon=0.04179]
+VAE finetune 8/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=2.40, kl=17.870, loss=0.04709, recon=0.03935]
+VAE finetune 9/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=2.70, kl=20.690, loss=0.04341, recon=0.03442]
+VAE finetune 10/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=3.00, kl=17.555, loss=0.04082, recon=0.03355]
+VAE finetune 11/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=3.30, kl=13.061, loss=0.04739, recon=0.04251]
+VAE finetune 12/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=3.60, kl=15.892, loss=0.04703, recon=0.04089]
+VAE finetune 13/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.25it/s, cap=3.90, kl=15.433, loss=0.03837, recon=0.03260]
+VAE finetune 14/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=4.20, kl=15.634, loss=0.03725, recon=0.03153]
+VAE finetune 15/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=4.50, kl=16.682, loss=0.03988, recon=0.03379]
+VAE finetune 16/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=4.80, kl=14.444, loss=0.03431, recon=0.02949]
+VAE finetune 17/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=5.10, kl=16.469, loss=0.03410, recon=0.02842]
+VAE finetune 18/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.19it/s, cap=5.40, kl=15.689, loss=0.02923, recon=0.02408]
+VAE finetune 19/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=5.70, kl=13.719, loss=0.03081, recon=0.02680]
+VAE finetune 20/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.16it/s, cap=6.00, kl=14.966, loss=0.03037, recon=0.02589]
+VAE finetune 21/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.20it/s, cap=6.30, kl=14.497, loss=0.03167, recon=0.02757]
+VAE finetune 22/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=6.60, kl=15.085, loss=0.03514, recon=0.03089]
+VAE finetune 23/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=6.90, kl=15.980, loss=0.03164, recon=0.02710]
+VAE finetune 24/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=7.20, kl=16.900, loss=0.03037, recon=0.02552]
+VAE finetune 25/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=7.50, kl=14.803, loss=0.03082, recon=0.02717]
+VAE finetune 26/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=7.80, kl=12.841, loss=0.02621, recon=0.02369]
+VAE finetune 27/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=8.10, kl=14.030, loss=0.03168, recon=0.02872]
+VAE finetune 28/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=8.40, kl=11.238, loss=0.02934, recon=0.02792]
+VAE finetune 29/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=8.70, kl=12.042, loss=0.02704, recon=0.02537]
+VAE finetune 30/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=9.00, kl=13.075, loss=0.02705, recon=0.02501]
+VAE finetune 31/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.24it/s, cap=9.30, kl=12.116, loss=0.03079, recon=0.02938]
+VAE finetune 32/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=9.60, kl=11.756, loss=0.02531, recon=0.02423]
+VAE finetune 33/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.20it/s, cap=9.90, kl=12.209, loss=0.02409, recon=0.02293]
+VAE finetune 34/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=10.20, kl=12.412, loss=0.02183, recon=0.02072]
+VAE finetune 35/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.21it/s, cap=10.50, kl=11.590, loss=0.02413, recon=0.02359]
+VAE finetune 36/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=10.80, kl=11.722, loss=0.02315, recon=0.02269]
+VAE finetune 37/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=11.10, kl=11.342, loss=0.02096, recon=0.02084]
+VAE finetune 38/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.17it/s, cap=11.40, kl=12.569, loss=0.02043, recon=0.01984]
+VAE finetune 39/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.22it/s, cap=11.70, kl=13.032, loss=0.02040, recon=0.01974]
+VAE finetune 40/40: 100%|██████████| 104/104 [00:32&lt;00:00,  3.23it/s, cap=12.00, kl=14.761, loss=0.02803, recon=0.02665]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saved VAE weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\VAE.pth
+Posterior mean std: 0.367
+Posterior std mean: 0.893
+</pre></div>
+</div>
+<img alt="../_images/8bec988d2ba9152cf3276f75db79072e96af81aa719331a477c1f7996b117e0b.png" src="../_images/8bec988d2ba9152cf3276f75db79072e96af81aa719331a477c1f7996b117e0b.png" />
+<img alt="../_images/fec25c5902511b72d9f958a8a6e1ab26648f6be55fdc7f40484b29cb28c33cc5.png" src="../_images/fec25c5902511b72d9f958a8a6e1ab26648f6be55fdc7f40484b29cb28c33cc5.png" />
+</div>
 </div>
 </section>
 <section id="generative-adversarial-networks-gan">
@@ -1163,6 +1218,67 @@ Weights directory: C:\Users\tivog\computational-imaging\years\2025-26\weights
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>GAN epoch 1/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.53it/s, c_loss=1.95112, g_loss=0.55751]
+GAN epoch 2/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.98154, g_loss=0.14607]
+GAN epoch 3/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.92912, g_loss=-0.12644]
+GAN epoch 4/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.16954, g_loss=-1.23122]
+GAN epoch 5/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.01089, g_loss=1.79324]
+GAN epoch 6/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.45816, g_loss=0.88461]
+GAN epoch 7/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.36047, g_loss=0.55528]
+GAN epoch 8/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.86737, g_loss=0.56084]
+GAN epoch 9/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.49894, g_loss=0.77646]
+GAN epoch 10/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.49958, g_loss=0.57851]
+GAN epoch 11/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.43229, g_loss=0.74812]
+GAN epoch 12/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.51234, g_loss=0.96809]
+GAN epoch 13/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.51it/s, c_loss=1.23360, g_loss=0.72387]
+GAN epoch 14/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.14985, g_loss=0.23202]
+GAN epoch 15/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.22595, g_loss=0.36479]
+GAN epoch 16/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=0.89047, g_loss=0.66828]
+GAN epoch 17/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.19268, g_loss=0.73507]
+GAN epoch 18/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.43957, g_loss=1.79016]
+GAN epoch 19/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.32110, g_loss=0.33417]
+GAN epoch 20/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.08382, g_loss=1.22090]
+GAN epoch 21/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=0.94203, g_loss=1.21677]
+GAN epoch 22/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=0.98300, g_loss=0.83875]
+GAN epoch 23/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.46312, g_loss=0.88724]
+GAN epoch 24/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.54it/s, c_loss=0.88502, g_loss=0.77475]
+GAN epoch 25/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.42174, g_loss=0.60275]
+GAN epoch 26/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.16759, g_loss=0.79829]
+GAN epoch 27/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.07739, g_loss=0.77894]
+GAN epoch 28/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.53it/s, c_loss=0.94370, g_loss=0.36938]
+GAN epoch 29/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.38598, g_loss=0.98329]
+GAN epoch 30/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.52it/s, c_loss=1.25891, g_loss=0.84908]
+GAN epoch 31/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=0.89671, g_loss=1.00695]
+GAN epoch 32/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.10515, g_loss=0.87096]
+GAN epoch 33/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.06296, g_loss=0.83597]
+GAN epoch 34/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.25138, g_loss=0.41866]
+GAN epoch 35/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=0.89498, g_loss=0.80918]
+GAN epoch 36/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.10118, g_loss=0.87573]
+GAN epoch 37/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.01399, g_loss=0.13861]
+GAN epoch 38/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.54it/s, c_loss=1.18976, g_loss=0.77676]
+GAN epoch 39/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=1.13549, g_loss=0.68222]
+GAN epoch 40/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=0.96023, g_loss=1.13367]
+GAN epoch 41/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=1.09068, g_loss=0.54153]
+GAN epoch 42/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=0.97075, g_loss=1.12252]
+GAN epoch 43/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.53it/s, c_loss=0.84740, g_loss=0.58891]
+GAN epoch 44/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.57it/s, c_loss=0.80570, g_loss=0.40819]
+GAN epoch 45/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.51it/s, c_loss=1.08816, g_loss=0.89959]
+GAN epoch 46/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.55it/s, c_loss=0.83627, g_loss=1.28615]
+GAN epoch 47/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=0.73377, g_loss=1.73625]
+GAN epoch 48/50: 100%|██████████| 104/104 [00:40&lt;00:00,  2.56it/s, c_loss=0.95479, g_loss=0.59786]
+GAN epoch 49/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.52it/s, c_loss=1.17214, g_loss=0.13312]
+GAN epoch 50/50: 100%|██████████| 104/104 [00:41&lt;00:00,  2.52it/s, c_loss=0.76511, g_loss=0.88630]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Saved generator weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\GAN_G.pth
+Saved EMA generator weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\GAN_G_EMA.pth
+Saved critic weights to: C:\Users\tivog\computational-imaging\years\2025-26\weights\GAN_C.pth
+</pre></div>
+</div>
+<img alt="../_images/4df00af923462e9ea2683242c3197f339717ba6b7eb955c9128a31978317d828.png" src="../_images/4df00af923462e9ea2683242c3197f339717ba6b7eb955c9128a31978317d828.png" />
+<img alt="../_images/e4b791f3c47b6f968ada39632fc470844e9f9f5239564223dad68e09722c17e2.png" src="../_images/e4b791f3c47b6f968ada39632fc470844e9f9f5239564223dad68e09722c17e2.png" />
+</div>
 </div>
 </section>
 <section id="generative-priors-for-inverse-problems">
@@ -1251,6 +1367,9 @@ Weights directory: C:\Users\tivog\computational-imaging\years\2025-26\weights
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4917de056d6492b2114f828547792991cba25698f903285e378c5d02faa3063e.png" src="../_images/4917de056d6492b2114f828547792991cba25698f903285e378c5d02faa3063e.png" />
 </div>
 </div>
 <p>The comparison above makes the trade-off between the two priors visible.</p>
