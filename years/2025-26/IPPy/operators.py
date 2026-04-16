@@ -90,6 +90,22 @@ class Operator:
         """Apply the adjoint operator to a single (c, h, w) tensor"""
         raise NotImplementedError
 
+class Identity(Operator):
+    r"""
+    Implements the Identity operator, acting on standardized Pytorch tensors of shape (N, 1, nx, ny) and returning a tensor of shape (N, 1, nx, ny)
+    """
+
+    def __init__(self, img_shape=(None, None): tuple[int]) -> None:
+        super().__init__()
+
+        self.nx, self.ny = img_shape
+        self.mx, self.my = img_shape
+
+    def _matvec(self, x: torch.Tensor) -> torch.Tensor:
+    	return x
+
+    def _adjoint(self, y: torch.Tensor) -> torch.Tensor:
+        return y
 
 class CTProjector(Operator):
     r"""
