@@ -1,10 +1,9 @@
-import numpy as np
-
 import math
+import warnings  # To warn if falling back to CPU
+
+import numpy as np
 import torch
 import torch.nn.functional as F
-
-import warnings  # To warn if falling back to CPU
 
 # Try importing CuPy (silently — warnings only surface when CTProjector is used)
 try:
@@ -90,22 +89,24 @@ class Operator:
         """Apply the adjoint operator to a single (c, h, w) tensor"""
         raise NotImplementedError
 
+
 class Identity(Operator):
     r"""
     Implements the Identity operator, acting on standardized Pytorch tensors of shape (N, 1, nx, ny) and returning a tensor of shape (N, 1, nx, ny)
     """
 
-    def __init__(self, img_shape=(None, None): tuple[int]) -> None:
+    def __init__(self, img_shape=(None, None)) -> None:
         super().__init__()
 
         self.nx, self.ny = img_shape
         self.mx, self.my = img_shape
 
     def _matvec(self, x: torch.Tensor) -> torch.Tensor:
-    	return x
+        return x
 
     def _adjoint(self, y: torch.Tensor) -> torch.Tensor:
         return y
+
 
 class CTProjector(Operator):
     r"""
@@ -699,8 +700,18 @@ class Gradient(Operator):
 
     def _matvec(self, x: torch.Tensor) -> torch.Tensor:
         N, c, nx, ny = x.shape
-        D_h = torch.diff(x, n=1, dim=2, prepend=torch.zeros((N, c, 1, ny), device=x.device, dtype=x.dtype))
-        D_v = torch.diff(x, n=1, dim=3, prepend=torch.zeros((N, c, nx, 1), device=x.device, dtype=x.dtype))
+        D_h = torch.diff(
+            x,
+            n=1,
+            dim=2,
+            prepend=torch.zeros((N, c, 1, ny), device=x.device, dtype=x.dtype),
+        )
+        D_v = torch.diff(
+            x,
+            n=1,
+            dim=3,
+            prepend=torch.zeros((N, c, nx, 1), device=x.device, dtype=x.dtype),
+        )
 
         return torch.cat((D_h, D_v), dim=1)
 
@@ -713,7 +724,17 @@ class Gradient(Operator):
         y_h = y[:, 0:1, :, :]
         y_v = y[:, 1:2, :, :]
 
-        D_h_T = -torch.diff(y_h, n=1, dim=2, append=torch.zeros((N, 1, 1, ny), device=y.device, dtype=y.dtype))
-        D_v_T = -torch.diff(y_v, n=1, dim=3, append=torch.zeros((N, 1, nx, 1), device=y.device, dtype=y.dtype))
+        D_h_T = -torch.diff(
+            y_h,
+            n=1,
+            dim=2,
+            append=torch.zeros((N, 1, 1, ny), device=y.device, dtype=y.dtype),
+        )
+        D_v_T = -torch.diff(
+            y_v,
+            n=1,
+            dim=3,
+            append=torch.zeros((N, 1, nx, 1), device=y.device, dtype=y.dtype),
+        )
 
         return D_h_T + D_v_T
