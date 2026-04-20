@@ -188,6 +188,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework2.html">Homework 2: Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -385,6 +386,7 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-forward-diffusion-process">The Forward Diffusion Process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#denoising-architectures-for-diffusion-models">Denoising Architectures for Diffusion Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-with-ddpm-and-ddim">Sampling with DDPM and DDIM</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
@@ -401,9 +403,10 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="diffusion-models-ddpm-and-ddim">
 <h1>Diffusion Models: DDPM and DDIM<a class="headerlink" href="#diffusion-models-ddpm-and-ddim" title="Link to this heading">#</a></h1>
-<p>VAEs and GANs are historically fundamental, but modern generative modeling is dominated by a third family: <strong>diffusion models</strong>. These models generate data by learning how to reverse a gradual noising process. In practice, they have become extremely successful because they combine high sample quality, relative training stability, and a clear probabilistic interpretation.</p>
-<p>This notebook develops the diffusion framework in detail. We first introduce the forward diffusion process, then explain the <strong>DDPM</strong> training objective and reverse sampling procedure, and finally show how <strong>DDIM</strong> modifies the sampling stage to obtain much faster generation from the same trained model.</p>
+<p>VAEs and GANs are historically fundamental, but modern generative modeling is dominated by a third family: <strong>diffusion models</strong> <span id="id1">[<a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>, <a class="reference internal" href="../references.html#id27" title="Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. Score-based generative modeling through stochastic differential equations. International Conference on Learning Representations, 2021.">37</a>]</span>. These models generate data by learning how to reverse a gradual noising process. In practice, they have become extremely successful because they combine high sample quality, relative training stability, and a clear probabilistic interpretation.</p>
+<p>This notebook develops the diffusion framework in detail. We first introduce the forward diffusion process, then explain the <strong>DDPM</strong> training objective and reverse sampling procedure <span id="id2">[<a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>]</span>, and finally show how <strong>DDIM</strong> modifies the sampling stage to obtain much faster generation from the same trained model <span id="id3">[<a class="reference internal" href="../references.html#id26" title="Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. International Conference on Learning Representations, 2021.">36</a>]</span>.</p>
 <p>As in the previous notebook, the focus remains practical. We train a compact but usable diffusion model on the Mayo slices resized to <span class="math notranslate nohighlight">\(64 \times 64\)</span>, save the learned denoiser in <code class="docutils literal notranslate"><span class="pre">../weights</span></code>, and generate images with both DDPM and DDIM sampling.</p>
+<a class="reference internal image-reference" href="../_images/DM.png"><img alt="../_images/DM.png" class="align-center" src="../_images/DM.png" style="width: 90%;" /></a>
 <section id="the-forward-diffusion-process">
 <h2>The Forward Diffusion Process<a class="headerlink" href="#the-forward-diffusion-process" title="Link to this heading">#</a></h2>
 <p>The central idea is to define a sequence of latent variables</p>
@@ -411,28 +414,28 @@
 \[
     \boldsymbol{x}_0, \boldsymbol{x}_1, \dots, \boldsymbol{x}_T,
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}_0\)</span> is a clean image sampled from the data distribution and the later variables are progressively noisier. In the standard <strong>DDPM</strong> construction, the forward process is Markovian and Gaussian:</p>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{x}_0\)</span> is a clean image sampled from the data distribution and the later variables are progressively noisier. In the standard <strong>DDPM</strong> construction <span id="id4">[<a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>]</span>, the forward process is Markovian and Gaussian:</p>
 <div class="math notranslate nohighlight">
 \[
-    q(\boldsymbol{x}_t \mid \boldsymbol{x}_{t-1}) = \mathcal{N}\big(\sqrt{\alpha_t} \, \boldsymbol{x}_{t-1}, (1-\alpha_t) I\big),
+    q(\boldsymbol{x}_t \mid \boldsymbol{x}_{t-1}) = \mathcal{N}\big(\sqrt{1-\beta_t} \, \boldsymbol{x}_{t-1}, \beta_t I\big),
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(\alpha_t = 1 - \beta_t\)</span> and the numbers <span class="math notranslate nohighlight">\(\beta_t \in (0,1)\)</span> form the <strong>noise schedule</strong>.</p>
+<p>where the numbers <span class="math notranslate nohighlight">\(\beta_t \in (0,1)\)</span> form the <strong>noise schedule</strong>.</p>
 <p>A crucial simplification is that one can sample <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span> directly from <span class="math notranslate nohighlight">\(\boldsymbol{x}_0\)</span> without simulating all intermediate steps. If</p>
 <div class="math notranslate nohighlight">
 \[
-    \bar{\alpha}_t = \prod_{s=1}^t \alpha_s,
+    \alpha_t = \prod_{s=1}^t (1-\beta_s),
 \]</div>
 <p>then</p>
 <div class="math notranslate nohighlight">
 \[
-    q(\boldsymbol{x}_t \mid \boldsymbol{x}_0) = \mathcal{N}\big(\sqrt{\bar{\alpha}_t} \, \boldsymbol{x}_0, (1-\bar{\alpha}_t) I\big),
+    q(\boldsymbol{x}_t \mid \boldsymbol{x}_0) = \mathcal{N}\big(\sqrt{\alpha_t} \, \boldsymbol{x}_0, (1-\alpha_t) I\big),
 \]</div>
 <p>and therefore</p>
 <div class="math notranslate nohighlight">
 \[
-    \boldsymbol{x}_t = \sqrt{\bar{\alpha}_t} \, \boldsymbol{x}_0 + \sqrt{1-\bar{\alpha}_t} \, \boldsymbol{\varepsilon},
+    \boldsymbol{x}_t = \sqrt{\alpha_t} \, \boldsymbol{x}_0 + \sqrt{1-\alpha_t} \, \boldsymbol{\epsilon}_t,
     \qquad
-    \boldsymbol{\varepsilon} \sim \mathcal{N}(0,I).
+    \boldsymbol{\epsilon}_t \sim \mathcal{N}(0,I).
 \]</div>
 <p>This formula is the workhorse of diffusion training: for a random timestep <span class="math notranslate nohighlight">\(t\)</span>, we can corrupt a clean image analytically and ask the neural network to predict the noise that was used.</p>
 <div class="admonition note">
@@ -576,23 +579,35 @@ Weights directory: C:\Users\tivog\computational-imaging\years\2025-26\weights
 </div>
 </div>
 <p>The figure above contains the full intuition of diffusion modeling. For small timesteps, the image is only mildly perturbed; for large timesteps, it becomes almost indistinguishable from Gaussian noise. The learning problem is therefore: given <span class="math notranslate nohighlight">\((\boldsymbol{x}_t, t)\)</span>, predict enough information to reverse this corruption process.</p>
-<p>In <strong>Denoising Diffusion Probabilistic Models (DDPM)</strong>, the reverse process is parameterized by a neural network that predicts the noise component in <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span>. If the model is denoted by <span class="math notranslate nohighlight">\(\boldsymbol{\varepsilon}_\Theta(\boldsymbol{x}_t, t)\)</span>, then training minimizes</p>
+<p>In <strong>Denoising Diffusion Probabilistic Models (DDPM)</strong>, the reverse process is parameterized by a neural network that predicts the noise component in <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span>. If the model is denoted by <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t, t)\)</span>, then training minimizes</p>
 <div class="math notranslate nohighlight">
 \[
-    \min_\Theta \; \mathbb{E}_{\boldsymbol{x}_0, \boldsymbol{\varepsilon}, t}
-    \Big[\|\boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_\Theta(\boldsymbol{x}_t, t)\|_2^2\Big],
+    \min_\Theta \; \mathbb{E}_{\boldsymbol{x}_0, \boldsymbol{\epsilon}_t, t}
+    \Big[\|\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t, t)\|_2^2\Big],
 \]</div>
 <p>where</p>
 <div class="math notranslate nohighlight">
 \[
-    \boldsymbol{x}_t = \sqrt{\bar{\alpha}_t} \, \boldsymbol{x}_0 + \sqrt{1-\bar{\alpha}_t} \, \boldsymbol{\varepsilon}.
+    \boldsymbol{x}_t = \sqrt{\alpha_t} \, \boldsymbol{x}_0 + \sqrt{1-\alpha_t} \, \boldsymbol{\epsilon}_t.
 \]</div>
 <p>This simple MSE loss is one of the key reasons diffusion models are practical. In the original DDPM derivation it appears as a particularly convenient surrogate for a variational objective, and in score-based language it is closely related to learning the score field of noisy data. For the purposes of this course, the important point is operational: once the network can predict the injected noise accurately across many timesteps, it contains enough information to run a reverse denoising process.</p>
 <p>One of the most elegant aspects of DDPMs is that the model is not asked to generate an image directly. Instead, it learns a family of denoising tasks across many noise levels. From the network output, one can reconstruct an estimate of the clean image via</p>
 <div class="math notranslate nohighlight">
 \[
-    \widehat{\boldsymbol{x}}_0(\boldsymbol{x}_t, t) = \frac{\boldsymbol{x}_t - \sqrt{1-\bar{\alpha}_t} \, \boldsymbol{\varepsilon}_\Theta(\boldsymbol{x}_t,t)}{\sqrt{\bar{\alpha}_t}}.
+    \hat{\boldsymbol{x}}_0(\boldsymbol{x}_t, t) = \frac{\boldsymbol{x}_t - \sqrt{1-\alpha_t} \, \boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t,t)}{\sqrt{\alpha_t}}.
 \]</div>
+</section>
+<section id="denoising-architectures-for-diffusion-models">
+<h2>Denoising Architectures for Diffusion Models<a class="headerlink" href="#denoising-architectures-for-diffusion-models" title="Link to this heading">#</a></h2>
+<p>At this point the remaining question is architectural: what kind of neural network should map <span class="math notranslate nohighlight">\((\boldsymbol{x}_t, t)\)</span> to a noise estimate <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t,t)\)</span>? In principle, many image-to-image architectures could be used, but in practice the standard choice is a <strong>UNet</strong>-style denoiser <span id="id5">[<a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>, <a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">33</a>]</span>.</p>
+<p>The reason is structural. The denoiser must work well at several spatial scales at once. Early in the reverse process, when <span class="math notranslate nohighlight">\(t\)</span> is large, the network must recover coarse global structure from a very noisy image. Later, when <span class="math notranslate nohighlight">\(t\)</span> is small, it must restore fine local details without destroying what is already correct. A UNet is well suited to this because the contracting path builds large receptive fields and captures global context, while the expanding path reconstructs spatial detail using skip connections from high-resolution features. In other words, it combines semantics and localization in the same architecture, which is exactly what diffusion denoising needs.</p>
+<p>Modern diffusion denoisers are therefore usually built from a UNet backbone enriched with residual blocks, normalization, and often attention layers at selected resolutions. Residual blocks stabilize optimization and make deep denoisers easier to train, while attention helps the model coordinate distant image regions when long-range structure matters. Even when the implementation details vary, the core design principle stays the same: a multiscale encoder-decoder predicts the noise present in the current noisy image.</p>
+<p>A second design issue is how to inject the timestep <span class="math notranslate nohighlight">\(t\)</span> into the network. The model cannot treat all noise levels identically, because denoising <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span> for a very small <span class="math notranslate nohighlight">\(t\)</span> is a different task from denoising it near pure noise. The usual solution is to transform <span class="math notranslate nohighlight">\(t\)</span> into a vector representation using a <strong>sinusoidal embedding</strong>, in the same spirit as positional encodings in transformers. This produces a smooth feature vector whose entries vary across timesteps and lets nearby timesteps have related representations.</p>
+<a class="reference internal image-reference" href="../_images/sinusoidal_embedding.png"><img alt="../_images/sinusoidal_embedding.png" class="align-center" src="../_images/sinusoidal_embedding.png" style="width: 90%;" /></a>
+<p>More concretely, instead of giving the scalar <span class="math notranslate nohighlight">\(t\)</span> directly to the network, one maps it to a vector whose coordinates are sinusoidal functions of different frequencies, for example terms of the form <span class="math notranslate nohighlight">\(\sin(\omega_k t)\)</span> and <span class="math notranslate nohighlight">\(\cos(\omega_k t)\)</span> for several scales <span class="math notranslate nohighlight">\(\omega_k\)</span>. Low-frequency components vary slowly across diffusion time and capture coarse information about whether the image is still very noisy or already close to clean, while high-frequency components let the representation distinguish nearby timesteps more precisely. This is useful because the denoiser should not see timestep <span class="math notranslate nohighlight">\(t\)</span> as an arbitrary label: it should understand it as a point on a continuous noise axis. Sinusoidal embeddings give exactly this kind of structured representation, making interpolation across timesteps natural and helping the network generalize smoothly across the full denoising trajectory.</p>
+<p>That embedding is then passed through a small MLP to obtain a richer time feature. Conceptually, one can think of this time information as being upsampled or broadcast to the current spatial resolution and concatenated to the feature maps so that each denoising block knows where in diffusion time it is operating. Many practical implementations, including the one used in this notebook, inject the time embedding a little more efficiently: the time vector is projected to the appropriate channel dimension and added inside the residual blocks rather than concatenated to the raw input image. These two descriptions express the same idea. The timestep is first encoded as a vector, then lifted to the scale of the feature maps, and finally fused with the image representation throughout the UNet.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DiffusionUNet</span></code> defined below follows exactly this philosophy. It is not a minimal toy CNN. It is a compact time-conditioned UNet with residual blocks and attention, chosen because a plain shallow network usually does not learn a useful denoising map at the image quality level we want. The architecture is still small enough to train in a course setting, but it already reflects the main design choices used by practical diffusion models.</p>
+<a class="reference internal image-reference" href="../_images/DiffusionUNet.png"><img alt="../_images/DiffusionUNet.png" class="align-center" src="../_images/DiffusionUNet.png" style="width: 90%;" /></a>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">DiffusionUNet</span><span class="p">(</span>
@@ -872,7 +887,7 @@ Trainable parameters: 12.36M
 </div>
 </div>
 </div>
-<p>The code below implements a practical DDPM training loop rather than the smallest possible pedagogical example. At each iteration we load a clean image <span class="math notranslate nohighlight">\(\boldsymbol{x}_0\)</span>, sample a random timestep <span class="math notranslate nohighlight">\(t\)</span>, sample Gaussian noise <span class="math notranslate nohighlight">\(\boldsymbol{\varepsilon}\)</span>, form the noisy image <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span> analytically, and then train the network to predict <span class="math notranslate nohighlight">\(\boldsymbol{\varepsilon}\)</span> from <span class="math notranslate nohighlight">\((\boldsymbol{x}_t, t)\)</span>. The implementation uses a stronger time-conditioned UNet, EMA averaging, checkpoint resume, gradient clipping, and mixed precision on CUDA so that longer training runs are actually worth keeping.</p>
+<p>The code below implements a practical DDPM training loop rather than the smallest possible pedagogical example. At each iteration we load a clean image <span class="math notranslate nohighlight">\(\boldsymbol{x}_0\)</span>, sample a random timestep <span class="math notranslate nohighlight">\(t\)</span>, sample Gaussian noise <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}_t\)</span>, form the noisy image <span class="math notranslate nohighlight">\(\boldsymbol{x}_t\)</span> analytically, and then train the network to predict <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}_t\)</span> from <span class="math notranslate nohighlight">\((\boldsymbol{x}_t, t)\)</span>. The implementation uses a stronger time-conditioned UNet, EMA averaging, checkpoint resume, gradient clipping, and mixed precision on CUDA so that longer training runs are actually worth keeping.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The notebook now keeps an epoch checkpoint in <code class="docutils literal notranslate"><span class="pre">../weights/DDPMDenoiser.ckpt</span></code> and stores the EMA denoiser in <code class="docutils literal notranslate"><span class="pre">../weights/DDPMDenoiser.pth</span></code>. This same EMA network is then reused for both DDPM and DDIM sampling.</p>
@@ -1089,17 +1104,18 @@ DDPM epoch 60/60: 100%|██████████| 104/104 [00:42&lt;00:00, 
 </section>
 <section id="sampling-with-ddpm-and-ddim">
 <h2>Sampling with DDPM and DDIM<a class="headerlink" href="#sampling-with-ddpm-and-ddim" title="Link to this heading">#</a></h2>
-<p>Once the denoiser has been trained, <strong>DDPM</strong> sampling starts from pure Gaussian noise <span class="math notranslate nohighlight">\(\boldsymbol{x}_T \sim \mathcal{N}(0,I)\)</span> and applies the learned reverse chain from <span class="math notranslate nohighlight">\(t=T\)</span> down to <span class="math notranslate nohighlight">\(t=0\)</span>. Each step combines two ingredients: the network prediction <span class="math notranslate nohighlight">\(\boldsymbol{\varepsilon}_\Theta(\boldsymbol{x}_t,t)\)</span>, which estimates how much noise is present, and a Gaussian random term, which keeps the process stochastic. This makes DDPM sampling faithful to the underlying probabilistic model, but also relatively slow.</p>
+<a class="reference internal image-reference" href="../_images/training_diffusion.png"><img alt="../_images/training_diffusion.png" class="align-center" src="../_images/training_diffusion.png" style="width: 90%;" /></a>
+<p>Once the denoiser has been trained, <strong>DDPM</strong> sampling starts from pure Gaussian noise <span class="math notranslate nohighlight">\(\boldsymbol{x}_T \sim \mathcal{N}(0,I)\)</span> and applies the learned reverse chain from <span class="math notranslate nohighlight">\(t=T\)</span> down to <span class="math notranslate nohighlight">\(t=0\)</span>. Each step combines two ingredients: the network prediction <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t,t)\)</span>, which estimates how much noise is present, and a Gaussian random term, which keeps the process stochastic. This makes DDPM sampling faithful to the underlying probabilistic model, but also relatively slow.</p>
 <p>A very important observation is that the DDPM training objective does <strong>not</strong> force us to use the original stochastic reverse chain at sampling time. <strong>Denoising Diffusion Implicit Models (DDIM)</strong> introduce an alternative non-Markovian reverse process that uses the same trained denoiser but allows much faster generation. The clean-image estimate remains</p>
 <div class="math notranslate nohighlight">
 \[
-    \widehat{\boldsymbol{x}}_0(\boldsymbol{x}_t,t) = \frac{\boldsymbol{x}_t - \sqrt{1-\bar{\alpha}_t} \, \boldsymbol{\varepsilon}_\Theta(\boldsymbol{x}_t,t)}{\sqrt{\bar{\alpha}_t}}.
+    \hat{\boldsymbol{x}}_0(\boldsymbol{x}_t,t) = \frac{\boldsymbol{x}_t - \sqrt{1-\alpha_t} \, \boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t,t)}{\sqrt{\alpha_t}}.
 \]</div>
 <p>Given a current timestep <span class="math notranslate nohighlight">\(t\)</span> and a target previous timestep <span class="math notranslate nohighlight">\(s &lt; t\)</span>, DDIM builds the next iterate using</p>
 <div class="math notranslate nohighlight">
 \[
-    \boldsymbol{x}_s = \sqrt{\bar{\alpha}_s} \, \widehat{\boldsymbol{x}}_0
-    + \sqrt{1-\bar{\alpha}_s - \sigma_t^2} \, \boldsymbol{\varepsilon}_\Theta(\boldsymbol{x}_t,t)
+    \boldsymbol{x}_s = \sqrt{\alpha_s} \, \hat{\boldsymbol{x}}_0
+    + \sqrt{1-\alpha_s - \sigma_t^2} \, \boldsymbol{\epsilon}_\Theta(\boldsymbol{x}_t,t)
     + \sigma_t \boldsymbol{z},
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(\boldsymbol{z} \sim \mathcal{N}(0,I)\)</span> and <span class="math notranslate nohighlight">\(\sigma_t\)</span> depends on a parameter <span class="math notranslate nohighlight">\(\eta\)</span>. If <span class="math notranslate nohighlight">\(\eta = 0\)</span>, the sampler becomes deterministic; if <span class="math notranslate nohighlight">\(\eta &gt; 0\)</span>, one recovers a stochastic family of samplers closer to DDPM.</p>
@@ -1168,6 +1184,7 @@ DDPM epoch 60/60: 100%|██████████| 104/104 [00:42&lt;00:00, 
 <li><p>The network does not generate images directly from a latent code. Instead, it learns a family of denoising tasks across many noise levels.</p></li>
 <li><p>The model used here predicts noise, but other parameterizations also exist, such as predicting the clean image or a velocity variable. The underlying diffusion logic remains the same.</p></li>
 </ul>
+<p>For experimentation beyond this notebook, pretrained diffusion checkpoints are widely available through the Hugging Face <code class="docutils literal notranslate"><span class="pre">diffusers</span></code> ecosystem. The official documentation explains how to load models and pipelines with <code class="docutils literal notranslate"><span class="pre">from_pretrained()</span></code> and how <code class="docutils literal notranslate"><span class="pre">diffusers</span></code> integrates with the Hub; see the <a class="reference external" href="https://huggingface.co/docs/diffusers/main/using-diffusers/models">Diffusers models guide</a> and the <a class="reference external" href="https://huggingface.co/docs/hub/diffusers">Using diffusers at Hugging Face</a> page. Concrete examples include the small unconditional DDPM checkpoint <a class="reference external" href="https://huggingface.co/google/ddpm-cifar10-32"><code class="docutils literal notranslate"><span class="pre">google/ddpm-cifar10-32</span></code></a>, which is close in spirit to the course material, and larger text-to-image pipelines such as <a class="reference external" href="https://huggingface.co/stabilityai/stable-diffusion-3-medium-diffusers"><code class="docutils literal notranslate"><span class="pre">stabilityai/stable-diffusion-3-medium-diffusers</span></code></a>.</p>
 <p>These same properties are exactly what make diffusion models powerful priors for inverse problems, which will be the focus of the next notebook.</p>
 </section>
 <section id="exercises">
@@ -1185,7 +1202,7 @@ DDPM epoch 60/60: 100%|██████████| 104/104 [00:42&lt;00:00, 
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>For the original DDPM formulation, see <span id="id1">[<a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>]</span>. For the score-based viewpoint that connects diffusion models with stochastic differential equations, see <span id="id2">[<a class="reference internal" href="../references.html#id27" title="Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. Score-based generative modeling through stochastic differential equations. International Conference on Learning Representations, 2021.">38</a>]</span>. For the DDIM sampler, see <span id="id3">[<a class="reference internal" href="../references.html#id26" title="Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. International Conference on Learning Representations, 2021.">37</a>]</span>. A good way to read these papers conceptually is to compare three layers of interpretation: forward noising, reverse denoising, and score estimation.</p>
+<p>For the original DDPM formulation, see <span id="id6">[<a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>]</span>. For the score-based viewpoint that connects diffusion models with stochastic differential equations, see <span id="id7">[<a class="reference internal" href="../references.html#id27" title="Yang Song, Jascha Sohl-Dickstein, Diederik P Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. Score-based generative modeling through stochastic differential equations. International Conference on Learning Representations, 2021.">37</a>]</span>. For the DDIM sampler, see <span id="id8">[<a class="reference internal" href="../references.html#id26" title="Jiaming Song, Chenlin Meng, and Stefano Ermon. Denoising diffusion implicit models. International Conference on Learning Representations, 2021.">36</a>]</span>. A good way to read these papers conceptually is to compare three layers of interpretation: forward noising, reverse denoising, and score estimation.</p>
 </section>
 </section>
 
@@ -1256,6 +1273,7 @@ DDPM epoch 60/60: 100%|██████████| 104/104 [00:42&lt;00:00, 
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-forward-diffusion-process">The Forward Diffusion Process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#denoising-architectures-for-diffusion-models">Denoising Architectures for Diffusion Models</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampling-with-ddpm-and-ddim">Sampling with DDPM and DDIM</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>

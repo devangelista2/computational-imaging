@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Homework 1: End-to-End Reconstruction Before Generative Models &#8212; Computational Imaging</title>
+    <title>Homework 2: Generative Models for Inverse Problems &#8212; Computational Imaging</title>
   
   
   
@@ -63,13 +63,13 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'homeworks/homework1';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'homeworks/homework2';</script>
     <script src="../_static/custom.js?v=4cff807c"></script>
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Homework 2: Generative Models for Inverse Problems" href="homework2.html" />
-    <link rel="prev" title="Diffusion Models for Inverse Problems" href="../generative/generative-inverse-problems.html" />
+    <link rel="next" title="References" href="../references.html" />
+    <link rel="prev" title="Homework 1: End-to-End Reconstruction Before Generative Models" href="homework1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -187,8 +187,8 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="homework2.html">Homework 2: Generative Models for Inverse Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="homework1.html">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Homework 2: Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -269,7 +269,7 @@
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fhomeworks/homework1.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fhomeworks/homework2.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -299,7 +299,7 @@
       
       
       
-      <li><a href="../_sources/homeworks/homework1.ipynb" target="_blank"
+      <li><a href="../_sources/homeworks/homework2.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -375,7 +375,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Homework 1: End-to-End Reconstruction Before Generative Models</h1>
+    <h1>Homework 2: Generative Models for Inverse Problems</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -387,9 +387,9 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework-goals-and-deliverables">Homework Goals and Deliverables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-structure-of-the-work">Suggested Structure of the Work</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-data-pipeline-and-synthetic-measurements">Part 1: Data Pipeline and Synthetic Measurements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-reconstruction-networks">Part 2: Reconstruction Networks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-training-saving-and-evaluating-the-models">Part 3: Training, Saving, and Evaluating the Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-data-pipeline-corruption-model-and-pretrained-models">Part 1: Data Pipeline, Corruption Model, and Pretrained Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-latent-reconstruction-with-a-generator-prior">Part 2: Latent Reconstruction with a Generator Prior</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-reconstruction-with-a-diffusion-prior">Part 3: Reconstruction with a Diffusion Prior</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-visual-and-quantitative-comparison">Part 4: Visual and Quantitative Comparison</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverables-and-discussion">Deliverables and Discussion</a></li>
 </ul>
@@ -403,46 +403,57 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="homework-1-end-to-end-reconstruction-before-generative-models">
-<h1>Homework 1: End-to-End Reconstruction Before Generative Models<a class="headerlink" href="#homework-1-end-to-end-reconstruction-before-generative-models" title="Link to this heading">#</a></h1>
-<p>This homework is entirely based on the material covered <strong>before</strong> the generative-model chapter. The goal is to implement a compact end-to-end reconstruction pipeline, train a few neural architectures, and analyze their behavior on a controlled inverse problem, in the spirit of the supervised imaging pipelines discussed in <span id="id1">[<a class="reference internal" href="../references.html#id46" title="Simon Arridge, Peter Maass, Ozan &quot;Oktem, and Carola-Bibiane Sch&quot;onlieb. Solving inverse problems using data-driven models. Acta Numerica, 28:1–174, 2019.">3</a>, <a class="reference internal" href="../references.html#id38" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">30</a>]</span>.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="homework-2-generative-models-for-inverse-problems">
+<h1>Homework 2: Generative Models for Inverse Problems<a class="headerlink" href="#homework-2-generative-models-for-inverse-problems" title="Link to this heading">#</a></h1>
+<p>This homework is based on the material of the <strong>generative-model</strong> chapter, with emphasis on the use of learned priors for inverse problems. The goal is to reuse pretrained generative models from the lecture notebooks and study how they can guide reconstruction under a known forward operator, following the broad perspective of learned priors surveyed in <span id="id1">[<a class="reference internal" href="../references.html#id46" title="Simon Arridge, Peter Maass, Ozan &quot;Oktem, and Carola-Bibiane Sch&quot;onlieb. Solving inverse problems using data-driven models. Acta Numerica, 28:1–174, 2019.">3</a>, <a class="reference internal" href="../references.html#id38" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">30</a>]</span>.</p>
 <p>Starting from clean Mayo images <span class="math notranslate nohighlight">\(\{\boldsymbol{x}_i\}_{i=1}^N\)</span>, you will generate synthetic measurements of the form</p>
 <div class="math notranslate nohighlight">
 \[
     \boldsymbol{y}_i^\delta = K\boldsymbol{x}_i + \boldsymbol{e},
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(K\)</span> is a known motion-blur operator and <span class="math notranslate nohighlight">\(\boldsymbol{e}\)</span> is additive Gaussian noise. You will then train neural networks to reconstruct <span class="math notranslate nohighlight">\(\boldsymbol{x}_i\)</span> from <span class="math notranslate nohighlight">\(\boldsymbol{y}_i^\delta\)</span> and compare the results.</p>
-<p>The purpose of the assignment is not to obtain the strongest possible model, but to demonstrate that you understand the full workflow discussed in the lectures: dataset preparation, synthetic corruption, model design, training, evaluation, and critical discussion of the results.</p>
+<p>where <span class="math notranslate nohighlight">\(K\)</span> is a known motion-blur operator and <span class="math notranslate nohighlight">\(\boldsymbol{e}\)</span> is additive Gaussian noise. You will then compare at least two reconstruction strategies:</p>
+<ul class="simple">
+<li><p>a <strong>generator-range prior</strong> method based on a pretrained <strong>VAE decoder</strong> <span id="id2">[<a class="reference internal" href="../references.html#id29" title="Ashish Bora, Ajil Jalal, Eric Price, and Alexandros G Dimakis. Compressed sensing using generative models. International Conference on Machine Learning, pages 537–546, 2017.">6</a>, <a class="reference internal" href="../references.html#id14" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">24</a>]</span>;</p></li>
+<li><p>a <strong>diffusion-prior</strong> method based on the pretrained denoiser from the diffusion notebook <span id="id3">[<a class="reference internal" href="../references.html#id33" title="Hyungjin Chung, Jeongsol Kim, Michael T McCann, Scott Klasky, and Jong Chul Ye. Diffusion posterior sampling for general noisy inverse problems. International Conference on Learning Representations, 2023.">7</a>, <a class="reference internal" href="../references.html#id25" title="Jonathan Ho, Ajay Jain, and Pieter Abbeel. Denoising diffusion probabilistic models. Advances in Neural Information Processing Systems, 33:6840–6851, 2020.">18</a>]</span>.</p></li>
+</ul>
+<p>The purpose of the assignment is not to reproduce a research paper line by line, but to demonstrate that you understand the algorithmic logic of generative priors: latent-space optimization, data fidelity, denoising guidance, and the tradeoff between realism and measurement consistency.</p>
 <section id="homework-goals-and-deliverables">
 <h2>Homework Goals and Deliverables<a class="headerlink" href="#homework-goals-and-deliverables" title="Link to this heading">#</a></h2>
 <p>You are asked to complete the notebook and submit the following:</p>
 <ol class="arabic simple">
 <li><p>A completed version of this notebook with all <code class="docutils literal notranslate"><span class="pre">TODO</span></code> sections filled in.</p></li>
-<li><p>The trained weights of your models, saved in <code class="docutils literal notranslate"><span class="pre">../weights/</span></code> with meaningful names.</p></li>
+<li><p>The pretrained weights you reused from the lecture notebooks, together with any additional saved results you produced for this homework.</p></li>
 <li><p>A short written discussion, included at the end of the notebook, answering the conceptual questions.</p></li>
-<li><p>At least one figure comparing the reconstructions produced by your models on the same test image.</p></li>
+<li><p>At least one figure comparing the corrupted datum and the final reconstructions produced by your methods on the same test image.</p></li>
 </ol>
 <p>Your work should show that you can:</p>
 <ul class="simple">
-<li><p>build a dataset pipeline for imaging data;</p></li>
+<li><p>build a dataset pipeline consistent with the generative models used in the lectures;</p></li>
 <li><p>simulate an inverse problem through a known operator <span class="math notranslate nohighlight">\(K\)</span>;</p></li>
-<li><p>implement simple end-to-end architectures in PyTorch;</p></li>
-<li><p>train and compare the models fairly;</p></li>
-<li><p>interpret the results rather than only showing them.</p></li>
+<li><p>load and reuse pretrained generative models correctly;</p></li>
+<li><p>implement a latent-prior reconstruction procedure;</p></li>
+<li><p>implement a diffusion-prior reconstruction procedure;</p></li>
+<li><p>compare the methods critically rather than only visually.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You may work entirely on CPU, but training will be faster on a GPU if one is available. Keep the code readable, and add comments only where the implementation is not obvious.</p>
+<p>Use grayscale images resized to <span class="math notranslate nohighlight">\(64 \times 64\)</span>, because this is the resolution used by the VAE, GAN, and diffusion lecture notebooks.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This homework is about the material of the end-to-end and cross-domain chapters. Do <strong>not</strong> use generative models, diffusion models, pretrained foundation models, or external black-box reconstruction libraries.</p>
+<p>Do <strong>not</strong> use external pretrained foundation models, external inverse-problem toolkits, or black-box diffusion pipelines. This includes downloading a ready-made Hugging Face diffusion pipeline instead of reusing the course denoiser. The homework is about reusing and understanding the models developed in this course.</p>
 </div>
 </section>
 <section id="suggested-structure-of-the-work">
 <h2>Suggested Structure of the Work<a class="headerlink" href="#suggested-structure-of-the-work" title="Link to this heading">#</a></h2>
-<p>A reasonable workflow is to start from the dataset and the corruption model, then move to the reconstruction architectures, then to training and evaluation. The mandatory part of the homework is based on <strong>SimpleCNN</strong> and <strong>ResCNN</strong>, that is, on a plain convolutional model and a residual variant connected to the lecture material on <strong>CNNs</strong> and <strong>residual learning</strong> <span id="id2">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">15</a>, <a class="reference internal" href="../references.html#id4" title="Yann LeCun, Leon Bottou, Yoshua Bengio, and Patrick Haffner. Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11):2278–2324, 1998.">25</a>]</span>. An additional comparison with a <strong>UNet</strong> <span id="id3">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">33</a>]</span> is recommended as an extension for students who want to go one step further.</p>
-<p>The notebook intentionally leaves several implementation choices open. You are expected to reuse the ideas developed in the lecture notebooks, but not simply copy them without understanding them.</p>
+<p>A reasonable workflow is to start from the data and corruption model, then load the pretrained generative models, then implement the reconstruction procedures, and finally compare them on the same examples.</p>
+<p>The <strong>mandatory</strong> part of the homework is:</p>
+<ul class="simple">
+<li><p>one <strong>VAE-based latent prior</strong> reconstruction <span id="id4">[<a class="reference internal" href="../references.html#id29" title="Ashish Bora, Ajil Jalal, Eric Price, and Alexandros G Dimakis. Compressed sensing using generative models. International Conference on Machine Learning, pages 537–546, 2017.">6</a>, <a class="reference internal" href="../references.html#id14" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">24</a>]</span>;</p></li>
+<li><p>one <strong>diffusion-prior</strong> reconstruction, choosing either a DPS-style or a DiffPIR-style method <span id="id5">[<a class="reference internal" href="../references.html#id33" title="Hyungjin Chung, Jeongsol Kim, Michael T McCann, Scott Klasky, and Jong Chul Ye. Diffusion posterior sampling for general noisy inverse problems. International Conference on Learning Representations, 2023.">7</a>, <a class="reference internal" href="../references.html#id48" title="Yuanzhi Zhu, Kai Zhang, Jingyun Liang, Luc Van Gool, and Radu Timofte. Diffpir: diffusion prior for general image restoration. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2023.">46</a>]</span>.</p></li>
+</ul>
+<p>An optional extension is to include a <strong>GAN-based generator prior</strong> or to implement <strong>both</strong> DPS-style and DiffPIR-style diffusion reconstructions and discuss how the comparison changes.</p>
+<p>The notebook intentionally leaves several implementation choices open. You are expected to reuse the ideas developed in the lecture notebooks, but not simply copy them without understanding the role of each step.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
@@ -458,14 +469,19 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">IPPy</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span><span class="p">,</span> <span class="n">utilities</span>
-
 <span class="n">book_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">ipp_root</span> <span class="o">=</span> <span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;IPPy&#39;</span>
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ipp_root</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ipp_root</span><span class="p">))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">operators</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">gaussian_noise</span><span class="p">,</span> <span class="n">get_device</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nn.diffusion</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiffusionUNet</span><span class="p">,</span> <span class="n">cosine_beta_schedule</span><span class="p">,</span> <span class="n">extract</span><span class="p">,</span> <span class="n">denormalize_to_01</span>
+
 <span class="n">weights_dir</span> <span class="o">=</span> <span class="n">book_root</span> <span class="o">/</span> <span class="s1">&#39;weights&#39;</span>
 <span class="n">weights_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">device</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">get_device</span><span class="p">()</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">get_device</span><span class="p">()</span>
 <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Working device:&#39;</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
@@ -475,25 +491,27 @@
 </div>
 </div>
 </section>
-<section id="part-1-data-pipeline-and-synthetic-measurements">
-<h2>Part 1: Data Pipeline and Synthetic Measurements<a class="headerlink" href="#part-1-data-pipeline-and-synthetic-measurements" title="Link to this heading">#</a></h2>
-<p>In this first part, implement a dataset for the Mayo images and create the synthetic inverse problem. Use grayscale images resized to <span class="math notranslate nohighlight">\(256 \times 256\)</span>.</p>
-<p>Your implementation should build training and test dataloaders, then generate measurements of the form</p>
-<div class="math notranslate nohighlight">
-\[
-    \boldsymbol{y}^\delta = K\boldsymbol{x} + \boldsymbol{e}
-\]</div>
-<p>using a Motion Blur operator from <code class="docutils literal notranslate"><span class="pre">IPPy</span></code> and additive Gaussian noise.</p>
-<p>The objective of this part is to verify that the data pipeline is correct <strong>before</strong> any model is trained.</p>
+<section id="part-1-data-pipeline-corruption-model-and-pretrained-models">
+<h2>Part 1: Data Pipeline, Corruption Model, and Pretrained Models<a class="headerlink" href="#part-1-data-pipeline-corruption-model-and-pretrained-models" title="Link to this heading">#</a></h2>
+<p>In this first part, build a dataset for the Mayo images at <span class="math notranslate nohighlight">\(64 \times 64\)</span>, define the synthetic inverse problem, and load the pretrained generative models from the lecture notebooks.</p>
+<p>The objective of this part is to verify that the data pipeline, the corruption model, and the reused weights are all correct <strong>before</strong> the reconstruction procedures are implemented.</p>
+<p>Be careful about <strong>architecture compatibility</strong>. The diffusion weights now correspond to the stronger lecture denoiser used in the diffusion notebook, so your <code class="docutils literal notranslate"><span class="pre">DiffusionUNet</span></code> definition must match that notebook exactly when you call <code class="docutils literal notranslate"><span class="pre">load_state_dict</span></code>. In particular, reuse the same configuration (<code class="docutils literal notranslate"><span class="pre">in_ch=1</span></code>, <code class="docutils literal notranslate"><span class="pre">base_ch=64</span></code>, <code class="docutils literal notranslate"><span class="pre">channel_mults=(1,</span> <span class="pre">2,</span> <span class="pre">4)</span></code>, <code class="docutils literal notranslate"><span class="pre">time_dim=256</span></code>, attention enabled at the same levels, and the same diffusion schedule).</p>
+<p>You should at least load:</p>
+<ul class="simple">
+<li><p>the pretrained <strong>VAE</strong> from <code class="docutils literal notranslate"><span class="pre">../weights/VAE.pth</span></code>;</p></li>
+<li><p>the pretrained <strong>diffusion denoiser</strong> from <code class="docutils literal notranslate"><span class="pre">../weights/DDPMDenoiser.pth</span></code>.</p></li>
+</ul>
+<p>If you attempt the optional extension, you may also load the pretrained <strong>GAN</strong> generator from <code class="docutils literal notranslate"><span class="pre">../weights/GAN_G_EMA.pth</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MayoDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">data_shape</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fname_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">data_path</span><span class="si">}</span><span class="s1">/*/*.png&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="n">data_shape</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">),</span> <span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
             <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
-            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="n">data_shape</span><span class="p">,</span> <span class="n">data_shape</span><span class="p">)),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,)),</span>
         <span class="p">])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -505,77 +523,77 @@
 
 
 <span class="c1"># TODO:</span>
-<span class="c1"># Build the training and test datasets, create the dataloaders,</span>
-<span class="c1"># inspect a batch, define the operator K, and visualize at least</span>
-<span class="c1"># one clean / corrupted pair.</span>
+<span class="c1"># 1. Build the training and test datasets and create the dataloaders.</span>
+<span class="c1"># 2. Define the forward operator K and the additive noise level.</span>
+<span class="c1"># 3. Visualize at least one clean / corrupted pair.</span>
+<span class="c1"># 4. Recreate the pretrained model classes from the lecture notebooks</span>
+<span class="c1">#    and load the VAE and diffusion weights from ../weights/.</span>
+<span class="c1">#    For the diffusion model, match the lecture architecture exactly</span>
+<span class="c1">#    and keep the image normalization in [-1, 1].</span>
+<span class="c1"># 5. If you do the optional extension, also load the GAN generator.</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="part-2-reconstruction-networks">
-<h2>Part 2: Reconstruction Networks<a class="headerlink" href="#part-2-reconstruction-networks" title="Link to this heading">#</a></h2>
-<p>In the lecture, we discussed a plain convolutional baseline and a residual variant. In this homework you must implement both:</p>
-<ul class="simple">
-<li><p><strong>SimpleCNN</strong>, which directly predicts the reconstruction;</p></li>
-<li><p><strong>ResCNN</strong>, which predicts a correction to be added back to the corrupted image.</p></li>
-</ul>
-<p>Architecturally, both models should remain simple and close to the lecture notebooks, but the exact implementation details are part of the assignment.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you want an optional extension after the mandatory part is completed, you may also implement a plain UNet and include it in the final comparison.</p>
-</div>
+<section id="part-2-latent-reconstruction-with-a-generator-prior">
+<h2>Part 2: Latent Reconstruction with a Generator Prior<a class="headerlink" href="#part-2-latent-reconstruction-with-a-generator-prior" title="Link to this heading">#</a></h2>
+<p>Use the pretrained <strong>VAE decoder</strong> as a generator prior. The idea is to reconstruct an image by optimizing a latent code <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> so that the generated image both matches the measurements and remains plausible under the latent prior, in the spirit of deep generative priors for inverse problems <span id="id6">[<a class="reference internal" href="../references.html#id29" title="Ashish Bora, Ajil Jalal, Eric Price, and Alexandros G Dimakis. Compressed sensing using generative models. International Conference on Machine Learning, pages 537–546, 2017.">6</a>, <a class="reference internal" href="../references.html#id14" title="Diederik P Kingma and Max Welling. Auto-encoding variational bayes. International Conference on Learning Representations, 2014.">24</a>]</span>.</p>
+<p>A standard objective has the form</p>
+<div class="math notranslate nohighlight">
+\[
+    \min_{\boldsymbol{z}} \; \|K G(\boldsymbol{z}) - \boldsymbol{y}^\delta\|_2^2 + \lambda \|\boldsymbol{z}\|_2^2,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(G\)</span> denotes the decoder and <span class="math notranslate nohighlight">\(\lambda\)</span> controls the latent regularization.</p>
+<p>The mandatory part is to implement the <strong>VAE-based</strong> version. If you want the optional extension, you may implement the same idea with the GAN generator and compare the behavior.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimpleCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># TODO: implement the model.</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">latent_objective</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">y_delta</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1"># Decode z, apply the forward operator, and compute a latent-prior</span>
+    <span class="c1"># objective combining data fidelity and latent regularization.</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">ResCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_ch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="c1"># TODO: implement the model.</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reconstruct_with_vae_prior</span><span class="p">(</span><span class="n">generator</span><span class="p">,</span> <span class="n">y_delta</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">latent_dim</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1"># Optimize the latent code z and return the final reconstruction.</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
 <span class="c1"># TODO:</span>
-<span class="c1"># Instantiate the models you want to study and report their number</span>
-<span class="c1"># of trainable parameters.</span>
+<span class="c1"># Reconstruct at least one corrupted test image with the VAE prior,</span>
+<span class="c1"># visualize the result, and save any useful intermediate values such</span>
+<span class="c1"># as the optimized latent code or objective history.</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-<section id="part-3-training-saving-and-evaluating-the-models">
-<h2>Part 3: Training, Saving, and Evaluating the Models<a class="headerlink" href="#part-3-training-saving-and-evaluating-the-models" title="Link to this heading">#</a></h2>
-<p>Train the models by generating the corrupted measurements <strong>online during training</strong>, exactly as done in the lecture. Use <code class="docutils literal notranslate"><span class="pre">nn.MSELoss()</span></code> as the default loss function and track the training with <code class="docutils literal notranslate"><span class="pre">tqdm</span></code>.</p>
-<p>Your implementation must train the models fairly under the same corruption setup, save the trained weights in <code class="docutils literal notranslate"><span class="pre">../weights/</span></code>, reload the weights before the final evaluation, and compare the models on the same test images.</p>
-<p>A reasonable baseline is to train for about <code class="docutils literal notranslate"><span class="pre">20</span></code> epochs. If your hardware allows it, you may train longer.</p>
+<section id="part-3-reconstruction-with-a-diffusion-prior">
+<h2>Part 3: Reconstruction with a Diffusion Prior<a class="headerlink" href="#part-3-reconstruction-with-a-diffusion-prior" title="Link to this heading">#</a></h2>
+<p>Implement one diffusion-prior reconstruction method by reusing the pretrained denoiser from the lecture notebook. Choose either a <strong>DPS-style</strong> method <span id="id7">[<a class="reference internal" href="../references.html#id33" title="Hyungjin Chung, Jeongsol Kim, Michael T McCann, Scott Klasky, and Jong Chul Ye. Diffusion posterior sampling for general noisy inverse problems. International Conference on Learning Representations, 2023.">7</a>]</span> or a <strong>DiffPIR-style</strong> method <span id="id8">[<a class="reference internal" href="../references.html#id48" title="Yuanzhi Zhu, Kai Zhang, Jingyun Liang, Luc Van Gool, and Radu Timofte. Diffpir: diffusion prior for general image restoration. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2023.">46</a>]</span>, since these are the two reference examples discussed in the course notebook.</p>
+<p>The purpose of this part is to show that you understand how the diffusion model enters the reconstruction algorithm: not through a tractable closed-form prior density, but through denoising or score information used iteratively together with the data-fidelity term.</p>
+<p>Use the <strong>same diffusion schedule and denoiser conventions as in the lecture notebook</strong>. In particular, keep the images normalized to <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>, rebuild the denoiser with the correct architecture, and use the matching diffusion schedule when loading <code class="docutils literal notranslate"><span class="pre">../weights/DDPMDenoiser.pth</span></code>.</p>
+<p>Keep the implementation compact and readable. It is acceptable to produce a pedagogical version rather than an exact research implementation, provided you explain the choice clearly in your discussion.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">weights_path</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
-    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
-    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
-    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">predict_x0_from_eps</span><span class="p">(</span><span class="n">x_t</span><span class="p">,</span> <span class="n">eps_pred</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">alpha_bars</span><span class="p">):</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1"># Reconstruct the clean-image estimate from x_t and the predicted noise.</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="c1"># TODO: complete the training procedure.</span>
 
-    <span class="k">return</span> <span class="n">history</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reconstruct_with_diffusion_prior</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">y_delta</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">alpha_bars</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">guidance_scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1"># Implement either a DPS-style or a DiffPIR-style reconstruction method.</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 
 <span class="c1"># TODO:</span>
-<span class="c1"># Train the models you implemented, save their weights, plot the</span>
-<span class="c1"># training curves, and reload the weights before evaluation.</span>
+<span class="c1"># Define the diffusion schedule exactly as in the lecture notebook,</span>
+<span class="c1"># reconstruct the same corrupted test image used in Part 2, and</span>
+<span class="c1"># visualize the diffusion-prior result.</span>
 </pre></div>
 </div>
 </div>
@@ -583,14 +601,16 @@
 </section>
 <section id="part-4-visual-and-quantitative-comparison">
 <h2>Part 4: Visual and Quantitative Comparison<a class="headerlink" href="#part-4-visual-and-quantitative-comparison" title="Link to this heading">#</a></h2>
-<p>Use the <strong>same corrupted test image</strong> for all trained models and compare the outputs both visually and quantitatively.</p>
-<p>At a minimum, compute the <strong>MSE</strong>. If you want to connect this homework to the evaluation section of the course, you may also compute <strong>PSNR</strong> and <strong>SSIM</strong>.</p>
-<p>The final comparison should make it possible to judge both the visual quality and the numerical behavior of the models.</p>
+<p>Use the <strong>same corrupted test image</strong> for all methods and compare the outputs both visually and quantitatively.</p>
+<p>At a minimum, compute the <strong>MSE</strong>. If you want a richer comparison, also compute <strong>PSNR</strong> and <strong>SSIM</strong>.</p>
+<p>The final comparison should make it possible to judge not only the numerical error, but also the different failure modes of the methods: oversmoothing, hallucinated detail, poor data consistency, or latent-range restriction.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO:</span>
-<span class="c1"># Evaluate the trained models on one or more test examples and build</span>
-<span class="c1"># a clear visual and quantitative comparison.</span>
+<span class="c1"># Evaluate the reconstructed images quantitatively, build a clear</span>
+<span class="c1"># comparison figure, and comment on the differences between the</span>
+<span class="c1"># corrupted input, the latent-prior reconstruction, and the</span>
+<span class="c1"># diffusion-prior reconstruction.</span>
 </pre></div>
 </div>
 </div>
@@ -600,24 +620,24 @@
 <h2>Deliverables and Discussion<a class="headerlink" href="#deliverables-and-discussion" title="Link to this heading">#</a></h2>
 <p>Complete the notebook by answering the following questions in a few sentences each.</p>
 <ol class="arabic simple">
-<li><p>Which model performed better in your experiments, and why do you think that happened?</p></li>
-<li><p>Did the residual architecture help? If yes, in what sense?</p></li>
-<li><p>How did the noise level affect training and reconstruction quality?</p></li>
-<li><p>Why is it important to generate the corruption through a known operator <span class="math notranslate nohighlight">\(K\)</span> instead of treating the problem as a generic image-to-image task?</p></li>
-<li><p>Why should one be cautious when evaluating pure end-to-end methods only through visual quality?</p></li>
-<li><p>If you implemented the optional UNet extension, how did it compare with the simpler CNN-based models?</p></li>
+<li><p>How did the VAE-based latent prior behave? Did the latent regularization help, and if so in what sense?</p></li>
+<li><p>How did the diffusion-prior method differ from the latent-prior method in terms of reconstruction quality and stability?</p></li>
+<li><p>Which method appeared more data-consistent, and which appeared more visually plausible?</p></li>
+<li><p>Did you observe any signs of hallucination or model bias? If yes, how did they manifest themselves?</p></li>
+<li><p>Why is it important to compare the methods on the <strong>same</strong> corrupted image and under the <strong>same</strong> forward operator?</p></li>
+<li><p>If you implemented the optional extension, what did the GAN prior or second diffusion method add to the comparison?</p></li>
 </ol>
 <p>In your final submission, make sure that the notebook contains:</p>
 <ul class="simple">
 <li><p>the completed code;</p></li>
-<li><p>the saved weights;</p></li>
-<li><p>the training curves;</p></li>
-<li><p>the final comparison figure;</p></li>
+<li><p>the loaded or reused weights;</p></li>
+<li><p>the reconstruction figures;</p></li>
+<li><p>the quantitative comparison;</p></li>
 <li><p>and the written discussion.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>A reconstruction that looks visually pleasing is not automatically reliable. In inverse problems, one must always keep in mind the role of the forward operator, the noise model, and the possibility of distribution shift.</p>
+<p>A reconstruction that looks realistic is not automatically reliable. In inverse problems, generative models can improve plausibility while still violating the measurements or introducing biased details. Your discussion should explicitly address this point.</p>
 </div>
 </section>
 </section>
@@ -653,20 +673,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../generative/generative-inverse-problems.html"
+       href="homework1.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Diffusion Models for Inverse Problems</p>
+        <p class="prev-next-title">Homework 1: End-to-End Reconstruction Before Generative Models</p>
       </div>
     </a>
     <a class="right-next"
-       href="homework2.html"
+       href="../references.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Homework 2: Generative Models for Inverse Problems</p>
+        <p class="prev-next-title">References</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -690,9 +710,9 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homework-goals-and-deliverables">Homework Goals and Deliverables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-structure-of-the-work">Suggested Structure of the Work</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-data-pipeline-and-synthetic-measurements">Part 1: Data Pipeline and Synthetic Measurements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-reconstruction-networks">Part 2: Reconstruction Networks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-training-saving-and-evaluating-the-models">Part 3: Training, Saving, and Evaluating the Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-data-pipeline-corruption-model-and-pretrained-models">Part 1: Data Pipeline, Corruption Model, and Pretrained Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-latent-reconstruction-with-a-generator-prior">Part 2: Latent Reconstruction with a Generator Prior</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-reconstruction-with-a-diffusion-prior">Part 3: Reconstruction with a Diffusion Prior</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-visual-and-quantitative-comparison">Part 4: Visual and Quantitative Comparison</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverables-and-discussion">Deliverables and Discussion</a></li>
 </ul>

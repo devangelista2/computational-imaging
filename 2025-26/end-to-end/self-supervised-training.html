@@ -188,6 +188,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework2.html">Homework 2: Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -454,7 +455,7 @@ K\boldsymbol{x}=\boldsymbol{y}^\delta
 <p class="admonition-title">Note</p>
 <p>A useful teaching principle is that <strong>self-supervision</strong> does not mean the absence of assumptions. It means that the assumptions are moved from explicit target images into the <strong>structure of the loss</strong>, the <strong>splitting of the data</strong>, or the <strong>architecture itself</strong>.</p>
 </div>
-<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">40</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
+<p>One of the earliest and most influential examples is the <strong>Deep Image Prior</strong> (DIP) <span id="id1">[<a class="reference internal" href="../references.html#id9" title="Dmitry Ulyanov, Andrea Vedaldi, and Victor Lempitsky. Deep image prior. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 9446–9454, 2018.">39</a>]</span>. Here one does not train a network across a dataset. Instead, for each single observed datum <span class="math notranslate nohighlight">\(\boldsymbol{y}^\delta\)</span>, one fixes a random input <span class="math notranslate nohighlight">\(\boldsymbol{z}\)</span> and optimizes the parameters of a network <span class="math notranslate nohighlight">\(g_{\boldsymbol{\Theta}}\)</span> so that</p>
 <div class="math notranslate nohighlight">
 \[
 \min_{\boldsymbol{\Theta}} \|Kg_{\boldsymbol{\Theta}}(\boldsymbol{z})-\boldsymbol{y}^\delta\|_2^2.

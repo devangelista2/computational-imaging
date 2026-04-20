@@ -188,6 +188,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Homeworks</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../homeworks/homework1.html">Homework 1: End-to-End Reconstruction Before Generative Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../homeworks/homework2.html">Homework 2: Generative Models for Inverse Problems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
 <ul class="nav bd-sidenav">
@@ -395,7 +396,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet-variants">UNet Variants</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-unet">Residual UNet</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-unet">Attention UNet</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">UNet++</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">UNet++</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-variants-on-the-same-corrupted-image">Comparing the Variants on the Same Corrupted Image</a></li>
 </ul>
 </li>
@@ -414,7 +415,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="residual-learning-receptive-field-and-unet">
 <h1>Residual Learning, Receptive Field, and UNet<a class="headerlink" href="#residual-learning-receptive-field-and-unet" title="Link to this heading">#</a></h1>
-<p>This notebook develops the next steps beyond a plain CNN. We first discuss residual learning and why learning the artifact can be easier than learning the clean image directly. We then introduce the receptive field as a key design concept and conclude with the UNet architecture, which is often the strongest default choice for end-to-end image reconstruction.</p>
+<p>This notebook develops the next steps beyond a plain CNN. We first discuss <strong>residual learning</strong> <span id="id1">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">15</a>]</span> and why learning the artifact can be easier than learning the clean image directly. We then introduce the receptive field as a key design concept and conclude with the <strong>UNet</strong> architecture <span id="id2">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">33</a>]</span>, which is often the strongest default choice for end-to-end image reconstruction.</p>
 <section id="residual-cnn">
 <h2>Residual CNN<a class="headerlink" href="#residual-cnn" title="Link to this heading">#</a></h2>
 <p>Any CNN for image processing works by identifying <strong>patterns</strong> in the input image, which have been previously learned during training, and by reconstructing each pattern in the same way it was learned. For this reason, if, for example, we train a model to deblur images of cats, there is no guarantee that the same model will be able to deblur images of dogs: the different patterns present in dog images make accurate reconstruction much harder.</p>
@@ -1118,8 +1119,8 @@ Epoch 10/10: 100%|██████████| 414/414 [18:46&lt;00:00,  2.72
 </div>
 </div>
 </section>
-<section id="id1">
-<h3>UNet++<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>UNet++<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <p>A third important variant is <strong>UNet++</strong>. Its motivation is slightly different: instead of modifying the convolutional blocks or the skip gates, it redesigns the skip connections themselves. The nested skip pathways try to reduce the <strong>semantic gap</strong> between encoder features and decoder features by refining them progressively before fusion.</p>
 <p>This point is worth stressing. In a classical UNet, encoder features and decoder features at the same resolution are fused directly, even though they may represent information at rather different stages of abstraction. UNet++ addresses this mismatch by inserting intermediate convolutional refinements along the skip pathways. In this way, the decoder receives features that have already been partially adapted before the final concatenation.</p>
 <p>This variant is attractive when:</p>
@@ -1278,7 +1279,7 @@ Epoch 10/10: 100%|██████████| 414/414 [21:41&lt;00:00,  3.14
 </section>
 <section id="further-reading">
 <h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
-<p>Residual learning is introduced in <span id="id2">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">15</a>]</span>. The standard reference for the UNet architecture is <span id="id3">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">34</a>]</span>. For volumetric imaging, see the 3D UNet of <span id="id4">[<a class="reference internal" href="../references.html#id42" title="&quot;Ozg&quot;un Cicek, Ahmed Abdulkadir, Soeren S. Lienkamp, Thomas Brox, and Olaf Ronneberger. 3d u-net: learning dense volumetric segmentation from sparse annotation. In Medical Image Computing and Computer-Assisted Intervention (MICCAI). 2016.">8</a>]</span>. For an attention-based variant, see <span id="id5">[<a class="reference internal" href="../references.html#id43" title="Ozan Oktay, Jo Schlemper, Loic Le Folgoc, Matthew Lee, Mattias Heinrich, Kazunari Misawa, Kensaku Mori, Steven McDonagh, Nils Y. Hammerla, Bernhard Kainz, Ben Glocker, and Daniel Rueckert. Attention u-net: learning where to look for the pancreas. arXiv preprint arXiv:1804.03999, 2018.">30</a>]</span>. For a nested skip-connection design, see <span id="id6">[<a class="reference internal" href="../references.html#id44" title="Zongwei Zhou, Md Mahfuzur Rahman Siddiquee, Nima Tajbakhsh, and Jianming Liang. Unet++: a nested u-net architecture for medical image segmentation. arXiv preprint arXiv:1807.10165, 2018.">45</a>]</span>. For a broader discussion of why multiscale neural architectures are effective in imaging inverse problems, see <span id="id7">[<a class="reference internal" href="../references.html#id38" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">31</a>]</span>.</p>
+<p>Residual learning is introduced in <span id="id4">[<a class="reference internal" href="../references.html#id5" title="Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016.">15</a>]</span>. The standard reference for the UNet architecture is <span id="id5">[<a class="reference internal" href="../references.html#id6" title="Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: convolutional networks for biomedical image segmentation. Medical Image Computing and Computer-Assisted Intervention, pages 234–241, 2015.">33</a>]</span>. For volumetric imaging, see the 3D UNet of <span id="id6">[<a class="reference internal" href="../references.html#id42" title="&quot;Ozg&quot;un Cicek, Ahmed Abdulkadir, Soeren S. Lienkamp, Thomas Brox, and Olaf Ronneberger. 3d u-net: learning dense volumetric segmentation from sparse annotation. In Medical Image Computing and Computer-Assisted Intervention (MICCAI). 2016.">8</a>]</span>. For an attention-based variant, see <span id="id7">[<a class="reference internal" href="../references.html#id43" title="Ozan Oktay, Jo Schlemper, Loic Le Folgoc, Matthew Lee, Mattias Heinrich, Kazunari Misawa, Kensaku Mori, Steven McDonagh, Nils Y. Hammerla, Bernhard Kainz, Ben Glocker, and Daniel Rueckert. Attention u-net: learning where to look for the pancreas. arXiv preprint arXiv:1804.03999, 2018.">29</a>]</span>. For a nested skip-connection design, see <span id="id8">[<a class="reference internal" href="../references.html#id44" title="Zongwei Zhou, Md Mahfuzur Rahman Siddiquee, Nima Tajbakhsh, and Jianming Liang. Unet++: a nested u-net architecture for medical image segmentation. arXiv preprint arXiv:1807.10165, 2018.">44</a>]</span>. For a broader discussion of why multiscale neural architectures are effective in imaging inverse problems, see <span id="id9">[<a class="reference internal" href="../references.html#id38" title="Gregory Ongie, Ajil Jalal, Christopher A Metzler, Richard G Baraniuk, Alexandros G Dimakis, and Rebecca Willett. Deep learning techniques for inverse problems in imaging. IEEE Journal on Selected Areas in Information Theory, 1(1):39–56, 2020.">30</a>]</span>.</p>
 </section>
 </section>
 
@@ -1359,7 +1360,7 @@ Epoch 10/10: 100%|██████████| 414/414 [21:41&lt;00:00,  3.14
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unet-variants">UNet Variants</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-unet">Residual UNet</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attention-unet">Attention UNet</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">UNet++</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">UNet++</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-variants-on-the-same-corrupted-image">Comparing the Variants on the Same Corrupted Image</a></li>
 </ul>
 </li>
