@@ -28,6 +28,7 @@ parts:
   - caption: Homeworks
     chapters:
       - file: homeworks/homework1
+      - file: homeworks/homework2
   - caption: References
     chapters:
       - file: references

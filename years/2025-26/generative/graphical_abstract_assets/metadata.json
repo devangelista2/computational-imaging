@@ -1,0 +1,39 @@
+{
+  "weights_path": "C:\\Users\\tivog\\computational-imaging\\years\\2025-26\\weights\\DDPMDenoiser.pth",
+  "image_index": 0,
+  "sample_steps": 40,
+  "num_snapshots": 10,
+  "num_diffusion_steps": 400,
+  "noise_level": 0.01,
+  "sigma_y": 0.01,
+  "guidance_scale": 0.15,
+  "dps_projection_scale": 0.15,
+  "tau": 0.6,
+  "kernel_size": 9,
+  "motion_angle": 20.0,
+  "device": "cpu",
+  "metrics": {
+    "observation": {
+      "mse": 0.006225770805031061,
+      "psnr": 22.058068714373874,
+      "ssim": 0.6296985149383545
+    },
+    "dps": {
+      "mse": 0.002579459920525551,
+      "psnr": 25.884712157766465,
+      "ssim": 0.755603015422821
+    },
+    "diffpir": {
+      "mse": 0.001471719820983708,
+      "psnr": 28.321748610463693,
+      "ssim": 0.8248023390769958
+    }
+  },
+  "notes": {
+    "x_t": "Current iterate shown at the selected reverse-diffusion timesteps. For visualization, every saved image in this script is mapped with its own per-image min-max normalization.",
+    "x0_hat": "Clean-image estimate reconstructed from the denoiser output. It is also visualized with per-image min-max normalization.",
+    "d_t": "Image-space data-consistency projection C(x0_hat, K, y). For DPS this is saved only as a visual proxy; the actual DPS iterate still follows the likelihood-gradient update used in the lecture notebook. It is visualized with per-image min-max normalization.",
+    "raw_values": "The PNGs are display-normalized image exports. If you need the exact saved tensors rather than the visualized panels, use the saved trace.pt files.",
+    "diffpir_visualization": "For DiffPIR, the saved abstract triplets use a forward-noised visualization state at the current timestep so that x_t looks like a genuine diffusion variable. The actual reconstruction path and reported metrics still follow the pedagogical lecture notebook update."
+  }
+}
